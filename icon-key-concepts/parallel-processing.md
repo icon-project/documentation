@@ -1,6 +1,6 @@
 ---
 title: "Parallel Processing"
-excerpt: ""
+excerpt: "Executing transactions in parallel on virtual environment"
 ---
 
 Normally, transactions should be executed sequentially.
@@ -34,7 +34,7 @@ So, we may apply parallel processing on following transactions.
 In sequential processing, it takes T (time for simple transfer) x 3.
 But, if we executes (1) and (2) in parallel, it takes T x 2.
 
-![Parallel simple transfer](parallel-simple_transfer.png)
+![Parallel simple transfer](parallel-processing-1.png)
 
 So, we can executes some of transactions in parallel, and it reduces
 time to get final state of the transactions in the block.
@@ -59,7 +59,7 @@ Otherwise, it results in transaction failure.
 With this scheme, we can execute two transactions in parallel on following
 configuration.
 
-![Parallel execution environment](parallel-execution_environment.png)
+![Parallel execution environment](parallel-processing-2.png)
 
 After executing them, they release locked accounts to let other transactions
 can compose own environments locking required accounts.
