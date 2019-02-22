@@ -853,7 +853,9 @@ This function causes state transition.
 | data      | T_DICT or String                                           | optional | The content of data varies depending on the dataType. See [Parameters - data](#sendtxparameterdata). |
 
 <a id ="sendtxparameterdata">**Parameters - data**</a>
+
 `data` contains the following data in various formats depending on the dataType.
+
 **1. dataType == call**
 It is used when calling a function in SCORE, and `data` has dictionary value as follows.
 
@@ -861,14 +863,19 @@ It is used when calling a function in SCORE, and `data` has dictionary value as 
 | :----- | :--------- | :------: | :-------------------------------------- |
 | method | String     | required | Name of the function to invoke in SCORE |
 | params | T_DICT     | optional | Function parameters                     |
+
 **2. dataType == deploy**
+
 It is used when installing or updating a SCORE, and `data` has dictionary value as follows.
+
 | KEY         | VALUE type                | Required | Description                                                  |
 | :---------- | :------------------------ | :------: | :----------------------------------------------------------- |
 | contentType | String                    | required | Mime-type of the content                                     |
 | content     | [T_BIN_DATA](#T_BIN_DATA) | required | Compressed SCORE data                                        |
 | params      | T_DICT                    | optional | Function parameters will be delivered to on_install() or on_update() |
+
 **3. dataType == message**
+
 It is used when transfering a message, and `data` has a HEX string.
 
 #### Returns
