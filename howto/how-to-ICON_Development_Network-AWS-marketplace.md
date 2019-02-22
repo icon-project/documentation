@@ -1,14 +1,14 @@
-# How to use "ICON Development Network" on AWS
+# How to set up "ICON Development Network" on AWS
 
 
 ## Overview
 This document is a HOW-to document for anyone who wants to set up their own ICON Development Network on AWS.
 
 ## Intended Audience
-Someone needs their own "ICON Development network" for ICON SCORE or DApp.
+Someone who needs their own "ICON Development network" for ICON SCORE or DApp. (Please also indicate level of expertise required)
 
 ## Purpose
-Set up their own ICON Development Network on AWS.
+Following this document step-by-step will all reader to set up their own ICON Development Network on AWS.
 
 ## Prerequisites
 ### Create a Key Pair
@@ -24,11 +24,11 @@ If you haven't created a key pair already, you can create one using the Amazon E
 6. Enter a name for the new key pair in the **Key pair name** field of the **Create Key Pair** dialog box, and then choose **Create**. Use a name that is easy for you to remember, such as your IAM user name, followed by -key-pair, plus the region name. For example, me-key-pair-useast2.
 ![Key_Pairs_02](./images/Key_Pairs_02.png)
 7. The private key file is automatically downloaded by your browser. The base file name is the name you specified as the name of your key pair, and the file name extension is .pem. Save the private key file in a safe place.
-8. If you will use an SSH client on a Mac or Linux computer to connect to your Linux instance, use the following command to set the permissions of your private key file so that only you can read it.If you do not set these permissions, then you cannot connect to your instance using this key pair.
+8. If you are using an SSH client on a Mac or Linux computer to connect to your Linux instance, use the following command to set the permissions of your private key file so that only you can read it. If you do not set these permissions, then you cannot connect to your instance using this key pair. (Where is the following command?)
 
 ### EC2 instance limits
 
-** ICON Development network ** requires at least 7 EC2 instances. But, default limit is 5 for each region. So, you need to request extend EC2 instance limitation. You can request from below link
+** ICON Development network ** requires at least 7 EC2 instances. However, the default limit is 5 for each region, so you need to request extend EC2 instance limitation. You can request from the link below:
  http://aws.amazon.com/contact-us/ec2-request
 
 
@@ -39,49 +39,49 @@ If you haven't created a key pair already, you can create one using the Amazon E
 
 1. Visit **AWS Marketplace**
 https://console.aws.amazon.com/marketplace
-![AWS Marketplace](./images/AWS Marketplace.png)
-2. Search by keyword "ICON Development Network" or Visit below URL. And then, click **Continue to Subscribe**
+![AWS Marketplace](./images/AWS Marketplace.png) (LINK TO PICTURE IS BROKEN)
+2. Search by keyword "ICON Development Network" or visit the URL below. Then, click **Continue to Subscribe**
 https://aws.amazon.com/marketplace/pp/B07KBTZHZD?ref_=aws-mp-console-subscription-detail
 ![ICON Development Network](./images/ICON_Development_Network.png)
 3. Click **Continue to Configuration**
 ![ICON Development Network2](./images/ICON_Development_Network_02.png)
-4. Select options. (Must select a specific region that you want to deploy) and then, Click **Continue to Launch**
+4. Select options (must select a specific region that you want to deploy). Then, click **Continue to Launch**
  - Fulfillment Option: Leave as default.
- - Software Version: Leave as default. If you need to setup as specific version. Then you can change to specific version. 
+ - Software Version: Leave as default. If you need to setup as specific version, you can change to specific version. 
  - Region: **(Required)** Please select a region to setup.
 ![ICON Development Network3](./images/ICON_Development_Network_03.png)
-5. From **Choose Action**'s drop downmenu. Select **Launch CloudFormation** and Click **Launch**
+5. From **Choose Action**'s drop downmenu, select **Launch CloudFormation** and click **Launch**
 ![ICON Development Network5](./images/ICON_Development_Network_05.png)
 ![ICON Development Network6](./images/ICON_Development_Network_06.png)
-6. The "CloudFormation" screen appears. Seelct **Next**
+6. The "CloudFormation" screen appears. Select **Next**
 ![AWS Cloudformation_01](./images/AWS Cloudformation_01.png)
 7. Step "Specify Details"
- - Stack Name: **(Required)** Any stack name(Must contain only letters, numbers, dashes and start with an alpha character.)
- - Instance Type: ICON EC2 instance type(t2.xlarge, m5.large, m5.xlarge, m5.2xlarge,c5.large, c5.xlarge). Default value is **m5.xlarge**
+ - Stack Name: **(Required)** Any stack name (must contain only letters, numbers, dashes and start with an alpha character)
+ - Instance Type: ICON EC2 instance type (t2.xlarge, m5.large, m5.xlarge, m5.2xlarge,c5.large, c5.xlarge). Default value is **m5.xlarge**
  - Node Count: ICON Node Cluster size; must be between 4 and 12. Default value is **4**.
  - InstanceName: EC2 Instance Name Prefix. Default value is **"ICON"**.
  - VpcId: **(Required)** VpcId of your existing Virtual Private Cloud (VPC). Select any drop-down menu item.
- - SubnetID: **(Required)** Subnet should be a public subnet. Select largest Subnet id(For example, \*.\*.0.0/32)
+ - SubnetID: **(Required)** Subnet should be a public subnet. Select largest Subnet id (for example, \*.\*.0.0/32)
  - Fee: Pay commission to execute the transaction by ICX or not. Default value is **false**
  - Audit: Prevent to deploy SCORE by anybody or not. Default value is **false**
- - KeyName: **(Required)** Name of an existing EC2 KeyPair to enable SSH access to the instance. You must select EC2 Keypair. So, you must be  sure to create a "Keypair" before this setup process.
- - SSHLocation: **(Required)** The IP address range that can be used to SSH to the EC2 instances.The setting with no limitation is "0.0.0.0/0".
+ - KeyName: **(Required)** Name of an existing EC2 KeyPair to enable SSH access to the instance. You must select EC2 Keypair. You must make sure to create a "Keypair" before this setup process.
+ - SSHLocation: **(Required)** The IP address range that can be used to SSH to the EC2 instances. The setting with no limitation is "0.0.0.0/0".
 ![AWS Cloudformation_02](./images/AWS Cloudformation_02.png)
-8. Step "Options". leave as default. just select **Next**
+8. Step "Options". Leave as default. Select **Next**
 ![AWS Cloudformation_03](./images/AWS Cloudformation_03.png)
 9. Step "Review". Select **Create**
 ![AWS Cloudformation_04](./images/AWS Cloudformation_04.png)
 10. The setup process is over. Just need to check about **Events**.
 ![AWS Cloudformation_05](./images/AWS Cloudformation_05.png)
-11. After CloudFormation process done. Check about **Outputs** tab. You can get information for **ICON Development Network**
+11. After CloudFormation process is done, check about **Outputs** tab. You can get information for **ICON Development Network**
 ![AWS Cloudformation_06](./images/AWS Cloudformation_06.png)
-12. From **Outputs**. Select "LoopChainRadioGroupCheckURL" for peers status.
+12. From **Outputs**, select "LoopChainRadioGroupCheckURL" for peers status.
  - "http://<YourRadiostationIP>:9002/api/v1/peer/list", you can check the information of connected nodes.
 ![LoopChainRadioGroupCheckURL](./images/LoopChainRadioGroupCheckURL.png)
 
 
 ### EC2 instance connect & navigate
-If, you want to access each EC2 instance. You need public IP address of each EC2 Instance and prvaite key selected during the CloudFormation process.
+If you want to access each EC2 instance, you need public IP address of each EC2 Instance and private key selected during the CloudFormation process.
 Get each EC2 instance Public IP address(**Peer\*PublicIP**) information from Previous **Outputs**
 
 ```
@@ -141,12 +141,12 @@ The github address is:
 https://github.com/icon-project/t-bears
 
 #### Step 1: Installation
-Install the T-bears by referring to the following link.
+Install the T-bears by referring to the following link:
 https://github.com/icon-project/t-bears#installation
 
 #### Step 2: Block search & SCORE deploy
 
-T-bears can build an environment that can be deployed in a local SCORE without using the AWS-generated Development Network. See details Github
+T-bears can build an environment that can be deployed in a local SCORE without using the AWS-generated Development Network. See Github for details.
 
 We have already setup ICON Development Network with CloudFormation, we will deal with block search, Send Transaction & Get Transaction Result and SCORE distribution using this network.
 
@@ -240,7 +240,7 @@ block info : {
 ```
 
 ###### Send Transaction & Get Transaction Result
-Keystore is needed when sending a transaction or when distributing SCORE. Because, it is a development network, try to create it in T-bears, not the actual key file.
+Keystore is needed when sending a transaction or when distributing SCORE. Since it is a development network, try to create it in T-bears, not the actual key file.
 First, create a keystore.
 ```
 $ tbears keystore <keystorepath>
@@ -255,7 +255,7 @@ $ cat <keystorepath>
 {"address": "hx4d1042e98770dcbab06ae4b55d09b1215e6d3af8", "crypto": {"cipher": "aes-128-ctr", "cipherparams": {"iv": "2621384865fceeb2988767c64dfe274e"}, "ciphertext": "5505c45ff3dce6742aa4f1630ffbc154b090176716e06942ec67f9bd1549e48b", "kdf": "scrypt", "kdfparams": {"dklen": 32, "n": 16384, "r": 1, "p": 8, "salt": "716a3d1ea83d6e540caeba473bea155d"}, "mac": "a88bc55b881f8b6c74b18b2d73d153bea8d5e178b3d54ae0f500be5e627c0cf1"}, "id": "e1939d52-617e-4a18-96c0-aec1b1cdfbc1", "version": 3, "coinType": "icx"}
 ```
 
-You need to create a send.json file because you need to specify information such as the address you send and the address you send before sending the transaction. This file contains "from" and "to" information. "from" is the send address and "to" is the receive address. (You can also use the address of the genesis block that you viewed with the lastblock or blockbyheight, since it is not a commission function because it is a development network.)
+You need to create a send.json file because you need to specify information such as the address you send and the address you send before sending the transaction (PLEASE CHECK IF ADDRESS YOU SEND IS REPEATED). This file contains "from" and "to" information. "from" is the send address and "to" is the receive address (you can also use the address of the genesis block that you viewed with the lastblock or blockbyheight, since it is not a commission function because it is a development network).
 ```
 $ vi send.json
 {
@@ -280,7 +280,7 @@ $ vi send.json
   "id": 1
 }
 ```
-Now let's send a Transaction.
+Now, let's send a Transaction.
 ```
 $ tbears sendtx -k <your keystore path> -u http://<Node Instance IP address>:9000/api/v3 send.json
 Input your keystore password:
@@ -327,7 +327,7 @@ Send deploy request successfully.
 If you want to check SCORE deployed successfully, execute txresult command
 transaction hash: 0x247ae6cfd8d321420dc93e94d56bdb9e30d8a4c194141f7876ae63f7f995a4db
 ```
-If, "Send deploy request successfully" message appears, the distribution is successful. Now, let's check the SCORE address using txresult again with the resulting transaction hash value.
+If "Send deploy request successfully" message appears, the distribution was successful. Now, let's check the SCORE address using txresult again with the resulting transaction hash value.
 
 ```
 $ tbears txresult -u http://<Node Instance IP address>:9000/api/v3 0x247ae6cfd8d321420dc93e94d56bdb9e30d8a4c194141f7876ae63f7f995a4db
@@ -394,7 +394,7 @@ $ vi call.json
 }
 ```
 
-From is the address of the previously created key, and to is the address of the previously SCORE deployed.
+"from" is the address of the previously created key, and "to" is the address of the previously SCORE deployed.
 The method in the data section means that we will look up the hello method that we just looked up.
 Let's call it using this file.
 ```
@@ -405,7 +405,7 @@ response : {
     "id": 1
 }
 ```
-If you get the above results, It is success.
+If you get the above results, It is a success.
 
 ## Extend the learning
 Easy way to check **ICON Development Network** status. - Use Chrome extenstion program ([**POSTMAN**](https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en))
@@ -426,7 +426,7 @@ If you receive the following response, "ICON Development Network" status is norm
 ![Postman](./images/Postman.png)
 
 ## Summarize the learning
-
+Congratulations on setting up your ICON Development Network on AWS!
 
 ## Tips or FAQs
 
