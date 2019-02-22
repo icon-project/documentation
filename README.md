@@ -20,7 +20,7 @@
 - [T-Bears Reference](/references/t-bears/t-bears-reference.md)
 
 ## Client SDK
-- Java SDK 
+- JavaScript SDK 
   - [Quickstart](/references/javascript-sdk/quickstart.md) 
   - [API Reference](/references/javascript-sdk/api-reference.md)
   
