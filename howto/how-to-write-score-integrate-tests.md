@@ -25,7 +25,7 @@ The SCORE integration test code works as follows
 
 1. Deploy SCORE to be tested
 2. Create a ICON JSON-RPC API request for the SCORE API you want to test
-3. If neccessary, sign a ICON JSON-RPC API request
+3. If necessary, sign a ICON JSON-RPC API request
 4. Invoke a ICON JSON-RPC API request and get the result
 5. Check the result
 
