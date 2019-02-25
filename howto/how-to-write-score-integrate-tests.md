@@ -192,5 +192,5 @@ OK
 
 ## References
 
-* [ICON python SDK] (https://repo.theloop.co.kr/icon/icon-sdk/icon-sdk-python)
+* [ICON python SDK] (https://github.com/icon-project/icon-sdk-python)
 * [ICON SCORE samples] (https://github.com/icon-project/samples)

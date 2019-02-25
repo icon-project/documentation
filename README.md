@@ -9,10 +9,13 @@
 
 ## SCORE Development Guide 
 - [Writing SCORE](/score/writing-score.md)
+- [Write SCORE integrate tests](/howto/how-to-write-score-integrate-tests.md)
+- [invoke SCORE functions](/score/invoking-score-functions.md)
 
 ## Sample SCOREs
 
 ## Howto
+-[Write SCORE unit-test](/score/score-unit-test.md)
 
 ## User Manual
 
