@@ -5,7 +5,6 @@ title: "SCORE unit-test Framework"
 ## Overview
 
 Describe about How to write SCORE unit-test using SCORE unit-test framework.  
-This document offers "Syntax", "Limit", "API reference" and "Audit Checklist"
 
 ## Intended Audience
 
