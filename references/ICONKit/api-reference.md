@@ -82,13 +82,13 @@ let request: Request<Response.Block> = service.getBlock(hash: "0x000...000")
 let request: Request<Response.Block> = service.getLastBlock()
 
 // Gets the balance of an given account
-let request: Request<Response.Value> = service.getBalance(address: "hx000...1")
+let request: Request<Response.IntValue> = service.getBalance(address: "hx000...1")
 
 // Gets a list of ScoreAPI
 let request: Request<Response.ScoreAPI> = service.getScoreAPI(scoreAddress: "cx000...1")
 
 // Gets the total supply of ICX
-let request: Request<Response.Value> = service.getTotalSupply()
+let request: Request<Response.IntValue> = service.getTotalSupply()
 
 // Gets a transaction matching the given transaction hash
 let request: Request<Response.Transaction> = service.getTransaction(hash: "0x000...000")
@@ -98,7 +98,7 @@ let request: Request<Response.TransactionResult> = service.getTransactionResult(
 
 // Calls a SCORE API just for reading
 let call = Call(from: wallet.address, to: scoreAddress, method: "balanceOf", params: params)
-let request: Request<Response.Value> = service.call(call)
+let request: Request<Response.IntValue> = service.call(call)
 ```
 ## Sending transactions
 Calling SCORE APIs to change states is requested as sending a transaction.
