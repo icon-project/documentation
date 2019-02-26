@@ -857,6 +857,7 @@ This function causes state transition.
 `data` contains the following data in various formats depending on the dataType.
 
 **1. dataType == call**
+
 It is used when calling a function in SCORE, and `data` has dictionary value as follows.
 
 | KEY    | VALUE type | Required | Description                             |
