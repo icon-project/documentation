@@ -71,7 +71,7 @@ https://aws.amazon.com/marketplace/pp/B07KBTZHZD?ref_=aws-mp-console-subscriptio
 ![AWS Cloudformation_03](./images/AWS Cloudformation_03.png)
 9. Step "Review". Select **Create**
 ![AWS Cloudformation_04](./images/AWS Cloudformation_04.png)
-10. The setup process is over. Just need to check about **Events**.
+10. The setup process is over. Just need to check the **Events** tab below.
 ![AWS Cloudformation_05](./images/AWS Cloudformation_05.png)
 11. After the network has been deployed successfully using the CloudFormation, you can get information for **ICON Development Network**  from the **Outputs** tab. 
 ![AWS Cloudformation_06](./images/AWS Cloudformation_06.png)
