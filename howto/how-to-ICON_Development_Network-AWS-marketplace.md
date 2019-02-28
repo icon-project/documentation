@@ -28,7 +28,7 @@ If you haven't created a key pair already, you can create one using the Amazon E
 
 ### EC2 instance limits
 
-** ICON Development network ** requires at least 7 EC2 instances. However, the default limit is 5 for each region, so you need to request extend EC2 instance limitation. You can request from the link below:
+**ICON Development Network** requires at least 7 EC2 instances. However, the default limit is 5 for each region, so you need to request extend EC2 instance limitation. You can request from the link below:
  http://aws.amazon.com/contact-us/ec2-request
 
 
