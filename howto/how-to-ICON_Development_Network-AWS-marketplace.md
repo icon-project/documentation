@@ -73,7 +73,7 @@ https://aws.amazon.com/marketplace/pp/B07KBTZHZD?ref_=aws-mp-console-subscriptio
 ![AWS Cloudformation_04](./images/AWS Cloudformation_04.png)
 10. The setup process is over. Just need to check about **Events**.
 ![AWS Cloudformation_05](./images/AWS Cloudformation_05.png)
-11. After CloudFormation process is done, check about **Outputs** tab. You can get information for **ICON Development Network**
+11. After the network has been deployed successfully using the CloudFormation, you can get information for **ICON Development Network**  from the **Outputs** tab. 
 ![AWS Cloudformation_06](./images/AWS Cloudformation_06.png)
 12. From **Outputs**, select "LoopChainRadioGroupCheckURL" for peers status.
  - "http://<YourRadiostationIP>:9002/api/v1/peer/list", you can check the information of connected nodes.
