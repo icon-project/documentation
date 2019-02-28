@@ -11,7 +11,7 @@ Someone who needs their own "ICON Development network" for ICON SCORE or DApp. (
 Following this document step-by-step will all reader to set up their own ICON Development Network on AWS.
 
 ## Prerequisites
-### Create a Key Pair
+### Create an Amazon EC2 Key Pair
 AWS uses public-key cryptography to secure the login information for your instance. A Linux instance has no password; you use a key pair to log in to your instance securely. You specify the name of the key pair when you launch your instance, then provide the private key when you log in using SSH.
 If you haven't created a key pair already, you can create one using the Amazon EC2 console. Note that if you plan to launch instances in multiple regions, you'll need to create a key pair in each region.
 
