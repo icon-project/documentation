@@ -5,7 +5,7 @@
 This document is a HOW-to document for anyone who wants to set up their own ICON Development Network on AWS.
 
 ## Intended Audience
-Someone who needs their own "ICON Development network" for ICON SCORE or DApp. (Please also indicate level of expertise required)
+Someone who needs their own "ICON Development Network" for ICON SCORE or DApp. (Please also indicate level of expertise required)
 
 ## Purpose
 Following this document step-by-step will all reader to set up their own ICON Development Network on AWS.
