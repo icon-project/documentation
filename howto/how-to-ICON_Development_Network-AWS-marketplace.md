@@ -240,7 +240,7 @@ block info : {
 ```
 
 ###### Send Transaction & Get Transaction Result
-Keystore is needed when sending a transaction or when distributing SCORE. Since it is a development network, try to create it in T-bears, not the actual key file.
+Keystore is needed when sending a transaction or when deploying a SCORE onto the network. You can generate a keystore file using T-Bears CLI.
 First, create a keystore.
 ```
 $ tbears keystore <keystorepath>
