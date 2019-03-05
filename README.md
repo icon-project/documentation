@@ -3,6 +3,7 @@
 ## ICON Application Services
 
 ## ICON Key Concepts
+- [Transactions](/icon-key-concepts/transactions.md)
 - [Parallel Processing](/icon-key-concepts/parallel-processing.md)
 
 ## SCORE Quickstart 
@@ -13,9 +14,11 @@
 - [invoke SCORE functions](/score/invoking-score-functions.md)
 
 ## Sample SCOREs
+- [Multisig Wallet](/sample-scores/multi-signature-wallet.md)
 
 ## Howto
--[Write SCORE unit-test](/score/score-unit-test.md)
+- [Write SCORE unit-test](/score/score-unit-test.md)
+- [How to generate a transaction signature](/howto/how-to-generate-a-transaction-signature.md)
 
 ## User Manual
 
@@ -29,6 +32,7 @@
 - Python SDK 
   - [Quickstart](/references/python-sdk/quickstart.md) 
   - [API Reference](/references/python-sdk/api-reference.md)
+- [JSON-RPC specification](/references/json-rpc/icon-json-rpc-v3.md)
   
 ## Design Doc
 
