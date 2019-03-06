@@ -7,7 +7,7 @@ This document describes how to interact with `ICON Network` using Java SDK. This
 
 [TOC]
 
-## Quick start 
+## Quick Start 
 
 A simple query of the block by height is as follows.
 
@@ -126,7 +126,7 @@ try {
 
 
 
-## Sending transactions
+## Sending Transactions
 
 Calling SCORE APIs to change states is requested as sending a transaction.
 
