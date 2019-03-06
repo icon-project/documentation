@@ -5,7 +5,7 @@
 This document is for anyone who wants to set up their own ICON Development Network on AWS.
 
 ## Intended Audience
-Someone who needs their own "ICON Development Network" for ICON SCORE or DApp. (Please also indicate level of expertise required)
+Someone who needs their own "ICON Development Network" for ICON SCORE or DApp.
 
 ## Purpose
 Following this document step-by-step will all reader to set up their own ICON Development Network on AWS.
@@ -24,7 +24,10 @@ If you haven't created a key pair already, you can create one using the Amazon E
 6. Enter a name for the new key pair in the **Key pair name** field of the **Create Key Pair** dialog box, and then choose **Create**. Use a name that is easy for you to remember, such as your IAM user name, followed by -key-pair, plus the region name. For example, me-key-pair-useast2.
 ![Key_Pairs_02](./images/Key_Pairs_02.png)
 7. The private key file is automatically downloaded by your browser. The base file name is the name you specified as the name of your key pair, and the file name extension is .pem. Save the private key file in a safe place.
-8. If you are using an SSH client on a Mac or Linux computer to connect to your Linux instance, use the following command to set the permissions of your private key file so that only you can read it. If you do not set these permissions, then you cannot connect to your instance using this key pair. (Where is the following command?)
+8. If you are using an SSH client on a Mac or Linux computer to connect to your Linux instance, use the following command to set the permissions of your private key file so that only you can read it. If you do not set these permissions, then you cannot connect to your instance using this key pair.
+```
+chmod 400 my-key-pair.pem
+```
 
 ### EC2 instance limits
 
@@ -39,7 +42,7 @@ If you haven't created a key pair already, you can create one using the Amazon E
 
 1. Visit **AWS Marketplace**
 https://console.aws.amazon.com/marketplace
-![AWS Marketplace](./images/AWS Marketplace.png) (LINK TO PICTURE IS BROKEN)
+![AWS Marketplace](./images/AWS_Marketplace.png) (LINK TO PICTURE IS BROKEN)
 2. Search by keyword "ICON Development Network" or visit the URL below. Then, click **Continue to Subscribe**
 https://aws.amazon.com/marketplace/pp/B07KBTZHZD?ref_=aws-mp-console-subscription-detail
 ![ICON Development Network](./images/ICON_Development_Network.png)
@@ -54,7 +57,7 @@ https://aws.amazon.com/marketplace/pp/B07KBTZHZD?ref_=aws-mp-console-subscriptio
 ![ICON Development Network5](./images/ICON_Development_Network_05.png)
 ![ICON Development Network6](./images/ICON_Development_Network_06.png)
 6. The "CloudFormation" screen appears. Select **Next**
-![AWS Cloudformation_01](./images/AWS Cloudformation_01.png)
+![AWS Cloudformation_01](./images/AWS_Cloudformation_01.png)
 7. Step "Specify Details"
  - Stack Name: **(Required)** Any stack name (must contain only letters, numbers, dashes and start with an alpha character)
  - Instance Type: ICON EC2 instance type (t2.xlarge, m5.large, m5.xlarge, m5.2xlarge,c5.large, c5.xlarge). Default value is **m5.xlarge**
@@ -66,15 +69,15 @@ https://aws.amazon.com/marketplace/pp/B07KBTZHZD?ref_=aws-mp-console-subscriptio
  - Audit: Prevent to deploy SCORE by anybody or not. Default value is **false**
  - KeyName: **(Required)** Name of an existing EC2 KeyPair to enable SSH access to the instance. You must select EC2 Keypair. You must make sure to create a "Keypair" before this setup process.
  - SSHLocation: **(Required)** The IP address range that can be used to SSH to the EC2 instances. The setting with no limitation is "0.0.0.0/0".
-![AWS Cloudformation_02](./images/AWS Cloudformation_02.png)
+![AWS Cloudformation_02](./images/AWS_Cloudformation_02.png)
 8. Step "Options". Leave as default. Select **Next**
-![AWS Cloudformation_03](./images/AWS Cloudformation_03.png)
+![AWS Cloudformation_03](./images/AWS_Cloudformation_03.png)
 9. Step "Review". Select **Create**
-![AWS Cloudformation_04](./images/AWS Cloudformation_04.png)
+![AWS Cloudformation_04](./images/AWS_Cloudformation_04.png)
 10. The setup process is over. Just need to check the **Events** tab below.
-![AWS Cloudformation_05](./images/AWS Cloudformation_05.png)
+![AWS Cloudformation_05](./images/AWS_Cloudformation_05.png)
 11. After the network has been deployed successfully using the CloudFormation, you can get information for **ICON Development Network**  from the **Outputs** tab. 
-![AWS Cloudformation_06](./images/AWS Cloudformation_06.png)
+![AWS Cloudformation_06](./images/AWS_Cloudformation_06.png)
 12. From **Outputs**, select "LoopChainRadioGroupCheckURL" for peers status.
  - "http://<YourRadiostationIP>:9002/api/v1/peer/list", you can check the information of connected nodes.
 ![LoopChainRadioGroupCheckURL](./images/LoopChainRadioGroupCheckURL.png)
