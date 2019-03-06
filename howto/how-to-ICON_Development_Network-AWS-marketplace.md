@@ -94,19 +94,19 @@ You can see various configuration files and start.sh and stop.sh files in ec2-us
 ```
 $ ls -l
 total 8
-drwxrwxr-x 3 ec2-user ec2-user 194  1월  3 01:54 conf
-drwxrwxr-x 5 ec2-user ec2-user  43  8월 10 01:18 elasticsearch
-drwxrwxr-x 2 ec2-user ec2-user  25  8월 10 01:33 fluentd_conf
-drwxr-xr-x 3 root     root      56 10월  4 03:40 iconscore
-drwxr-xr-x 3 root     root      22 10월  4 03:40 iconstate
-drwxrwxr-x 3 ec2-user ec2-user  20  8월  9 07:44 kibana
-drwxrwxrwx 4 ec2-user ec2-user  55  8월  9 08:06 log
-drwxr-xr-x 2 root     root       6 10월  4 03:40 score
-drwxrwxr-x 6 ec2-user ec2-user  79  8월 21 05:08 scripts
--rwxrwxrwx 1 ec2-user ec2-user 268  1월  3 01:54 start.sh
--rwxrwxrwx 1 ec2-user ec2-user 267  1월  3 01:54 stop.sh
-drwxr-xr-x 6 root     root     124  1월  3 01:55 storage
-drwxr-xr-x 2 root     root       6 10월  4 03:21 storageRS
+drwxrwxr-x 3 ec2-user ec2-user 194 Jan  3 01:54 conf
+drwxrwxr-x 5 ec2-user ec2-user  43 Aug 10 01:18 elasticsearch
+drwxrwxr-x 2 ec2-user ec2-user  25 Aug 10 01:33 fluentd_conf
+drwxr-xr-x 3 root     root      56 Oct  4 03:40 iconscore
+drwxr-xr-x 3 root     root      22 Oct  4 03:40 iconstate
+drwxrwxr-x 3 ec2-user ec2-user  20 Aug  9 07:44 kibana
+drwxrwxrwx 4 ec2-user ec2-user  55 Aug  9 08:06 log
+drwxr-xr-x 2 root     root       6 Oct  4 03:40 score
+drwxrwxr-x 6 ec2-user ec2-user  79 Aug 21 05:08 scripts
+-rwxrwxrwx 1 ec2-user ec2-user 268 Jan  3 01:54 start.sh
+-rwxrwxrwx 1 ec2-user ec2-user 267 Jan  3 01:54 stop.sh
+drwxr-xr-x 6 root     root     124 Jan  3 01:55 storage
+drwxr-xr-x 2 root     root       6 Oct  4 03:21 storageRS
 ```
 
 ICON's services use [Docker Compose](https://docs.docker.com/compose/ "Docker Compose"). You can check the current containers as follows.
