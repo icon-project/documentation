@@ -2,7 +2,7 @@
 title: "T-Bears Command Line Interface Reference Guide"
 ---
 
-This page contains information about the T-Bears CLI commands and their arguments. This CLI reference guide includes details about T-Bears version 1.1.0.1.
+This page contains information about the T-Bears Command Line Interface (CLI) commands and their arguments. This CLI reference guide includes details about T-Bears version 1.1.0.1.
 [TOC]
 ## CLI Usage
 ```bash
@@ -46,7 +46,7 @@ Available commands:
 ```
 
 ## CLI Commands
-This chapter discusses the following sections.
+This section discusses the following topics:
 
  - T-Bears Service Commands
  - T-Bears SCORE Commands
@@ -56,10 +56,10 @@ This chapter discusses the following sections.
 ### T-Bears Service Commands
 Commands that manage the T-Bears service. There are three commands `start`, `stop` and `clear`.
 
-#### start
-- Description
+#### `start`
+- Description:
 Start T-Bears service. Whenever T-Bears service starts, it loads the configuration from `tbears_server_config.json` file. If you want to use other configuration file, you can specify the file location with the '-c' option.
-- Usage
+- Usage:
 ```bash
 usage: tbears start [-h] [-a HOSTADDRESS] [-p PORT] [-c CONFIG]
 
@@ -74,7 +74,7 @@ optional arguments:
                         tbears configuration file path (default:
                         ./tbears_server_config.json)
 ```
-- Example
+- Example:
 ```bash
 $ tbears start -p 9100 -c ./tbears_server_config.json
 Started tbears service successfully
@@ -82,10 +82,10 @@ $ tbears start -p 9100 -c ./tbears_server_config.json
 port 9100 already in use. use other port.
 ```
 
-#### stop
-- Description
+#### `stop`
+- Description:
 Stop all running SCOREs and T-Bears service.
-- Usage
+- Usage:
 ```bash
 usage: tbears stop [-h]
 
@@ -94,16 +94,16 @@ Stop all running SCOREs and tbears service
 optional arguments:
   -h, --help  show this help message and exit
 ```
-- Example
+- Example:
 ```bash
 $ tbears stop
 Stopped tbears service successfully
 ```
 
-#### clear
-- Description
+#### `clear`
+- Description:
 Clear all SCOREs deployed on local T-Bears service.
-- Usage
+- Usage:
 ```bash
 usage: tbears clear [-h]
 
@@ -112,18 +112,19 @@ Clear all SCOREs deployed on local tbears service
 optional arguments:
   -h, --help  show this help message and exit
 ```
-- Example
+- Example:
 ```bash
 $ tbears clear
 Cleared SCORE deployed on tbears successfully
 ```
 
 ### T-Bears SCORE Commands
-These commands are related to SCORE development, test and deployment. `init` generates SCORE project template. `test` is used to run unittest in the SCORE. `deploy` is used to deploy the SCORE. `scoreapi', 'sendtx' and 'call' are used to query and call the external method of the SCORE.
-#### init
-- Description
+These commands are related to SCORE development, test and deployment. `init` generates SCORE project template. `test` is used to run unittest in the SCORE. `deploy` is used to deploy the SCORE. `scoreapi`, `sendtx` and `call` are used to query and call the external method of the SCORE.
+
+#### `init`
+- Description:
 Initialize SCORE development environment. Generate <project\>.py, package.json and test code in <project\> directory. The name of the SCORE class is \<scoreClass\>.  Default configuration files, `tbears_server_config.json` used when starting T-Bears and `tbears_cli_config.json` used when deploying SCORE, are also generated.
-- Usage
+- Usage:
 ```bash
 usage: tbears init [-h] project scoreClass
 
@@ -138,7 +139,7 @@ positional arguments:
 optional arguments:
   -h, --help  show this help message and exit
 ```
-- Example
+- Example:
 ```bash
 $ tbears init project_test TestScore
 Initialized project_test successfully
@@ -146,7 +147,7 @@ $ tbears init project_test TestScore
 error: argument project: 'project_test' must be empty
 ...
 ```
-- File Description
+- File Description:
 
 | Item                       | Description                                              |
 | :------------------------- | :----------------------------------------------------------- |
@@ -161,10 +162,10 @@ error: argument project: 'project_test' must be empty
 | \<project>/tests/\_\_init\_\_.py | \_\_init\_\_.py file to make the test directory recognized as a python package. |
 | \<project>/tests/test\_<project>.py    | SCORE test main file.                              |
 
-#### test
-- Description
+#### `test`
+- Description:
 Run the unittest in the SCORE project.
-- Usage
+- Usage:
 ```bash
 usage: tbears test [-h] project
 
@@ -176,7 +177,7 @@ positional arguments:
 optional arguments:
   -h, --help  show this help message and exit
 ```
-- Example
+- Example:
 ```bash
 tbears test project_test/
 ..
@@ -186,12 +187,12 @@ Ran 2 tests in 0.180s
 OK
 ```
 
-#### deploy
-- Description
+#### `deploy`
+- Description:
 Deploy the SCORE. You can deploy it on local T-Bears service or on ICON network.
 
 `tbears_cli_config.json` file contains the deployment configuration properties. If you want to use other configuration file, you can specify the file location with the '-c' option.
-- Usage
+- Usage:
 ```bash
 usage: tbears deploy [-h] [-u URI] [-t {tbears,zip}] [-m {install,update}]
                      [-f FROM] [-o TO] [-k KEYSTORE] [-n NID] [-p PASSWORD]
@@ -225,7 +226,7 @@ optional arguments:
   -c CONFIG, --config CONFIG
                         deploy config path (default: ./tbears_cli_config.json)
 ```
-- Example
+- Example:
 ```bash
 $ tbears deploy score_proj
 error: argument project: There is no 'score_proj'
@@ -244,10 +245,10 @@ If you want to check SCORE deployed successfully, execute txresult command
 transaction hash: 0xa2e1941dd3aaf607d05aecd48af6eb8108be32bc3368fe30ea58d7dfad907551
 ```
 
-#### scoreapi
-- Description
+#### `scoreapi`
+- Description:
 Get list of APIs that the given SCORE provides. Please refer to icx_getScoreApi of [ICON JSON-RPC API v3](https://github.com/icon-project/icon-rpc-server/blob/develop/docs/icon-json-rpc-v3.md#icx_getscoreapi) for details.
-- Usage
+- Usage:
 ```bash
 usage: tbears scoreapi [-h] [-u URI] [-c CONFIG] address
 
@@ -265,7 +266,7 @@ optional arguments:
                         value for the "uri" (default:
                         ./tbears_cli_config.json)
 ```
-- Example
+- Example:
 ```bash
 $ tbears scoreapi hxe7af5fcfd8dfc67530a01a0e403882687528dfcb
 error: argument address: Invalid address 'hxe7af5fcfd8dfc67530a01a0e403882687528dfcb'. Address must start with 'cx'
@@ -301,10 +302,10 @@ SCORE API: [
 ]
 ```
 
-#### sendtx
-- Description
+#### `sendtx`
+- Description:
 Request `icx_sendTransaction` with the specified json file.
-- Usage
+- Usage:
 ```bash
 usage: tbears sendtx [-h] [-u URI] [-k KEYSTORE] [-c CONFIG] [-p PASSWORD]
                      json_file
@@ -329,7 +330,7 @@ optional arguments:
   -p PASSWORD, --password PASSWORD
                         Keystore file's password
 ```
-- Example
+- Example:
 ```bash
 $ cat send.json
 {
@@ -359,10 +360,10 @@ Send transaction request successfully.
 transaction hash: 0xc8a3e3f77f21f8f1177d829cbc4c0ded6fd064cc8e42ef309dacff5c0a952289
 ```
 
-#### call
-- Description
+#### `call`
+- Description:
 Request `icx_call` with the specified json file.
-- Usage
+- Usage:
 ```bash
 usage: tbears call [-h] [-u URI] [-c CONFIG] json_file
 
@@ -380,7 +381,7 @@ optional arguments:
                         value for the "uri" (default:
                         ./tbears_cli_config.json)
 ```
-- Example
+- Example:
 ```bash
 $ cat call.json
 {
@@ -406,10 +407,11 @@ response : {
 
 ### Other ICON JSON-RPC API Commands
 Commands that are related to ICX coin, transaction, and block.
-#### transfer
-- Description
-Transfer designated amount of ICX coins.
-- Usage
+
+#### `transfer`
+- Description:
+Transfer specified amount of ICX coins.
+- Usage:
 ```bash
 usage: tbears transfer [-h] [-f FROM] [-k KEYSTORE] [-n NID] [-u URI]
                        [-p PASSWORD] [-s STEPLIMIT] [-c CONFIG]
@@ -440,7 +442,7 @@ optional arguments:
                         values for the properties "keyStore", "uri", "from"
                         and "stepLimit". (default: ./tbears_cli_config.json)
 ```
-- Example
+- Example:
 ```bash
 $ tbears transfer -f hxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa hxbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab 100
 Got an error response
@@ -458,10 +460,10 @@ Send transfer request successfully.
 transaction hash: 0x6334856b5da9b2d4d841c1bbfa27fc0a0f3568d17bb9cac91302ce64f83aa6db
 ```
 
-#### balance
-- Description
-Get balance of given address.
-- Usage
+#### `balance`
+- Description:
+Get balance of specified address.
+- Usage:
 ```bash
 usage: tbears balance [-h] [-u URI] [-c CONFIG] address
 
@@ -479,7 +481,7 @@ optional arguments:
                         value for the "uri" (default:
                         ./tbears_cli_config.json)
 ```
-- Example
+- Example:
 ```bash
 $ tbears balance hxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 balance in hex: 0xde0b6b3a7640000
@@ -495,10 +497,10 @@ error: argument address: Invalid address 'hxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 ...
 ```
 
-#### totalsupply
-- Description
+#### `totalsupply`
+- Description:
 Query total supply of ICX.
-- Usage
+- Usage:
 ```bash
 usage: tbears totalsupply [-h] [-u URI] [-c CONFIG]
 
@@ -513,17 +515,17 @@ optional arguments:
                         value for the "uri" (default:
                         ./tbears_cli_config.json)
 ```
-- Example
+- Example:
 ```bash
 $ tbears totalsupply
 Total supply of ICX in hex: 0x52c3fff19494c464f000000
 Total supply of ICX in decimal: 1600920000000000000000000000
 ```
 
-#### txresult
-- Description
-Get transaction result by transaction hash.
-- Usage
+#### `txresult`
+- Description:
+Get transaction result by specified transaction hash.
+- Usage:
 ```bash
 usage: tbears txresult [-h] [-u URI] [-c CONFIG] hash
 
@@ -541,7 +543,7 @@ optional arguments:
                         value for the "uri" (default:
                         ./tbears_cli_config.json)
 ```
-- Example
+- Example:
 ```bash
 # update SCORE
 $ tbears txresult 0xa2e1941dd3aaf607d05aecd48af6eb8108be32bc3368fe30ea58d7dfad907551
@@ -584,10 +586,10 @@ Transaction result: {
 }
 ```
 
-#### txbyhash
-- Description
-Get transaction information by transaction hash
-- Usage
+#### `txbyhash`
+- Description:
+Get transaction information by specified transaction hash
+- Usage:
 ```bash
 usage: tbears txbyhash [-h] [-u URI] [-c CONFIG] hash
 
@@ -605,7 +607,7 @@ optional arguments:
                         value for the "uri" (default:
                         ./tbears_cli_config.json)
 ```
-- Example
+- Example:
 ```bash
 # update SCORE
 $ tbears txbyhash 0xa2e1941dd3aaf607d05aecd48af6eb8108be32bc3368fe30ea58d7dfad907551
@@ -657,10 +659,10 @@ Transaction: {
 }
 ```
 
-#### lastblock
-- Description
+#### `lastblock`
+- Description:
 Query last block information. When running on T-Bears service, "merkle_tree_root_hash" and "signature" will be empty.
-- Usage
+- Usage:
 ```bash
 usage: tbears lastblock [-h] [-u URI] [-c CONFIG]
 
@@ -675,7 +677,7 @@ optional arguments:
                         value for the "uri" (default:
                         ./tbears_cli_config.json)
 ```
-- Example
+- Example:
 ```bash
 $ tbears lastblock
 block info : {
@@ -713,10 +715,10 @@ block info : {
 }
 ```
 
-#### blockbyheight
-- Description
-Get block information using given block height.
-- Usage
+#### `blockbyheight`
+- Description:
+Get block information using specified block height.
+- Usage:
 ```bash
 usage: tbears blockbyheight [-h] [-u URI] [-c CONFIG] height
 
@@ -734,7 +736,7 @@ optional arguments:
                         value for the "uri" (default:
                         ./tbears_cli_config.json)
 ```
-- Example
+- Example:
 ```bash
 $ tbears blockbyheight 0
 block info : {
@@ -775,10 +777,10 @@ block info : {
 }
 ```
 
-#### blockbyhash
-- Description
-Get block information using given block hash.
-- Usage
+#### `blockbyhash`
+- Description:
+Get block information using specified block hash.
+- Usage:
 ```bash
 usage: tbears blockbyhash [-h] [-u URI] [-c CONFIG] hash
 
@@ -796,7 +798,7 @@ optional arguments:
                         value for the "uri" (default:
                         ./tbears_cli_config.json)
 ```
-- Example
+- Example:
 ```bash
 $ tbears blockbyhash 0x59ec3abfada762374c9cfd058d1d950f5e22c989e01bcb9b15c378d980ed83aa
 block info : {
@@ -831,10 +833,11 @@ block info : {
 
 ### T-Bears Utility Commands
 Commands that generate configuration file and keystore file.
-#### keystore
-- Description
-Create a keystore file in the given path. Generate a private and public key pair.
-- Usage
+
+#### `keystore`
+- Description:
+Create a keystore file in the specified path. Generate a private and public key pair.
+- Usage:
 ```bash
 usage: tbears keystore [-h] [-p PASSWORD] path
 
@@ -849,7 +852,7 @@ optional arguments:
   -p PASSWORD, --password PASSWORD
                         Keystore file's password
 ```
-- Example
+- Example:
 ```bash
 $ tbears keystore -p short ./keystore_example
 Password must be at least 8 characters long including alphabet, number, and special character.
@@ -857,13 +860,13 @@ $ tbears keystore -p p@ssw0rd ./keystore_example
 Made keystore file successfully
 ```
 
-#### genconf
-- Description
+#### `genconf`
+- Description:
 Generate T-Bears default config files. 
 `tbears_cli_config.json` : config file for T-Bears CLI
 `tbears_server_config.json` : config file for T-Bears Service
 `keystore_test1` : keystore file for `test1` account
-- Usage
+- Usage:
 ```bash
 usage: tbears genconf [-h]
 
@@ -873,7 +876,7 @@ tbears_cli_config.json and keystore_test1)
 optional arguments:
   -h, --help  show this help message and exit
 ```
-- Example
+- Example:
 ```bash
 $ tbears genconf
 Made tbears_cli_config.json, tbears_server_config.json, keystore_test1 successfully
@@ -881,10 +884,10 @@ $ tbears genconf
 There were configuration files already.
 ```
 
-#### console
-- Description
+#### `console`
+- Description:
 Enter T-Bears interactive mode using IPython. ([Ipython.org](https://ipython.org/))
-- Usage
+- Usage:
 ```bash
 usage: tbears console [-h]
 
@@ -893,7 +896,7 @@ Get into tbears interactive mode by embedding IPython
 optional arguments:
   -h, --help  show this help message and exit
 ```
-- Example
+- Example:
 In the interactive mode, you can execute command in short form (without `tbears`) by predefined IPython's magic command.
 TAB will complete T-Bears's command or variable names. Use TAB.
 ```bash
