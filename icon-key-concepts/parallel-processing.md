@@ -6,7 +6,7 @@ excerpt: "Executing transactions in parallel"
 Various factors affect the blockchain performance. One of the major factors is the **execution time** of transactions. In this article, we illustrate our R&D approach to increase the blockchain performance by reducing the transaction execution time. 
 
 ## Transaction Execution Time 
-Transactons Per Second (TPS) is the number of transactions that a network can process during a single second. TPS is a key metric of blockchain performance. 
+Transactions Per Second (TPS) is the number of transactions that a network can process during a single second. TPS is a key metric of blockchain performance. 
 Transaction can be defined from the submission to the network until it is included in the block. In ICON, the number of transactions included in a block are always quaranteed to be executed within one block generation time, so, it is a good representation of transaction throughput, and proportional to the TPS.  
 
 TPS is mainly affected by following factors.
