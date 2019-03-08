@@ -21,7 +21,7 @@ On the other hand, reducing the execution time has not been touched yet. If we r
 
 The most straightforward approach to reduce the transaction execution time is using stronger computing power. This is called scale-up or vertical scaling. However, increasing computing power is expensive and has physical limitation. Instead, in modern computing, increasing overall throughput with the parallel execution using multiple cores is more common approach.
 
-That said, in blockchain, sequential execution of transactions has been the norm, because, blockchain network represents a world state - a collection of accounts and their states, and every consensus node must agree on the state change after a transaction. Because previous transctions can affect the execution of the current transaction, it is safe to execute transactions sequentially.
+That said, in blockchain, sequential execution of transactions has been the norm, because, blockchain network represents a world state - a collection of accounts and their states, and every consensus node must agree on the state change after a transaction. Because previous transactions can affect the execution of the current transaction, it is safe to execute transactions sequentially.
 
 On closer look, however, some transactions are disjoint or independent, meaning that they do not write on the same state variables within a single block time. Those independent transactions can be executed in parallel without any conflict. In the subsequent sections, we will explain more in detail how this can be implemented on two different cases.
 
