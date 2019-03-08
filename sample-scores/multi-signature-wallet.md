@@ -525,18 +525,18 @@ Submits a transaction which is to be executed when the number of confirmations m
 def submitTransaction(self, _destination: Address, _method: str="", _params: str="", _value: int=0, _description: str=""):
 ```
 
-`_destination` is the SCORE address in which `_method` is defined in. 
+`_destination` is the SCORE address where `_method` is defined. 
 
-`_description` is a detailed description of the transaction. This parameter is optional.
+`_description` is a supplementary explanation of the transaction. (optional parameter)
+    
+`_value` is amount of ICX coin in loop (1 ICX == 1 ^ 18 loop). This parameter is used when transferring ICX coin or calling 'payable' method. (optional parameter)
 
-`_value` is amount of ICX coin in loop (1 ICX == 1 ^ 18 loop). This parameter is used when transferring ICX coin or calling 'payable' method (i.e. optional parameter). 
+`_method` is the name of the method that is to be executed when the number of confirmations meets the 'requirement' value. In the case of transferring ICX coin, do not have to specify this parameter. (optional parameter)
 
-`_method` is the name of the method that is to be executed when the number of confirmations meets the 'requirement' value. In the case of transferring ICX coin, do not have to input this parameter (i.e. optional parameter).
-
-`_params` is a stringified JSON data. This data is used as the arguments of the `_method` when it is executed. Below is the format. **name** is parameter's name, **type** is parameter's type (supported types are `int`, `str`, `bool`, `Address` and `bytes`), **value** is the actual data. In the case of transferring ICX coin, do not have to input this parameter (i.e. optional parameter).
+`_params` is a stringified JSON data. This data is used as the arguments of the `_method` when it is executed. Below is the format. **name** is parameter's name, **type** is parameter's type (supported types are `int`, `str`, `bool`, `Address` and `bytes`), **value** is the actual data. In the case of transferring ICX coin, do not have to specify this parameter. (optional parameter)
 
 
-![](./images/submitTransaction_json_format.png)
+![parameter_list_in_json_format](multi-signature-wallet-1.png)
 
 Below is an example of a `addWalletOwner` method call. After writing the request in the JSON format, you have to stringify it.
 ```json
@@ -764,7 +764,7 @@ def revokeTransaction(self, _transactionId: int):
 }
 ```
 
-### Methods (only called by wallet)
+### Methods (only callable by wallet)
 
 These methods only can be called by the multisig wallet SCORE itself. **In short, you can not call those methods directly (or it will fail)**. If you want to execute these methods, call `submitTransaction` with the method's information as a parameter.
 
