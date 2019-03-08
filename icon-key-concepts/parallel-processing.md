@@ -56,7 +56,7 @@ But, each specific method requires a limited permission to the accounts. So, if 
 With the extra information about the method, we can create a virtual world state (a partial view to the world) for each transaction.
 The transaction can only change the world state when the method is designated to do so. Otherwise, any attempt to change the world state beyond its permission will result the transaction failed.
 
-Below diagram illustrates how the parallel execution of two transacations are managed.
+Below diagram illustrates how the parallel execution of two transactions are managed.
 
 ![Parallel execution environment](parallel-processing-2.png)
 
