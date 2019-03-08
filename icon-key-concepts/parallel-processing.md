@@ -14,7 +14,7 @@ TPS is mainly affected by following factors.
 * Communication time among consensus nodes
 * Execution time of transaction 
 
-Travel and communication time are network bound, and there has been continuous attempt to optimize the network protocol in blockchain. Further optimizing the network protocol is not trivial as it invloves the risk of breaking the liveness and safety properties in the blockchain network. 
+Travel and communication time are network bound, and there has been continuous attempt to optimize the network protocol in blockchain. Further optimizing the network protocol is not trivial as it involves the risk of breaking the liveness and safety properties in the blockchain network.
 On the other hand, reducing the execution time has not been touched yet. If we reduce the transaction execution time, we can improve the performance of blockchain without risking the network stability.
 
 ## Parallel Execution
