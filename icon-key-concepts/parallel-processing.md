@@ -62,4 +62,4 @@ Below diagram illustrates how the parallel execution of two transactions are man
 
 After executing transactions, each environment releases the locked accounts, then other transaction can create own execution environment with the required accounts being locked.
 
-To enable parallel processing, SCORE methods should be annotated with the required accounts. Careful design such as spliting  database and code will enhance the parallelsm. 
+To enable parallel processing, SCORE methods should be annotated with the required accounts. Careful design such as splitting database and code will enhance the parallelism. 
