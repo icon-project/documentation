@@ -18,8 +18,8 @@ You can understand how to audit SCORE
 
 ## Prerequisite 
 
-* [score-overview](https://github.com/icon-project/documentation/blob/develop/score/score-overview.md)
-* [score-writing-score](https://github.com/icon-project/documentation/blob/develop/score/writing-score.md)
+* [score-overview](https://github.com/icon-project/documentation/blob/master/score/score-overview.md)
+* [score-writing-score](https://github.com/icon-project/documentation/blob/master/score/writing-score.md)
 
 ## Severity level
 

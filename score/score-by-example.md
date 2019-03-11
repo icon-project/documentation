@@ -17,8 +17,8 @@ You can deploy Samples using T-Bears
 
 ## Prerequisite 
 
-* [score-overview](https://github.com/icon-project/documentation/blob/develop/score/score-overview.md)
-* [writing-score](https://github.com/icon-project/documentation/blob/develop/score/writing-score.md)
+* [score-overview](https://github.com/icon-project/documentation/blob/master/score/score-overview.md)
+* [writing-score](https://github.com/icon-project/documentation/blob/master/score/writing-score.md)
 
 ## Token & Crowdsale
 This document will explain how to write SCOREs with T-Bears framework. Let’s start by creating a simple token contract. You can create an empty project using init command. Suppose your project name is ‘sample_token’ and the main class name is ‘SampleToken’.

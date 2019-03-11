@@ -17,7 +17,7 @@ Understand how to write SCORE unit-test
 
 ## Prerequisite 
 
-* [score-overview](https://github.com/icon-project/documentation/blob/develop/score/score-overview.md)
+* [score-overview](https://github.com/icon-project/documentation/blob/master/score/score-overview.md)
 
 
 ### How to Write SCORE Unit Test Code
