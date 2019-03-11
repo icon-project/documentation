@@ -242,10 +242,12 @@ self.FundTransfer2(self.msg.sender, amount, True)
 Possible data types for function parameters are primitive types (int, str, bytes, bool, Address). Array, Dictionary and None type parameter is not supported.
 
 #### Fallback
-fallback function can not be decorated with @external.  
+Fallback function can not be decorated with @external.  
 (i.e., fallback function is not allowed to be called by external contract or user.)  
 This fallback function is executed whenever the contract receives plain icx coins without data.  
 If the fallback function is not decorated with @payable, the icx coin transfers to the contract will fail.
+You query a SCORE api info, you can find only decorated payable fallback.
+Even if you transfer zero ICX to this SCORE, it is also not allowed to be called.
 
 
 #### InterfaceScore
