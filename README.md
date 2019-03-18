@@ -30,8 +30,8 @@
 ## SCORE Development Guide 
 - [SCORE Overview](/score/score-overview.md)
 - [Writing SCORE](/score/writing-score.md)
-- [ICONservice API reference](https://iconservice.readthedocs.io_
-- [Writing SCORE Integrate Tests](/howto/how-to-write-score-integrate-tests.md)
+- [ICONservice API reference **](https://iconservice.readthedocs.io)
+- [Writing SCORE Integration Tests](/howto/how-to-write-score-integrate-tests.md)
 - [Invoking SCORE Functions](/score/invoking-score-functions.md)
 - Test Framework
 - Step Estimation
@@ -70,14 +70,14 @@
 
 ## Client SDK
 - JavaScript SDK 
-  - [Quickstart](/references/javascript-sdk/quickstart.md) 
-  - [API Reference](/references/javascript-sdk/api-reference.md)
+  - [Quickstart **](/references/javascript-sdk/quickstart.md) 
+  - [API Reference **](/references/javascript-sdk/api-reference.md)
 - Python SDK 
   - [Quickstart](/references/python-sdk/quickstart.md) 
   - [API Reference](/references/python-sdk/api-reference.md)
 - Java SDK
-  - [Quickstart](/references/java-sdk/java-sdk-reference.md)
-  - [API Reference](http://www.javadoc.io/doc/foundation.icon/icon-sdk)
+  - [Quickstart **](/references/java-sdk/java-sdk-reference.md)
+  - [API Reference **](http://www.javadoc.io/doc/foundation.icon/icon-sdk)
 - Swift
   - [Quickstart](/references/ICONKit/api-reference.md)
   - API Reference
