@@ -850,7 +850,7 @@ This function causes state transition.
 | nonce     | [T_INT](#T_INT)                                            | optional | An arbitrary number used to prevent transaction hash collision. |
 | signature | [T_SIG](#T_SIG)                                            | required | Signature of the transaction.                                |
 | dataType  | [T_DATA_TYPE](#T_DATA_TYPE)                                | optional | Type of data. (call, deploy, or message)                     |
-| data      | T_DICT or String                                           | optional | The content of data varies depending on the dataType. See [Parameters - data](#sendtxparameterdata). |
+| data      | T_DICT or String                                           | optional | The content of data varies depending on the dataType. See [Parameters - data](#sendtxparameterdata).<br />The maximum size of data is 512 KB. |
 
 <a id ="sendtxparameterdata">**Parameters - data**</a>
 
