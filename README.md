@@ -13,7 +13,7 @@
 - ICONick
 
 ## ICON Key Concepts
-- Account [OLD](https://github.com/icon-project/icon-project.github.io/blob/master/docs/wallet.md)
+- Account ([OLD Link](https://github.com/icon-project/icon-project.github.io/blob/master/docs/wallet.md))
 - [Transactions](/icon-key-concepts/transactions.md)
 - Transaction Fees
 - ICON Nodes
