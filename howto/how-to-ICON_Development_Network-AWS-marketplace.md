@@ -50,7 +50,7 @@ https://aws.amazon.com/marketplace/pp/B07KBTZHZD?ref_=aws-mp-console-subscriptio
 ![ICON Development Network2](./images/ICON_Development_Network_02.png)
 4. Select options (must select a specific region that you want to deploy). Then, click **Continue to Launch**
  - Fulfillment Option: Leave as default.
- - Software Version: Leave as default. If you need to setup as specific version, you can change to specific version. 
+ - Software Version: Leave as default. It will provide the latest stable version. 
  - Region: **(Required)** Please select a region to setup.
 ![ICON Development Network3](./images/ICON_Development_Network_03.png)
 5. From **Choose Action**'s drop downmenu, select **Launch CloudFormation** and click **Launch**
@@ -85,7 +85,7 @@ https://aws.amazon.com/marketplace/pp/B07KBTZHZD?ref_=aws-mp-console-subscriptio
 
 ### EC2 instance connect & navigate
 If you want to access each EC2 instance, you need public IP address of each EC2 Instance and private key selected during the CloudFormation process.
-Get each EC2 instance Public IP address(**Peer\*PublicIP**) information from Previous **Outputs**
+Get each EC2 instance Public IP address(**Peer\*PublicIP**. For Example, Peer1 PublicIP) information from Previous **Outputs**.(Peer1 PublicIP,  
 
 ```
 $ ssh -i yourkey.pem ec2-user@<Node Instance IP address>
