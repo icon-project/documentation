@@ -85,7 +85,7 @@ https://aws.amazon.com/marketplace/pp/B07KBTZHZD?ref_=aws-mp-console-subscriptio
 
 ### EC2 instance connect & navigate
 If you want to access each EC2 instance, you need public IP address of each EC2 Instance and private key selected during the CloudFormation process.
-Get each EC2 instance Public IP address(**Peer\*PublicIP**. For Example, Peer1 PublicIP) information from Previous **Outputs**.(Peer1 PublicIP,  
+Get each EC2 instance Public IP address(**Peer\*PublicIP**. For Example, Peer1 PublicIP) information from Previous **Outputs**.
 
 ```
 $ ssh -i yourkey.pem ec2-user@<Node Instance IP address>
