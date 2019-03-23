@@ -23,7 +23,7 @@ The most straightforward approach to reduce transaction execution time is using 
 
 That said, in blockchain, sequential execution of transactions has been the norm, because a blockchain network represents a world state - a collection of accounts and their states, and every consensus node must agree on the state change after a transaction. Since previous transactions can affect the execution of the current transaction, it is safer to execute transactions sequentially.
 
-On closer look, however, some transactions are disjointed or independent, meaning that they do not write on the same state variables during their execution. These independent transactions can be executed in parallel without any conflict with other transactions. In the subsequent sections, we will explain in more detail how this can be implemented in two different cases.
+On closer look, however, some transactions are disjoint or independent, meaning that they do not write on the same state variables during their execution. These independent transactions can be executed in parallel without any conflict with other transactions. In the subsequent sections, we will explain in more detail how this can be implemented in two different cases.
 
 
 ### Coin transfer
