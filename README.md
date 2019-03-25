@@ -51,7 +51,7 @@
 ## Howto
 - [Account management](/howto/account-management.md)
 - [How to change a network (Tracker, ICONex)](/howto/how-to-change-network.md)
-- [How to deploy, update, and destroy a SCOR](/howto/how-to-deploy-score.md)
+- [How to deploy, update, and destroy a SCORE](/howto/how-to-deploy-score.md)
 - How to get test ICX
 - How to interact with ICON network (SDKs, ICONex)
 - Step estimation
