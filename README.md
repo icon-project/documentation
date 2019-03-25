@@ -57,6 +57,7 @@
 - [Writing SCORE unit test](/score/score-unit-test.md)
 - How to generate a key pair without SDK
 - [How to generate a transaction signature](/howto/how-to-generate-a-transaction-signature.md)
+- How to set the policy for transaction fee (fee sharing, virtual step)
 
 ## User Manual
 - ICONest
