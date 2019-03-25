@@ -13,7 +13,7 @@
 - ICONick
 
 ## ICON Key Concepts
-- Account ([OLD Link](https://github.com/icon-project/icon-project.github.io/blob/master/docs/wallet.md))
+- [Account](/icon-key-concepts/account.md)
 - [Transactions](/icon-key-concepts/transactions.md)
 - Transaction Fees
 - ICON Nodes
@@ -24,8 +24,9 @@
 - Interchain - BTP
 
 ## SCORE Quickstart 
-- Start with Local Emulator
-- Deploy on the ICON testnet
+- [Quickstart](/score/quickstart.md)
+  - [Start with Local Emulator](/score/quickstart_p1.md)
+  - [Deploy on the ICON testnet](/score/quickstart_p2.md)
 
 ## SCORE Development Guide 
 - [SCORE Overview](/score/score-overview.md)
@@ -48,9 +49,9 @@
 - Oracle
 
 ## Howto
-- Account management
-- How to change a network (Tracker, ICONex)
-- How to deploy, update, and destroy a SCORE
+- [Account management](/howto/account-management.md)
+- [How to change a network (Tracker, ICONex)](/howto/how-to-change-network.md)
+- [How to deploy, update, and destroy a SCOR](/howto/how-to-deploy-score.md)
 - How to get test ICX
 - How to interact with ICON network (SDKs, ICONex)
 - Step estimation
