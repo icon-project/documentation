@@ -2,9 +2,13 @@ Account Management
 ==============
 
 ## Account
-Accounts represent identities of participants in the blockchain network, users and contracts.
+Accounts represent identities of participants in the blockchain network, that is, users and contracts. Accounts are used to identify the owner of trasactions, and specify the destinations of trasactions. All accounts can have tokens.
 
 There are two types of accounts in ICON, accounts that are associated with users, often dubbed as Externally Owned Accounts (EOA), and Smart Contract (SCORE) Accounts. An EOA address starts with "hx" followed by a 20-byte hex string, while a Smart Contract Account address starts with "cx" followed by a 20-byte hex string. 
+
+There are some special, pre-defined accounts, such as:
+ - Governance contract
+ - Public Treasury
 
 In order to deploy a SCORE on the ICON network or make a transaction, one must hold a valid EOA. Furthermore, when we say account in this document, it means EOA. The terms of EOA, wallet, and keystore are not exactly same, but are often used interchangeably. 
 
