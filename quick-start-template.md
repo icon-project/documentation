@@ -57,7 +57,9 @@ Should present the information of latest stable version.
 ## References
 
 API references for each language
+
 ICON JSON-RPC API v3
+
 IRC2 Specification
 
 ## Licenses
