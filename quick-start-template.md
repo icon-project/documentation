@@ -20,7 +20,7 @@ Helping your readers to prepare increases the likelihood that they will continue
 
 ## Installation
 
-## Structure of SDK
+Should present the information of latest stable version.
 
 ## IconService
 
@@ -44,6 +44,8 @@ Helping your readers to prepare increases the likelihood that they will continue
 
 ### Token Transfer
 
+### Calling SCORE API
+
 ### Checking Transaction Result
 
 ## Utilities
@@ -53,3 +55,10 @@ Helping your readers to prepare increases the likelihood that they will continue
 ### Validators
 
 ## References
+
+API references for each language
+ICON JSON-RPC API v3
+IRC2 Specification
+
+## Licenses
+
