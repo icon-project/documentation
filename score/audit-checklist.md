@@ -486,7 +486,7 @@ Values of parameters must be in a valid range.
 There is no size limit in `str` or `int` type in Python, however, transaction message should not exceed 512 KB.
 ```python
 # Function declarations
-def myTransfer(_value: int) -> bool
+def myTransfer(_value: int) -> bool:
 def myTransfer1(_value: int, _extra: str) -> bool:
 
 # Bad
