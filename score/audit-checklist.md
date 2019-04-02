@@ -25,25 +25,31 @@ You can understand how to audit SCORE
 
 ### Critical
 - [Timeout](#timeout)
-- [Unfinishing loop](#unfinishing-loop)
+- [Unfinishing Loop](#unfinishing-loop)
 - [Package import](#package-import)
-- [System call](#system-call)
+- [System Call](#system-call)
+- [Outbound Network Call](#outbound-network-call)
+- [iconservice Internal API](#iconservice-internal-api)
 - [Randomness](#randomness)
-- [Outbound network call](#outbound-network-call)
-- [IRC2 Token Standard compliance](#irc2-token-standard-compliance)
-- [IRC2 Token parameter name](#irc2-token-parameter-name)
+- [Fixed SCORE Infomation](#fixed-score-infomation)
+- [IRC2 Token Standard Compliance](#irc2-token-standard-compliance)
+- [IRC2 Token Parameter Name](#irc2-token-parameter-name)
 - [Eventlog on Token Transfer](#eventlog-on-token-transfer)
 - [Eventlog without Token Transfer](#eventlog-without-token-transfer)
 - [ICXTransfer Eventlog](#icxtransfer-eventlog)
+- [Super Class](#super-class)
+- [Keyword Arguments](#keyword-arguments)
 - [Big Number Operation](#big-number-operation)
 - [Instance Variable](#instance-variable)
+- [StateDB Operation](#statedb-operation)
+- [StateDB Write Operation](#statedb-write-operation)
+- [Temporary Limitation](#temporary-limitation)
 
 ### Warning
 - [External Function Parameter Check](#external-function-parameter-check)
 - [Internal Function Parameter Check](#internal-function-parameter-check)
-- [Predictable arbitrarity](#predictable-arbitrarity)
+- [Predictable Arbitrarity](#predictable-arbitrarity)
 - [Unchecked Low Level Calls](#unchecked-low-level-calls)
-- [Super Class](#super-class)
 - [Underflow/Overflow](#underflowoverflow)
 - [Vault](#vault)
 - [Reentrancy](#reentrancy)
@@ -74,7 +80,7 @@ def airdrop_token(self, _to: Address, _value: int, _data: bytes = None):
     self._transfer(self.msg.sender, _to, _value, _data)
 ```
 
-### Unfinishing loop
+### Unfinishing Loop
 
 Use `for` and `while` statement carefully. Make sure that the code always reaches the exit condition.
 If the operation inside the loop consumes `step`, the program will halt at some point.
@@ -108,7 +114,7 @@ from iconservice import *
 from .myclass import *
 ```
 
-### System call
+### System Call
 
 System call is prohibited.  
 SCORE can not access any system resources.
@@ -117,6 +123,27 @@ SCORE can not access any system resources.
 # Bad
 import os
 os.uname()
+```
+
+### Outbound Network Call
+
+Outbound network call is prohibited.  
+Outcome of network call from each node can be different.
+
+```python
+# Bad
+import socket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(host, port)
+```
+
+### iconservice Internal API
+
+Among the API provided by ICONService, API written for platform should not be used in SCORE. Attempts to access internal APIs with information obtained using getAttr() are prohibited. Use externally released APIs only. You can find recent released APIs at https://iconservice.readthedocs.io/en/latest/.
+
+```python 
+# Bad
+something = getattr(self, 'something', '')
 ```
 
 ### Randomness
@@ -132,19 +159,25 @@ Therefore, not only random function, but any attempt to prevent block generation
 won = datetime.datetime.now() % 2 == 0
 ```
 
-### Outbound network call
+### Fixed SCORE Infomation
+SCORE's critical information should not be changed once it has been deployed. In case of IRC2 token SCORE, `name`, `symbol` and `decimals` should not be changed; for other SCOREs, `name` must not be changed.
 
-Outbound network call is prohibited.  
-Outcome of network call from each node can be different.
-
+IRC token type must be fixed once deployed as well. For example, IRC2 token SCORE should not be updated to IRC3 tokens, and IRC2 token should not be updated to non-IRC SCORE. 
 ```python
-# Bad
-import socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(host, port)
+@external(readonly=True)
+def name(self) -> str:
+    return self._name.get()
+#Bad
+@external
+def setname(self, new_name):
+    self._name.set(new_name)
 ```
+You should not implement any class methods that update the variables, and those values should not be changed when you update the SCORE.
+For IRC2 tokens, you must update the IRC2 token SCORE with the same `name`, `symbol` and `decimals` values. 
+If it is not an IRC2 token, it should be update to non-IRC2 SCORE with the same name value.
 
-### IRC2 Token Standard compliance
+
+### IRC2 Token Standard Compliance
 
 IRC2 compliant token must implement every functions in the specification.  
 [IRC2 ICON Token Standard](https://github.com/icon-project/IIPs/blob/master/IIPS/iip-2.md)
@@ -170,7 +203,7 @@ def balanceOf(self, _owner: Address) -> int:
 def transfer(self, _to: Address, _value: int, _data: bytes=None):
 ```
 
-### IRC2 Token parameter name
+### IRC2 Token Parameter Name
 
 When implementing IRC2 compliant token, make the parameter names in the function remain the same
 as defined in [IRC2 ICON Token Standard](https://github.com/icon-project/IIPs/blob/master/IIPS/iip-2.md).
@@ -225,6 +258,53 @@ ICXTransfer Eventlog is reserved for ICX transfer. Do not implement the Eventlog
 @eventlog(indexed=3)
 def ICXTransfer(self, _from: Address, _to: Address, _value: int):
 ```
+
+### Super Class
+
+In your SCORE main class that inherits IconScoreBase, you must call super().\_\_init\_\_() in the \_\_init\_\_() function to initialize the state DB. Likewise, super().on_install() must be called in on_install() function and super().on_update() must be called in on_update() function.
+
+```python
+# Bad
+class MyClass(IconScoreBase):
+    def __init__(self, db: IconScoreDatabase) -> None:
+        self._context__name = VarDB('context.name', db, str)
+        self._context__cap = VarDB('context.cap', db, int)
+
+    def on_install(self, name: str, cap: str) -> None:
+        # doSomething
+
+    def on_update(self) -> None:
+        # doSomething
+
+# Good
+class MyClass(IconScoreBase):
+    def __init__(self, db: IconScoreDatabase) -> None:
+        super().__init__(db)
+        self._context__name = VarDB('context.name', db, str)
+        self._context__cap = VarDB('context.cap', db, int)
+
+    def on_install(self, name: str, cap: str) -> None:
+        super().on_install()
+        # doSomething
+
+    def on_update(self) -> None:
+        super().on_update()
+        # doSomething
+```
+
+### Keyword Arguments
+Keyword arguments are not allowed as an input parameter of `on_install()` and `on_update()` functions.
+
+```python
+# Good
+def on_install(self, name: str, symbol: str, amount: int, decimals: int):
+    ...
+
+# Bad
+def on_install(self, **kwargs) -> None:
+    ...
+```
+
 
 ### Big Number Operation
 
@@ -309,6 +389,91 @@ def get_organizer(self) -> Address:
     return self._organizer.get()
 ```
 
+### StateDB Operation
+
+In order not to cause an unexpected situation, VarDB, DictDB and ArrayDB should be accessed in a permitted manner. 
+
+```python
+# VarDB
+self.test_var = VarDB('test_var', db, value_type=str)
+
+# Good
+self.test_var.set('sample')      # set
+name = self.test_var.get()       # get
+# Bad
+self.test_var = 'sample'         # Error
+
+# DictDB
+self.test_dict = DictDB('test_dict', db, value_type=int)
+
+# Good
+self.test_dict['key'] = 1        ## set
+print(self.test_dict['key'])     ## get 
+# Bad
+self.test_dict = 1               ## Error 
+
+# ArrayDB
+self.test_array = ArrayDB('test_array', db, value_type=int)
+
+# Good
+self.test_array.put(0)           # put the value at the last index
+self.test_array.pop()            # remove the value at the last index and return it
+self.test_array.get(0)           # get the value at some index
+# Bad
+self.test_array = 1              # Error 
+```
+
+Also, if you want to store a class instance in StateDB, you must explicitly serialize it before saving.
+
+```python
+self.something = VarDB('context.something', db, str)
+
+# Good
+self.something.set( str(Something()) )
+
+# Bad
+self.something.set( Something() )
+```
+
+### StateDB Write Operation
+
+StateDB write operations inside of \_\_init\_\_() function is prohibited. Updating state DB in \_\_init\_\_() may cause unexpected behavior.
+
+```python
+# Bad
+def __init__(self, db: IconScoreDatabase) -> None:
+    super().__init__(db)
+    self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
+    self._total_supply.set(10000000)
+```
+
+### Temporary Limitation
+Due to the known issue of ArrayDB, declaring ArrayDB as a class member variable in __init__() may not work as intended. Following workaround is needed. ArrayDB instance must be initialized every time it is used.
+
+```python
+# Problematic (Original Usage)
+def __init__(self, db: IconScoreDatabase) -> None:
+    super().__init__(db)
+    self.test_array = ArrayDB('test_array', db, value_type=int)
+
+def func(self) -> None:
+    self.test_array.put(0)
+
+
+# Good (Temporary)
+@property
+def test_array(self) -> ArrayDB:
+    return ArrayDB('test_array', db, value_type=int)
+
+def __init__(self, db: IconScoreDatabase) -> None:
+    super().__init__(db)
+    # no declaration
+
+def func(self) -> None:
+    self.test_array.put(0)
+```
+
+
 ## Warning
 
 ### External Function Parameter Check
@@ -371,38 +536,6 @@ self._refund_icx_amount[_to] += amount
 self.icx.transfer(_to, amount)
 ```
 
-### Super Class
-
-In your SCORE main class that inherits IconScoreBase, you must call super().\_\_init\_\_() in the \_\_init\_\_() function to initialize the state DB. Likewise, super().on_install() must be called in on_install() function and super().on_update() must be called in on_update() function.
-
-```python
-# Bad
-class MyClass(IconScoreBase):
-    def __init__(self, db: IconScoreDatabase) -> None:
-        self._context__name = VarDB('context.name', db, str)
-        self._context__cap = VarDB('context.cap', db, int)
-
-    def on_install(self, name: str, cap: str) -> None:
-        # doSomething
-
-    def on_update(self) -> None:
-        # doSomething
-
-# Good
-class MyClass(IconScoreBase):
-    def __init__(self, db: IconScoreDatabase) -> None:
-        super().__init__(db)
-        self._context__name = VarDB('context.name', db, str)
-        self._context__cap = VarDB('context.cap', db, int)
-
-    def on_install(self, name: str, cap: str) -> None:
-        super().on_install()
-        # doSomething
-
-    def on_update(self) -> None:
-        super().on_update()
-        # doSomething
-```
 
 ### Underflow/Overflow
 
