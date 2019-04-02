@@ -37,7 +37,7 @@ Peer nodes will become a leader node in pre-defined order, and produce one block
 
 ## Citizen
 
-Citize nodes synchronize the blockchan data from Peer nodes. 
+Citizen nodes synchronize the blockchain data from Peer nodes. 
 Of course, Citizen also executes the trasactions in the block for verifying them.
 So we can provide the confidence of block data downloaded from Peer nodes.
 In addition, Citizen relay the trasaction to the Peer nodes.
