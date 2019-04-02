@@ -291,7 +291,7 @@ class MyClass(IconScoreBase):
 ```
 
 ### Keyword Arguments
-Keyword argument is not allowed on_install() and on_update() function parameters
+Keyword arguments are not allowed as an input parameter of `on_install()` and `on_update()` functions.
 
 ```python
 # Good
