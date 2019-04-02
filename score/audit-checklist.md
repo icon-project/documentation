@@ -38,7 +38,7 @@ You can understand how to audit SCORE
 - [Eventlog without Token Transfer](#eventlog-without-token-transfer)
 - [ICXTransfer Eventlog](#icxtransfer-eventlog)
 - [Super Class](#super-class)
-- [Keyword Argument](#keyword-argument)
+- [Keyword Arguments](#keyword-arguments)
 - [Big Number Operation](#big-number-operation)
 - [Instance Variable](#instance-variable)
 - [StateDB Operation](#statedb-operation)
