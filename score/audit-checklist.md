@@ -172,7 +172,7 @@ def name(self) -> str:
 def setname(self, new_name):
     self._name.set(new_name)
 ```
-The above rules should also be guaranteed for SCORE update deployments.
+You should not implement any class methods that update the variables, and those values should not be changed when you update the SCORE.
 For IRC2 tokens, you must update the IRC2 token SCORE with the same name, symbol and decimals value. 
 If it is not an IRC2 token, it should be update to non-IRC2 SCORE with the same name value.
 
