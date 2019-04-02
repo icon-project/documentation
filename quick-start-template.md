@@ -3,13 +3,7 @@ title: "Quick Start Template for SDK"
 excerpt: ""
 ---
 
-## Intended Audience
-
-Describe intended audience.
-
-## Purpose
-
-Purpose of this quick-start guide.
+Purpose and scope of this quick-start guide.
 Briefly mention what users will learn from this tutorial.
 
 ## Prerequisite
@@ -22,45 +16,27 @@ Helping your readers to prepare increases the likelihood that they will continue
 
 Should present the information of latest stable version.
 
-## IconService
+## Configuration (Optional)
 
-## Queries
+Such as env. variables 
 
-### Blocks
+## Using the SDK
 
-### Balances
+Import, initialize, deinitialize, and basic call that applies to every or most code to use the SDK. 
+This section also serves as a test if the SDK has been correctly installed and ready to use.  
 
-## Wallet
+## Code Examples
 
-### Create Wallet
+### Example 1
 
-### Load Wallet
+### Example 2
 
-### Store Wallet
 
-## Transactions
+## References (Optional)
 
-### ICX Transfer
+- reference 1
+- reference 2
 
-### Token Transfer
-
-### Calling SCORE API
-
-### Checking Transaction Result
-
-## Utilities
-
-### Converters
-
-### Validators
-
-## References
-
-API references for each language
-
-ICON JSON-RPC API v3
-
-IRC2 Specification
 
 ## Licenses
 
