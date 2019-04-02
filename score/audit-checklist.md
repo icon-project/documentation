@@ -290,7 +290,7 @@ class MyClass(IconScoreBase):
         # doSomething
 ```
 
-### Keyword Argument
+### Keyword Arguments
 Keyword argument is not allowed on_install() and on_update() function parameters
 
 ```python
