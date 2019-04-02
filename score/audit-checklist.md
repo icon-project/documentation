@@ -160,7 +160,9 @@ won = datetime.datetime.now() % 2 == 0
 ```
 
 ### Fixed SCORE Infomation
-SCORE's critical information can not be changed since it was first installed. In case of IRC2 token SCORE, name, sysmbol and decimals should not be changed; for other SCORE, name must not be changed.
+SCORE's critical information should not be changed once it has been deployed. In case of IRC2 token SCORE, `name`, `symbol` and `decimals` should not be changed; for other SCOREs, `name` must not be changed.
+
+IRC token type must be fixed once deployed as well. For example, IRC2 token SCORE should not be updated to IRC3 tokens, and IRC2 token should not be updated to non-IRC SCORE. 
 ```python
 @external(readonly=True)
 def name(self) -> str:
