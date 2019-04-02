@@ -40,15 +40,17 @@ Peer nodes will become a leader node in pre-defined order, and produce one block
 Citizen nodes synchronize the blockchain data from Peer nodes. 
 Of course, Citizen also executes the trasactions in the block for verifying them.
 So we can provide the confidence of block data downloaded from Peer nodes.
-In addition, Citizen relay the trasaction to the Peer nodes.
+In addition, Citizen relays the trasactions to the Peer nodes.
 
-Citizen is used for service end-point of ICON Network. 
+In general, Citizen is used for service end-point of ICON Network. 
 It gives queries to the users, and relays transactions to the Peer nodes.
 It is designed that no trasanctions and queries are supposed to access the Peer nodes directly.
 This architecture keeps the Peer nodes focusing on consensus, that is, producing and validating blocks. 
 Limited access to Peer nodes makes the ICON network more safe.
 
+Since Citizen verify the blocks and transactions, Exchanges or DApp operator had better running Citizen inside their network, rather than using publicly opened Citizen outside the network.
+
 ## Light Client
 
-To Be Continued.
+To be continued.
 
