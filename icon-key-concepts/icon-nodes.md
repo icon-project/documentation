@@ -33,7 +33,14 @@ Peer nodes will become a leader node in a pre-defined order, and produce one blo
 
 ### Public Representative (P-Rep)
 
+TBD
+
 ### Community Representative (C-Rep)
+
+Commuinity Representatives have a role of bridging ICON Network and their own Community blockchain.
+They should relay the transactions and their proofs to the other blockchain.
+It is not decided whether C-Rep joins the consensus protocol or not. 
+The detail role of C-Rep will be defined after BTP (Blockchan Transfer Protocol) is finalized.
 
 ## Citizen
 
