@@ -33,7 +33,7 @@ Peer nodes will become a leader node in pre-defined order, and produce one block
 
 ### Public Representitive (P-Rep)
 
-### Community Represesntitive (C-Rep)
+### Community Representative (C-Rep)
 
 ## Citizen
 
