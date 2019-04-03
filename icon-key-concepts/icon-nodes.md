@@ -16,7 +16,7 @@ There are three types of nodes in ICON network.
 ![types of nodes](types_of_nodes.png)
 
 The user and smart contract can access (query or send trasactoins) these nodes through ICONex wallet or ICON SDK. 
-Of course, they can also access the nodes using JSON RPC directly.
+Indeed, they can also access the nodes using JSON RPC directly as well.
 
 ## Peer
 
