@@ -21,7 +21,7 @@ Indeed, they can also access the nodes using JSON RPC directly as well.
 ## Peer
 
 There are two types of Peer nodes, Public and Community Representative. 
-As you see in the word "Representitive", these nodes are supposed to be elected by ICONist or Community members.
+As you see in the word "Representative", these nodes are supposed to be elected by ICONist or Community members.
 Details of election are presented in [ICONSENSUS](https://icon.community/iconsensus/).
 
 Peer nodes are the essential entities of ICON network. 
