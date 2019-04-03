@@ -3,7 +3,7 @@ ICON Network
 
 This document presents what kinds of nodes are in the ICON network. 
 Node means the computer server which participates in the blockchain protocol.
-All nodes keep the full or partial copy of blockchain data, and excute transactions in the blocks for validation.
+All nodes keep the full or partial copy of blockchain data, and execute transactions in the blocks for validation.
 So all nodes should be connected to internet, and have their own address to identify themselves.
 
 ## Types of Nodes
