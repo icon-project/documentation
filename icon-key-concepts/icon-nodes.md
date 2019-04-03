@@ -9,7 +9,7 @@ So all nodes should be connected to the internet, and have their own address to 
 ## Types of Nodes
 
 There are three types of nodes in ICON network.
-Peer nodes can participate in the consensus protocl, so they can produce and propose block.
+**Peer nodes** can participate in the consensus protocol, so they can produce and propose a block.
 **Citizen nodes** just synchronize the blockchain data and relay the transaction to the Peer node.
 **Light clients** just synchronize the header of blocks for simple verification of transactions.
 
