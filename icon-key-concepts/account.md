@@ -16,7 +16,7 @@ There are some special, pre-defined accounts, such as:
 
 In order to deploy a SCORE on the ICON network or make a transaction, one must hold a valid EOA. Furthermore, when we say account in this document, it means EOA. The terms of EOA, wallet, and keystore are not exactly the same, but are often used interchangeably. 
 
-An account is cryptographically defined by a private-public key pair, and the account address can be derived from its public key. Creating an account is equivalent to creating a key pair, and the account can be exported as a file known as a keystore file. 
+An account is cryptographically defined by a private-public key pair, and the account address can be derived from its public key by taking the last 20-bytes of the SHA3-256 hash of the public key. Creating an account is equivalent to creating a key pair, and the account can be exported as a file known as a keystore file. 
 
 ## Keystore file
 A keystore file is a JSON text file containing your private key and address. The private key is encrypted with the password that you enter when you create an account or keystore file. If you lose your keystore file and password, there is no way to recover them. You will lose your account and the assets you own.
