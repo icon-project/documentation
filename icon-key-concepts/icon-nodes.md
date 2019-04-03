@@ -27,7 +27,7 @@ Details of election are presented in [ICONSENSUS](https://icon.community/iconsen
 Peer nodes are the essential entities of ICON network. 
 They have roles to produce and validate the blocks, which contains transactions transmitted into ICON network.
 All transactions sent to ICON network are relayed or directed to Peer nodes.
-One of Peer nodes becomes the leader node, who have right to produce the block for his turn. 
+One of Peer nodes becomes the leader node, who has the right to propose a block for its turn. 
 And the other Peer nodes validate that block. The block is confirmed when 2/3 of Peer nodes agree on that block.
 Peer nodes will become a leader node in a pre-defined order, and produce one block for their turn.
 
