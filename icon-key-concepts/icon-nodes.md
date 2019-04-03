@@ -11,7 +11,7 @@ So all nodes should be connected to internet, and have their own address to iden
 There are three types of nodes in ICON netwrok.
 Peer nodes can participate in the consensus protocl, so they can produce and propose block.
 Citizen nodes just sychronize the blockchain data, and relay the transaction to Peer node.
-Light clients just synchronize the header of blocks for simple verification of transactions.
+**Light clients** just synchronize the header of blocks for simple verification of transactions.
 
 ![types of nodes](types_of_nodes.png)
 
