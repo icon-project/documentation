@@ -31,7 +31,7 @@ One of Peer nodes becomes the leader node, who have right to produce the block f
 And the other Peer nodes validate that block. The block is confirmed when 2/3 of Peer nodes agree on that block.
 Peer nodes will become a leader node in pre-defined order, and produce one block for their turn.
 
-### Public Representitive (P-Rep)
+### Public Representative (P-Rep)
 
 ### Community Representative (C-Rep)
 
