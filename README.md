@@ -1,119 +1,53 @@
-## Introduction
-- What is ICON
-- Interchain
-- Public vs Enterprise chain
-- Smart Contract - SCORE
-- The ICON Network
-
-## ICON Application Services
-- ICONest
-- ICON ID
-- ICONex
-- Tracker
-- ICONick
-
-## ICON Key Concepts
-- [Account](/icon-key-concepts/account.md)
-- [Transactions](/icon-key-concepts/transactions.md)
-- Transaction Fees
-- ICON Nodes
-- Governance - P-Rep/ C-Rep Election
-- Governance - IISS
-- Multi-channel
-- [Parallel Processing](/icon-key-concepts/parallel-processing.md)
-- Interchain - BTP
-
-## SCORE Quickstart 
-- [Quickstart](/score/quickstart.md)
-  - [Start with Local Emulator](/score/quickstart_p1.md)
-  - [Deploy on the ICON testnet](/score/quickstart_p2.md)
-
-## SCORE Development Guide 
-- [SCORE Overview](/score/score-overview.md)
-- [Writing SCORE](/score/writing-score.md)
-- [ICONservice API reference **](https://iconservice.readthedocs.io)
-- [Writing SCORE Integration Tests](/howto/how-to-write-score-integrate-tests.md)
-- [Invoking SCORE Functions](/score/invoking-score-functions.md)
-- Test Framework
-- Step Estimation
-
-## Sample SCOREs
-- Hello World
-- IRC2 Token
-- Crowdsale
-- Non-fungible Token
-- [Multisig Wallet](/sample-scores/multi-signature-wallet.md)
-- Random Number
-- Voting
-- IPFS
-- Oracle
-
-## Howto
-- [Account management](/howto/account-management.md)
-- [How to change a network (Tracker, ICONex)](/howto/how-to-change-network.md)
-- [How to deploy, update, and destroy a SCORE](/howto/how-to-deploy-score.md)
-- How to get test ICX
-- How to interact with ICON network (SDKs, ICONex)
-- Step estimation
-- [Writing SCORE unit test](/score/score-unit-test.md)
-- How to generate a key pair without SDK
-- [How to generate a transaction signature](/howto/how-to-generate-a-transaction-signature.md)
-- How to set the policy for transaction fee (fee sharing, virtual step)
-
-## User Manual
-- ICONest
-- ICON ID
-- ICONex
-- Tracker
-- ICONick
-
-## T-Bears
-- [T-Bears Reference](/references/t-bears/t-bears-reference.md)
-
-## Client SDK
-- JavaScript SDK 
-  - [Quickstart **](/references/javascript-sdk/quickstart.md) 
-  - [API Reference **](/references/javascript-sdk/api-reference.md)
-- Python SDK 
-  - [Quickstart](/references/python-sdk/quickstart.md) 
-  - [API Reference](/references/python-sdk/api-reference.md)
-- Java SDK
-  - [Quickstart **](/references/java-sdk/java-sdk-reference.md)
-  - [API Reference **](http://www.javadoc.io/doc/foundation.icon/icon-sdk)
-- Swift
-  - [Quickstart](/references/ICONKit/api-reference.md)
-  - API Reference
-- [JSON-RPC Specification](/references/json-rpc/icon-json-rpc-v3.md)
-  
-## Design Doc
-- Block, Transaction Data Structure
-- BTP
-
-## P-Rep
-- Introduction
-- How to be a P-Rep
-- Requirements and Responsibilities
-- Installation and Configuration
-- Operation Guide and Troubleshooting
-
-## C-Rep
-- Introduction
-- How to be a C-Rep
-- Requirements and Responsibilities
-- Installation and configuration
-- Operation Guide and Troubleshooting
- 
-## Citizen Node
-- Introduction
-- How to setup a Citizen node
-- Operation Guide and Troubleshooting
-
-## Create own Blockchain Network
-- From source
-- [From AWS Marketplace](/howto/how-to-ICON_Development_Network-AWS-marketplace.md)
-
-## Enterprise Solution - loopchain
-- What is a loopchain Enterprise Solution
-- Features and Tools
-- Pricing
-  
+- howto
+	- [account-management](./howto/account-management.md)
+	- [how-to-change-network](./howto/how-to-change-network.md)
+	- [how-to-deploy-score](./howto/how-to-deploy-score.md)
+	- [how-to-generate-a-transaction-signature](./howto/how-to-generate-a-transaction-signature.md)
+	- [how-to-write-score-integrate-tests](./howto/how-to-write-score-integrate-tests.md)
+	- [icon-development-network-on-aws-marketplace](./howto/icon-development-network-on-aws-marketplace.md)
+- icon-application-services
+- icon-key-concepts
+	- [account](./icon-key-concepts/account.md)
+	- [icon-nodes](./icon-key-concepts/icon-nodes.md)
+	- [parallel-processing](./icon-key-concepts/parallel-processing.md)
+	- [transactions](./icon-key-concepts/transactions.md)
+- introduction
+	- [about-this-guide](./introduction/about-this-guide.md)
+- loopchain
+- node
+	- c-rep
+	- citizen
+	- p-rep
+- references
+	- ICONKit
+		- [api-reference](./references/ICONKit/api-reference.md)
+	- java-sdk
+		- [java-sdk-reference](./references/java-sdk/java-sdk-reference.md)
+	- javascript-sdk
+		- [api-reference](./references/javascript-sdk/api-reference.md)
+		- [quickstart](./references/javascript-sdk/quickstart.md)
+	- json-rpc
+		- [icon-json-rpc-v3](./references/json-rpc/icon-json-rpc-v3.md)
+	- python-sdk
+		- [api-reference](./references/python-sdk/api-reference.md)
+		- [quickstart](./references/python-sdk/quickstart.md)
+	- t-bears
+		- [t-bears-reference](./references/t-bears/t-bears-reference.md)
+- sample-scores
+	- [multi-signature-wallet](./sample-scores/multi-signature-wallet.md)
+- score
+	- [audit-checklist](./score/audit-checklist.md)
+	- [invoking-score-functions](./score/invoking-score-functions.md)
+	- [quickstart](./score/quickstart.md)
+	- [quickstart_p1](./score/quickstart_p1.md)
+	- [quickstart_p2](./score/quickstart_p2.md)
+	- [score-by-example](./score/score-by-example.md)
+	- [score-overview](./score/score-overview.md)
+	- [score-unit-test](./score/score-unit-test.md)
+	- [writing-score](./score/writing-score.md)
+- user-manual
+- [explanation-template](./explanation-template.md)
+- [howto-template](./howto-template.md)
+- [quick-start-sdk-template](./quick-start-sdk-template.md)
+- [reference-template](./reference-template.md)
+- [tutorial-template](./tutorial-template.md)
