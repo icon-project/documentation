@@ -211,8 +211,11 @@ Example) Setting theloop for the key name on the state DB:
 
 ```python
 VarDB('name', db, value_type=str).set('theloop')
+```
+
 Example) Getting value by the key name:
 
+```python
 name = VarDB('name', db, value_type=str).get()
 print(name) ## 'theloop'
 ```
@@ -255,7 +258,7 @@ test_dict2['key1'] = 1 ## ok
 **ArrayDB(‘key’, ‘target db’, ‘return type’)**  
 
 ArrayDB supports one dimensional array only.  
-ArrayDB supports put, get, and pop. Does not support insert (adding elements in the middle of array).
+ArrayDB supports put, get, and pop. It is not supported to insert (adding elements in the middle of array) into the ArrayDB.
 
 ```python
 test_array = ArrayDB('test_array', db, value_type=int)
@@ -456,11 +459,11 @@ When you handle exceptions in your contract, it is recommended to use revert fun
 than using an exception inherited from IconServiceBaseException.
 
 
-## Packaging & Deployment
+## Packaging
+
 
 ### package.json
-   
-   
+
 Before deploying the SCORE, the required files should be packaged into a zip file. This file should have meta information as well as smart contract source code. The meta information file, package.json, should contain a version, main module name, and main class. 
 
 This json file describes like this.
@@ -484,153 +487,114 @@ if you want to point main_module as submodule, you can specify the module name l
 }
 ```
 
-## Let's deploy SampleToken on LocalNodeEmulator
-### WARNING! 
-**This time, We are going to handle about that is offered local node emulator by T-Bears.**  
-**So you don't need to set your address, icx, signing and signature.**  
-**If you want to deploy on Mainnet or Testnet, You have to edit URL, keyStore in tbears_cli_config.json.**
+## Deploy
 
-### 1. Follow and Setup T-Bears [t-bears-tutorial](https://github.com/icon-project/t-bears)
+In this example for deploying a smart contract, local node emulator by TBears will be used. If you want to deploy on Main-net or Test-net, you can edit URL and KeyStore in tbears_cli_config.json.
 
-### 2. Follow and Make Sample projects(SampleToken) [score-by-example](https://github.com/icon-project/documentation/blob/master/score/score-by-example.md)
+The [Simple Token project](https://github.com/icon-project/documentation/blob/master/score/score-by-example.md) is used in this paragraph as sample.
 
-### 3. Transfer ICX A to B
-**You can get your token balance is 0 now.**  
-**How about your icx coin balance?**  
-**Let's Query your icx balance using T-Bears**
+### Deploy SampleToken on Local-Node emulated by TBears
 
-1 - Query your icx balance.
+1. Generate T-Bears cli config
 
-```console
-$ tbears balance hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6
-```
-``` console
-balance in hex: 0x0
-balance in decimal: 0
-```
+	```console
+	$ tbears genconf
+	```
 
-2 - Send icx to this Address(hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6) from God Address(hx0000000000000000000000000000000000000000) to 2 icx
+1. TBears start emulator on local environment.
 
-```console
-$ tbears transfer -f hx0000000000000000000000000000000000000000 hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6 2000000000000000000
-```
-```console
-Send transfer request successfully.
-transaction hash: 0x5cd000a719e4e8c3d33c5f6e47a778411a60d4d077883b51f6422c1ee776bdd4
-```
-```console
-$ tbears txresult 0x5cd000a719e4e8c3d33c5f6e47a778411a60d4d077883b51f6422c1ee776bdd4
-Transaction result: {
-    "jsonrpc": "2.0",
-    "result": {
-        "txHash": "0x5cd000a719e4e8c3d33c5f6e47a778411a60d4d077883b51f6422c1ee776bdd4",
-        "blockHeight": "0xf1a",
-        "blockHash": "0x159e830bad73e2988d77f18c497de72f093acc0234eb59b8d4210a9299e0d0c6",
-        "txIndex": "0x0",
-        "to": "hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6",
-        "stepUsed": "0xf4240",
-        "stepPrice": "0x0",
-        "cumulativeStepUsed": "0xf4240",
-        "eventLogs": [],
-        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-        "status": "0x1"
-    },
-    "id": 1
-}
-```
+	```console
+	$ tbears start
+	```
 
-3 - Query your icx balance again
+1. Open "tbears_cli_config.json" and edit it as belows.
 
-```console
-$ tbears balance hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6
-```
-```console
-balance in hex: 0x1BC16D674EC80000
-balance in decimal: 2000000000000000000
-```
+	Parameters for on_install() function should be set as belows.
 
-### 4. Deploy SampleToken on Local-Node
+	* __initialSupply: 1000  
+	* __decimals: 18  
 
-1 - Generate T-Bears cli config
-```console
-$ tbears genconf
-```
-2 - T-Bears start emulator
-```console
-$ tbears start
-```
+	
 
-3 - Open "tbears_cli_config.json" and edit like this.
-
-**Set params in on_install**  
-**__initialSupply: 1000**  
-**__decimals: 18**  
-
-```json
-# tbears_cli_config.json
-{
-    "uri": "http://127.0.0.1:9000/api/v3",
-    "nid": "0x3",
-    "keyStore": null,
-    "from": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
-    "to": "cx0000000000000000000000000000000000000000",
-    "deploy": {
-        "stepLimit": "0x10000000",
-        "mode": "install",
-        "scoreParams": {
-	      "_initialSupply": "0x3e8",
-	      "_decimals": "0x12"
+	```json
+	# tbears_cli_config.json
+	{
+	    "uri": "http://127.0.0.1:9000/api/v3",
+	    "nid": "0x3",
+	    "keyStore": null,
+	    "from": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
+	    "to": "cx0000000000000000000000000000000000000000",
+	    "deploy": {
+		"stepLimit": "0x10000000",
+		"mode": "install",
+		"scoreParams": {
+		      "_initialSupply": "0x3e8",
+		      "_decimals": "0x12"
+		    }
+	    },
+	    "txresult": {},
+	    "transfer": {
+		"stepLimit": "0xf4240"
 	    }
-    },
-    "txresult": {},
-    "transfer": {
-        "stepLimit": "0xf4240"
-    }
-}
-```
+	}
+	```
 
-4 - Deploy SampleToken
-```console
-$ tbears deploy sample_token -c tbears_cli_config.json
-```
+1. Deploy the SampleToken
+	
+	Using `deploy` command in `tbears`, you can deploy sample_token project with configuration 'tbears_cli_config.json'.
+	The `tbears` automatically makes zip file from sample_token directory.
 
-after that, you can get txHash like this.
-```console
-Send deploy request successfully.
-If you want to check SCORE deployed successfully, execute txresult command
-transaction hash: 0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7
-```
+	```console
+	$ tbears deploy sample_token -c tbears_cli_config.json
+	Send deploy request successfully.
+	If you want to check SCORE deployed successfully, execute txresult command
+	transaction hash: 0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7
+	```
+	
 
-5 - Get transaction result by transaction hash.
-```console
-$ tbears txresult 0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7
-```
+1. Get transaction result by transaction hash.
 
-after that, you can get txHash like this.
-```console
-Transaction result: {
-    "jsonrpc": "2.0",
-    "result": {
-        "txHash": "0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7",
-        "blockHeight": "0xbe",
-        "blockHash": "0xdc85bccb32109da6cfe5bb5308121ce68a1494c499d9dd8c724a0bd7397d0729",
-        "txIndex": "0x0",
-        "to": "cx0000000000000000000000000000000000000000",
-        "scoreAddress": "cx0841205d73b93aec1062877d8d4d5ea54c6665bb",
-        "stepUsed": "0x2cc8f10",
-        "stepPrice": "0x0",
-        "cumulativeStepUsed": "0x2cc8f10",
-        "eventLogs": [],
-        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-        "status": "0x1"
-    },
-    "id": 1
-}
-```
+	You can check the result of deployment by querying the transaction hash.
 
-### 5. Handling Deployed SCORES -1
+	```console
+	$ tbears txresult 0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7
+	```
 
-1 - Make json file to call totalSupply on Sampletoken like this.
+	The results of trasaction contain several information as seen in below. You can find the `scoreAddress`, which is the address of this deployed SCORE.
+	
+	```console
+	Transaction result: {
+	    "jsonrpc": "2.0",
+	    "result": {
+		"txHash": "0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7",
+		"blockHeight": "0xbe",
+		"blockHash": "0xdc85bccb32109da6cfe5bb5308121ce68a1494c499d9dd8c724a0bd7397d0729",
+		"txIndex": "0x0",
+		"to": "cx0000000000000000000000000000000000000000",
+		"scoreAddress": "cx0841205d73b93aec1062877d8d4d5ea54c6665bb",
+		"stepUsed": "0x2cc8f10",
+		"stepPrice": "0x0",
+		"cumulativeStepUsed": "0x2cc8f10",
+		"eventLogs": [],
+		"logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+		"status": "0x1"
+	    },
+	    "id": 1
+	}
+	```
+
+## Call a SCORE functions
+
+### Call a read-only functions to query some informations.
+
+The SCORE functions are executed by calling JSON RPC API. So, You need to generate JSON file which contains informations about calling method and prameters.
+
+To call a read-only functinos, the method in the JSON RPC API should be `icx_call`.
+
+#### To query total supply of this Sample Token.
+
+Make JSON file to call `totalSupply` in Sampletoken.
+
 ```json
 # sand.json
 {
@@ -647,9 +611,14 @@ Transaction result: {
   "id": 1
 }
 ```
+
+You can use `tbears` with command `call` and parameters `send.json`.
+
 ```console
 $ tbears call send.json
 ```
+
+You can get the result of calling `totalSupply` as seen below. The total supply of this Token is 0x3635c9adc5dea00000.
 
 ```console
 response : {
@@ -659,7 +628,10 @@ response : {
 }
 ```
 
-2 - Edit json file to call balanceOf on Sampletoken like this.
+#### To query balance of specific address.
+
+Edit JSON file to call `balanceOf` on the SampleToken.
+
 ```json
 # sand.json
 {
@@ -680,9 +652,13 @@ response : {
 }
 ```
 
+You can use `tbears` with command `call` and parameters `send.json`.
+
 ```console
 $ tbears call send.json
 ```
+
+The result of calling method `balanceOf` is 0, that means the balance of address `hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6` is 0.
 
 ```console
 response : {
@@ -693,11 +669,16 @@ response : {
 ```
 
 
+### Call a writable functions.
 
-### 5. Handling Deployed SCORES -2
+The method of calling writable funcgtions should be `icx_sendTransaction`. 
 
-1 - Let's transfer this token(1 token) A to B  
-This time,  Sampletoken's owner(hxe7af5fcfd8dfc67530a01a0e403882687528dfcb) transfer 1 token to hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6
+The writable functions can change the states of the smart contract. So, the signature should be presented in the requests.
+
+The `to` is address of the smart contract, which has the writable functions.
+
+The following example request is transfering 1 token to `hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6` from `hxe7af5fcfd8dfc67530a01a0e403882687528dfcb`.
+
 ```json
 # send.json
 {
@@ -726,9 +707,13 @@ This time,  Sampletoken's owner(hxe7af5fcfd8dfc67530a01a0e403882687528dfcb) tran
 }
 ```
 
+The request of calling writable functions with `tbears` is same as the one of calling read-only functions.
+
 ```console
 $ tbears call send.json
 ```
+
+After calling a function, that is, sending a trasaction with the JSON request, you can get the following response containing the transaction hash as receipt of trasaction.
 
 ```console
 response : {
@@ -738,8 +723,10 @@ response : {
 }
 ```
 
-**You can check about eventLogs and logsBloom**  
+The transaction hash which is in the response of calling function, doesn't mean the success or fail of the transactions. It is just a receipt that the submitted transaction is executed. You can find the result of calling functions by checking `status`, `eventLog` or `logBloom` of transaction result.
+
 ```console
+$ tbears txresult 0x41bf7b9ada89eb938ee4e36fce02ec86b3e68c1ceefd61decfe1e3dcc7df43a5
 Transaction result: {
     "jsonrpc": "2.0",
     "result": {
@@ -768,39 +755,6 @@ Transaction result: {
         "logsBloom": "0x00000000000000100000002000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000100000040000000000000000200000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000100000002000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000080000000000000000000000000000000000000000",
         "status": "0x1"
     },
-    "id": 1
-}
-```
-
-2 - Edit json file to call balanceOf on Sampletoken about hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6 again
-```json
-# sand.json
-{
-  "jsonrpc": "2.0",
-  "method": "icx_call",
-  "params": {
-    "from": "hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6",
-    "to": "cx658e956f66a1449212132a750d716cec418e6193",
-    "dataType": "call",
-    "data": {
-      "method": "balanceOf",
-      "params": {
-        "_owner": "hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6"
-      }
-    }
-  },
-  "id": 1
-}
-```
-
-```console
-$ tbears call send.json
-```
-
-```console
-response : {
-    "jsonrpc": "2.0",
-    "result": "0xde0b6b3a7640000",
     "id": 1
 }
 ```
