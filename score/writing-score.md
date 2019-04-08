@@ -116,18 +116,6 @@ This function is called when the Smart Contract is deployed for the first time, 
 ### on_update
 This function is called when the Smart Contract is updated.
 
-## Type Hints
-
-Hinting types is highly recommended for the input parameters and return value. When the clients want to query the list of SCORE's API, API specification is generated based on its type hints. If type hints are not given, only function names will return.
-
-```python
-@external(readonly=True)
-def func1(arg1: int, arg2: str) -> int:
-    return 100
-```
-Possible data types for function parameters are ``int``, ``str``, ``bytes``, ``bool``, and ``Address``.
-``List`` and ``Dict`` type parameters are not supported yet.
-Returning types can be ``int``, ``str``, ``bytes``, ``bool``, ``Address``, ``List``, and ``Dict``.
 
 
 ## Defining Functions
@@ -436,6 +424,18 @@ Returns True if coin transfer succeeds.
 Basic behavior is same as transfer, the difference is that exception is caught inside the function.  
 Returns True when coin transfer succeeded, False when failed.
 
+## Type Hints
+
+Hinting types is highly recommended for the input parameters and return value. When the clients want to query the list of SCORE's API, API specification is generated based on its type hints. If type hints are not given, only function names will return.
+
+```python
+@external(readonly=True)
+def func1(arg1: int, arg2: str) -> int:
+    return 100
+```
+Possible data types for function parameters are ``int``, ``str``, ``bytes``, ``bool``, and ``Address``.
+``List`` and ``Dict`` type parameters are not supported yet.
+Returning types can be ``int``, ``str``, ``bytes``, ``bool``, ``Address``, ``List``, and ``Dict``.
 
 
 ## Exception handling
