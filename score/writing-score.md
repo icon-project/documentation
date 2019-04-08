@@ -120,7 +120,8 @@ This function is called when the Smart Contract is updated.
 
 ## Defining Functions
 
-
+You can implement functions which are supposed to be invoked by trasactions. 
+These functions are methods of main class, and decorated with external, payable, and eventlog.
 
 ### External decorator (@external)
 
@@ -170,6 +171,17 @@ Possible data types for function parameters are primitive types (int, str, bytes
 
 ### fallback
 This fallback function is executed whenever the smart contract receives plain ICX coins without data. 
+
+```python
+    @payable
+    def fallback(self):
+        """
+        Called when anyone sends ICX to the SCORE.
+        """
+        if something_wrong:
+            revert('something wrong.')
+```
+
 If the fallback function is not decorated with @payable, the ICX coin transfers to the contract will fail.
 
 This fallback function can not be decorated with @external. (i.e., fallback function is not allowed to be called by external contract or user.)  
@@ -385,7 +397,7 @@ Using the object, you can invoke other SCORE’s external function as if it is a
 ```python
 #Crowdsale SCORE
 ...
-@payable
+    @payable
     def fallback(self):
         """
         Called when anyone sends funds to the SCORE.
