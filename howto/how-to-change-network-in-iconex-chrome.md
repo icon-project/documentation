@@ -1,4 +1,7 @@
-## How to change network in ICONex Chrome extension
+---
+title: "How to change network in ICONex Chrome extension"
+---
+
 - Open the Chrome DevTools by pressing F12, then go to the **Application** tab. In the **Storage** section, expand **Local Storage**. 
 - Add a new key/value pair, **isDev/true**, by clicking on the empty row at the bottom of the table.
 

@@ -1,5 +1,5 @@
 ---
-title: "How to Generate Transaction Signature"
+title: "How to generate a transaction signature"
 ---
 
 When a user sends a transaction, they need to sign the data with their own private key. There are two major steps involved in signing the transaction, serializing the original transaction data and generating a signature with user's own private key. This document describes the process of generating a digital signature of transaction data.

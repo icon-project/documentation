@@ -1,8 +1,6 @@
 ---
-title: "How to write SCORE integrate tests"
+title: "How to write SCORE integration tests"
 ---
-
-## Overview
 
 Describe about How to write SCORE integrate-test using IconIntegrateTestBase.
 

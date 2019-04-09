@@ -1,7 +1,8 @@
-# How to set up "ICON Development Network" on AWS
+---
+title: "How to create own blockchain network from AWS marketplace"
+excerpt: ""
+---
 
-
-## Overview
 This document is for anyone who wants to set up their own ICON Development Network on AWS.
 
 ## Intended Audience
