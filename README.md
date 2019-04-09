@@ -6,7 +6,7 @@
   - [how-to-write-score-integration-tests](./howto/how-to-write-score-integration-tests.md)
   - [icon-development-network-on-aws-marketplace](./howto/icon-development-network-on-aws-marketplace.md)
 - icon-application-services
-- [icon-key-concepts](./icon-key-concepts)
+- icon-key-concepts
   - [accounts](./icon-key-concepts/accounts.md)
   - [icon-nodes](./icon-key-concepts/icon-nodes.md)
   - [parallel-processing](./icon-key-concepts/parallel-processing.md)
@@ -38,18 +38,16 @@
 - score
   - [audit-checklist](./score/audit-checklist.md)
   - [invoking-score-functions](./score/invoking-score-functions.md)
-  - [quickstart](./score/quickstart.md)
-  - [quickstart_p1](./score/quickstart_p1.md)
-  - [quickstart_p2](./score/quickstart_p2.md)
   - [score-by-example](./score/score-by-example.md)
   - [score-overview](./score/score-overview.md)
+  - [score-quickstart-p1](./score/score-quickstart-p1.md)
+  - [score-quickstart-p2](./score/score-quickstart-p2.md)
+  - [score-quickstart](./score/score-quickstart.md)
   - [score-unit-test](./score/score-unit-test.md)
   - [writing-score](./score/writing-score.md)
 - user-manual
-- vi
 - [explanation-template](./explanation-template.md)
 - [howto-template](./howto-template.md)
 - [quick-start-sdk-template](./quick-start-sdk-template.md)
 - [reference-template](./reference-template.md)
-- [toc](./toc.md)
 - [tutorial-template](./tutorial-template.md)

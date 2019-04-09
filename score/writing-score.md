@@ -2,8 +2,6 @@
 title: "Writing SCORE"
 ---
 
-## Overview
-
 Described about How to write SCORE.  
 This document offers "Syntax", "Limit", "API reference" and "Audit Checklist"
 

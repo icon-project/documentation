@@ -1,8 +1,6 @@
 ---
-title: "Audit CheckList"
+title: "Audit Checklist"
 ---
-
-## Overview
 
 Described about How to audit SCORE.  
 This document offers "Severity level", "Critical", "Warning"

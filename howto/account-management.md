@@ -2,8 +2,9 @@
 title: "How to create an account"
 ---
 
+There are several ways to create an account, either using SDKs or on ICONex wallet app. In this document, we will explain one by one.  
+
 ## Create an account
-There are several ways to create an account. 
 
 ### Using T-Bears
 You can create a keystore file from CLI using `tbears keystore` command. 

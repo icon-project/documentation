@@ -1,4 +1,7 @@
-# Part 1. HelloWorld on local emulated environment
+---
+title: "Part 1. HelloWorld on local emulated environment"
+excerpt: ""
+---
 
 ## Install T-Bears (Docker)
 

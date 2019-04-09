@@ -2,8 +2,6 @@
 title: "Invoking SCORE functions"
 ---
 
-## Overview
-
 Describe How to invoke SCORE functions.
 
 ## Intended Audience
