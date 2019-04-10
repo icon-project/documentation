@@ -16,7 +16,7 @@ Exactly speaking, SCORE is the platform for ICON's smart contract. But it is als
 
 ## Purpose 
 
-You can understand how to write SCORE
+You can understand how to write SCORE.
 
 ## Prerequisite 
 
