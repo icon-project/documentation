@@ -7,6 +7,8 @@ title: "Writing SCORE"
 This document presents how to write a SCORE, smart contract of ICON network. 
 You can understand from setting the workspace to deploying a SCORE.
 
+Exactly speaking, SCORE is the platform for ICON's smart contract. But it is also used to represent a ICON's smart contract itself.
+
 ## Intended Audience
 
 * Mid  
@@ -344,7 +346,7 @@ Address class provides types and utilities for using the address in the smart co
 
 ## Built-in Global Functions
 
-SCORE also provides the built-in library 
+SCORE also provides the built-in library.
 
 ### create_interface_score
 **create_interface_score('score address', 'interface class') -> interface class instance**
