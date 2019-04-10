@@ -2,52 +2,48 @@
 title: "Writing SCORE"
 ---
 
-## Overview
-
-This document presents how to write a SCORE, smart contract of ICON network. 
+This document presents how to write a SCORE, smart contract of ICON network.
 You can understand from setting the workspace to deploying a SCORE.
 
 Exactly speaking, SCORE is the platform for ICON's smart contract. But it is also used to represent a ICON's smart contract itself.
 
 ## Intended Audience
 
-* Mid  
+* Mid
 * Experienced
 
-## Purpose 
+## Purpose
 
 You can understand how to write SCORE.
 
-## Prerequisite 
+## Prerequisite
 
-* [score-overview](https://github.com/icon-project/documentation/blob/master/score/score-overview.md)
-* [score-by-example](https://github.com/icon-project/documentation/blob/master/score/score-by-example.md)
-* [t-bears-tutorial](https://github.com/icon-project/t-bears)
+* [SCORE Overview](https://github.com/icon-project/documentation/blob/master/score/score-overview.md)
+* [SCORE by Example](https://github.com/icon-project/documentation/blob/master/score/score-by-example.md)
+* [T-Bears Tutorial](https://github.com/icon-project/t-bears)
 
 ## Creating Workspace
 
-SCORE is written in Python programming language, so you can use any tools for programming for Python, as long as the required files, as described below,  are included in the SCORE package. These files are all text.
-* \_\_init\_\_.py: source codes written in Python to initialize a SCORE.
-* project.py: source codes of a SCORE, written in Python. The file name is written in package.json.
-* package.json: configurations of a SCORE.
+SCORE is written in Python programming language, so you can use any tools for programming for Python, as long as the required files, as described below, are included in the SCORE package. These files are all text.
+* \_\_init\_\_.py: Indicating the directory as containing packages.
+* _project.py_: The main module file of the SCORE to be executed at the top level and this should be specified in `package.json`.
+* package.json: Providing basic information of the SCORE.
 
-If you want to use more convenient way to create a workspace, you may use TBears. One of functions provided by TBears is to create a workspace for writing SCORE applications.  It creates some template source files for SCORE, as mentioned above,  and other files for configuration of development environments. You can refer the TBears guide for the details.
+If you want to use more convenient way to create a workspace, you may use T-Bears. One of functions provided by T-Bears is to create a workspace for writing SCORE applications.  It creates some template source files for SCORE, as mentioned above, and other files for configuration of development environments. You can refer the T-Bears guide for the details.
 
-You can use “init” command with project name and main class name, as you see in below.
+You can use T-Bears `init` command with project name and main class name. For example:
 
 ```console
 $ tbears init hello_world HelloWorld
 ```
 
-You can see the generated files after running TBears init command.
+You can see the generated files after running T-Bears `init` command.
 
 ```console
 $ ls -lF
-total 24
+total 4
 drwxr-xr-x  6 edward  staff   192  4  4 10:24 hello_world/
--rw-r--r--  1 edward  staff   675  4  4 10:20 keystore_test1
--rw-r--r--  1 edward  staff   386  4  4 10:20 tbears_cli_config.json
--rw-r--r--  1 edward  staff  1212  4  4 10:20 tbears_server_config.json
+
 $ ls -lF hello_world/
 total 16
 -rw-r--r--  1 edward  staff    0  4  4 10:20 __init__.py
@@ -58,13 +54,13 @@ drwxr-xr-x  4 edward  staff  128  4  4 10:23 tests/
 
 ## Structure of SCORE
 
-SCORE is a software program written in Python. There should be main class which has member variables and methods. Main class is described in configuration file “package.json”, so nodes are able to know what codes should be executed at first. Actually, this main class should have at least three methods which are supposed to be invoked at loading, installing, and updating SCORE respectively. In addition, main class has more than one external method, which is supposed to be invoked by transactions from EOA or other Smart Contracts, and may update the internal state. Main class also has variables to store state, and all variables should be stored in state database, which will mentioned below as VarDB, DictDB, and ArrayDB. 
+SCORE is a collection of codes written in Python. There should be a main class which has member variables and methods. The main class should be specified in the `package.json` file as the value of `main_score` field, so that nodes are able to know what class should be loaded and executed at first. Actually, the main class should have at least three methods which are supposed to be invoked at loading, installing and updating SCORE respectively. In addition, the main class should have more than one external method, which are supposed to be invoked by transactions from EOA or other Smart Contracts, and may update the internal states. The main class can have member variables to store its states, and those variables should be incorporated with the state database, which will be mentioned later as VarDB, DictDB, and ArrayDB.
 
-Following is example of main class which we have just generated by TBears’ init command.
+The following is a content of the main class which we have just generated by T-Bears `init` command.
 
 ```python
 from iconservice import *
-  
+
 TAG = 'HelloWorld'
 
 class HelloWorld(IconScoreBase):
@@ -87,72 +83,76 @@ class HelloWorld(IconScoreBase):
 
 ## IconScoreBase
 
-SCORE’s main class should be inherited from IconScoreBase. If the SCORE’s main class is not derived from IconScoreBase, it can’t be deployed.
+Every main class of SCORE should be inherited from `IconScoreBase`. If the main class is not derived from `IconScoreBase`, it cannot be deployed.
 
-IconScoreBase declares at least 3 member functions, \_\_init\_\_(), on_install(), and on_update().
+The main class should have at least 3 member methods, `__init__`, `on_install` and `on_update`.
 
 
-### \_\_init\_\_ 
+### \_\_init\_\_
 
-This is a init function presented by Python originally. This function is called when the SCORE is loaded at each nodes.
+`__init__` is the constructor for the class.  This method gets called when memory for the class object is allocated.
 
-Member variables can be declared here, however, declaring member variables which not managed by states is prohibited. In other words, all member variables which should keep the values during executions of smart contract should be stored in state database.
+Member variables can be declared here, however, declaring member variables which are not managed as states is prohibited.  In other words, all member variables which should keep values during executions of smart contract must be stored in state database.
 
-Followings are examples of using member variables as storing state.
+Here's an example of declaring member variables as the state database.
 
 ```python
 def __init__(self, db: IconScoreDatabase) -> None:
-    # Also, parent’s init function must be called as follows.
+    # Parent’s __init__ method must be called as well
     super().__init__(db)
 
-    self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
-    self._decimals = VarDB(self._DECIMALS, db, value_type=int)
-    self._balances = DictDB(self._BALANCES, db, value_type=int)
-
+    self._total_supply = VarDB('total_supply', db, value_type=int)
+    self._decimals = VarDB('decimals', db, value_type=int)
+    self._balances = DictDB('balances', db, value_type=int)
 ```
 
-### on_install
+### on\_install
 
-This function is called when the Smart Contract is deployed for the first time, and will not be called again on contract update or deletion afterward. This is the place where you initialize the state DB.
+This method is called when the smart contract is deployed for the first time, and will not be called again on contract update or deletion afterward. This is the place where you initialize the state database.
 
-### on_update
-This function is called when the Smart Contract is updated.
+### on\_update
+This method is called when the smart contract is updated.
 
 
+## Implementing Methods
 
-## Defining Functions
-
-You can implement functions which are supposed to be invoked by trasactions. 
-These functions are methods of main class, and decorated with external, payable, and eventlog.
+Users can implement methods which are supposed to be invoked by transactions.
+These methods can be decorated with `@external` and `@payable`.
+Additionally users can declare methods decorated with `@eventlog` which can be used to leave custom events in TxResult.
 
 ### External decorator (@external)
 
-Functions decorated with @external can be called from outside the contract. These functions are registered on the exportable API list.
+Methods decorated with `@external` can be called from outside the contract. These methods are registered on the external API list and users can query the API list through `icx_getScoreApi` JSON RPC call.
 
-Any attempt to call a non-external function from outside the contract will fail.
+Any attempt to call a non-external method from outside the contract will fail.
 
-If a function is decorated with 'readonly' parameters, i.e., @external(readonly=True), the function will have read-only access to the state database. This is similar to view keyword in Solidity.
+If a method is decorated with a  `readonly` parameter, i.e., `@external(readonly=True)`, the method will have read-only access to the state database.
 
-If the read-only external function is also decorated with @payable, the function call will fail. 
+If a read-only external method is also decorated with `@payable`, the method call will fail.
 
-Duplicate declaration of @external will raise IconScoreException on import time.
+Duplicate declaration of `@external` will raise an exception on class loading time.
 
-
-### Payable decorator (@payable)  
-Only functions with @payable decorator are permitted to receive incoming ICX coins.  
-Transferring 0 icx is acceptable.  
-If ICX coins (msg.value) are passed to a non-payable function, that transaction will fail.
+Possible data types for external method parameters are Python primitive types (`int`, `str`, `bytes`, `bool`) and `Address` (newly defined type for SCORE codes).
+`list`, `dict` and `None` types are not supported for method parameters.
+Default values for method parameters could be set.
 
 
-### Eventlog decorator (@eventlog)  
-Functions with @eventlog decorator will include logs in its TxResult as ‘eventlogs’.  
-It is recommended to declare a function without implementation body.  
-Even if the function has a body, it does not be executed. When declaring a function, type hinting is a must.  
-Without type hinting, transaction will fail.  
-The default value for the parameter can be set.
+### Payable decorator (@payable)
 
-If indexed parameter is set in the decorator, designated number of parameters in the order of declaration will be indexed and included in the Bloom filter.  
-At most 3 parameters can be indexed, And index can’t exceed the number of parameters(will raise an error).  
+Only methods with `@payable` decorator are permitted to receive incoming ICX coins.
+Transferring zero ICX is acceptable if it is decorated with `@payable`.
+If ICX coins (`self.msg.value`) are passed to a non-payable method, that transaction will fail.
+
+
+### Eventlog decorator (@eventlog)
+
+Methods decorated with `@eventlog` can be called within SCORE codes during the execution of a transaction to include custom event logs in its TxResult as `eventlogs`.
+It is recommended to declare a method without implementation body.
+Even if the method has a implementation body, it does not be executed. When declaring a method, Python type hinting must be specified.
+Without the type hinting, SCORE loading will fail.
+
+If an `indexed` parameter is set in the decorator, designated number of parameters in the order of declaration will be indexed and included in the Bloom filter.
+At most 3 parameters can be indexed, and the index cannot exceed the number of parameters, otherwise an error will be raised.
 Indexed parameters and non-indexed parameters are separately stored in TxResult.
 
 Example)
@@ -161,7 +161,7 @@ Example)
 @eventlog
 def FundTransfer1(self, _backer: Address, _amount: int, _isContribution: bool): pass
 
-@eventlog(indexed=1) # The first param (backer) will be indexed
+@eventlog(indexed=1) # The first parameter (_backer) will be indexed
 def FundTransfer2(self, _backer: Address, _amount: int, _isContribution: bool): pass
 
 # Execution
@@ -169,62 +169,60 @@ self.FundTransfer1(self.msg.sender, amount, True)
 self.FundTransfer2(self.msg.sender, amount, True)
 ```
 
-Possible data types for function parameters are primitive types (int, str, bytes, bool, Address). Array, Dictionary and None type parameter is not supported.
-
 ### fallback
-This fallback function is executed whenever the smart contract receives plain ICX coins without data. 
+
+`fallback` is a special method that is executed whenever the smart contract receives plain ICX coins without data.
 
 ```python
-    @payable
-    def fallback(self):
-        """
-        Called when anyone sends ICX to the SCORE.
-        """
-        if something_wrong:
-            revert('something wrong.')
+@payable
+def fallback(self):
+    """
+    Called when anyone sends ICX to the SCORE.
+    """
+    if something_wrong:
+        revert('something wrong')
 ```
 
-If the fallback function is not decorated with @payable, the ICX coin transfers to the contract will fail.
+If `fallback` method is not decorated with `@payable`, the ICX coin transfers to the contract will fail even for the zero ICX transfer.
 
-This fallback function can not be decorated with @external. (i.e., fallback function is not allowed to be called by external contract or user.)  
-If you query a SCORE api info, you can find only decorated payable fallback.
+`fallback` method can not be decorated with `@external` (i.e., `fallback` method is not allowed to be called explicitly by other contract or user).
+An exception will be raised and the SCORE will be rejected during its deployment if `fallback` has `@external` decorator.
 
-Even if you transfer zero ICX to this SCORE, it is also not allowed to be called.
+If you query the SCORE API list, you will receive `fallback` method only if it is decorated with `@payable` decorator.
 
 
 ## Storing State Data
 
-The state of SCORE should be stored in the state database in the blockchain. The state means the values of variables in the smart contract and blockchain. This state of smart contract can be changed only by execution of transactions. Since all nodes execute transactions and change the state of the smart contract in its own nodes independently. Since the nodes of blockchains can’t always be trusted and can’t be sure to safe, the state should also be agreed with all ⅔ nodes after each execution of transactions, that is called consensus in blockchain.  So the values of variables should be stored in the database in blockchain for consensus. If the variables are not stored in the state database, it may not be confirmed that all nodes have the same state.
+The state of SCORE should be stored in the state database in the blockchain. The state of SCORE simply means the values of member variables in the smart contract which are declared as VarDB, DictDB and ArrayDB. The state of SCORE can be changed only by execution of transactions. All nodes execute transactions and change the state of the smart contract in their own state database independently. Since the nodes cannot always be trusted and sure to safe, the changed state should also be agreed between the  ⅔ of nodes after each execution of transactions, and this process is called consensus in blockchain.
 
-In general, state database is key-value database, and can be accessed using VarDB, DictDB, and ArrayDB classes.
+In general, the state database is a key-value database, and can be accessed using VarDB, DictDB and ArrayDB classes.
 
-VarDB, DictDB, ArrayDB are utility classes wrapping the state DB.  
-A``key`` can be a number or characters, and ``value_type`` can be ``int``, ``str``, ``Address``, and ``bytes``.  
-If the ``key`` does not exist, these classes return 0 when ``value_type`` is ``int``, return ""
-when ``str``, return ``None`` when the ``value_type`` is ``Address`` or ``bytes``.  
+VarDB, DictDB and ArrayDB are utility classes wrapping the state database.
+A `key` can be numbers or characters, and `value_type` can be `int`, `str`, `bytes` and `Address`.
+If the `key` does not exist, the wrapping classes return the *zero value* of `value_type`, which is 0 for `int`,
+"" for `str`, and None for `bytes` or `Address`.
 
-VarDB can be used to store simple key-value state, and DictDB behaves more like python dict.  
+VarDB can be used to store simple key-value state, and DictDB behaves more like Python `dict`.
 DictDB does not maintain order, whereas ArrayDB, which supports length and iterator, maintains order.
-
 
 **VarDB(‘key’, ‘target db’, ‘return type’)**
 
-Example) Setting theloop for the key name on the state DB:
+Example) Setting a value "icon" for the key "name" on the state DB:
 
 ```python
-VarDB('name', db, value_type=str).set('theloop')
+VarDB('name', db, value_type=str).set('icon')
 ```
 
-Example) Getting value by the key name:
+Example) Getting value by the key "name":
 
 ```python
 name = VarDB('name', db, value_type=str).get()
-print(name) ## 'theloop'
+print(name) ## 'icon'
 ```
 
 **DictDB(‘key’, ‘target db’, ‘return type’, ‘dict depth (default is 1)’)**
 
-Example 1) One-depth dict (test_dict1[‘key’]):
+Example 1) One-depth dict
 
 ```python
 test_dict1 = DictDB('test_dict1', db, value_type=int)
@@ -234,7 +232,7 @@ print(test_dict1['key']) ## get 1
 print(test_dict1['nonexistence_key']) # prints 0 (key does not exist and value_type=int)
 ```
 
-Example 2) Two-depth dict (test_dict2[‘key1’][‘key2’]):
+Example 2) Two-depth dict
 
 ```python
 test_dict2 = DictDB('test_dict2', db, value_type=str, depth=2)
@@ -244,7 +242,7 @@ print(test_dict2['key1']['key2']) ## get 'a'
 print(test_dict2['key1']['nonexistent_key']) # prints "" (key does not exist and value_type=str)
 ```
 
-If the depth is more than 2, dict[key] returns new DictDB.  
+If the depth is more than 2, `test_dictN['key']` returns new DictDB with the depth N-1.
 Attempting to set a value to the wrong depth in the DictDB will raise an exception.
 
 Example 3)
@@ -257,10 +255,10 @@ test_dict2 = test_dict3['key']['key2']
 test_dict2['key1'] = 1 ## ok
 ```
 
-**ArrayDB(‘key’, ‘target db’, ‘return type’)**  
+**ArrayDB(‘key’, ‘target db’, ‘return type’)**
 
-ArrayDB supports one dimensional array only.  
-ArrayDB supports put, get, and pop. It is not supported to insert (adding elements in the middle of array) into the ArrayDB.
+ArrayDB supports one dimensional array only.
+ArrayDB supports put, get and pop operations, i.e., the data can be accessed in stack-like fashion.  It does not support insert or delete operation (adding or removing elements in the middle of array).
 
 ```python
 test_array = ArrayDB('test_array', db, value_type=int)
@@ -278,59 +276,55 @@ print(test_array[-1]) ## ok
 # print(test_array[-100]) ## error
 ```
 
-#### Warning Case About VarDB, DictDB, ArrayDB
+#### Cautions about VarDB, DictDB and ArrayDB
 
-The variables should be stored in the block (state database), because the variables only in memory is volatile and reset when the nodes is restarted. You can use the wrapping method of database, VarDB, ListDB, and DictDB, to store the variables. But you should use these methods in right way, or you face some unexpected results.
+The state should be stored in the persistent storage (state database), but simple variables which reside in memory are volatile and will be reset when the nodes is restarted. Thus users need to use the wrapping classes of the state database, VarDB, ListDB and DictDB, to store the state permanently. But you should use these classes in right way, otherwise you might face some unexpected results.
 
-Example)  
+Example)
 ```python
-varDB = VarDB(...)  
-varDB.set(100) 		# right  
-varDB = 100 		# wrong
+varDB = VarDB(...)
+varDB.set(100)       # right
+varDB = 100          # wrong
 
-arrayDB = ArrayDB(...)  
-arrayDB[0] = 100 	# right  
-arrayDB = 100		# wrong
+arrayDB = ArrayDB(...)
+arrayDB[0] = 100     # right
+arrayDB = 100        # wrong
 
 dictDB = DictDB(...)
-dictDB['key0'] = 100 	# right
-dictDB = 100 		# wrong
+dictDB['key0'] = 100 # right
+dictDB = 100         # wrong
 ```
 
 ## Built-in Properties
 
-These are member variables supported by IconScoreBase, Which are supposed to be set by ICON platform to pass some information to this smart contract. So, these are read-only variables and do not allowed to modified by smart contract.
+These are member variables supported by `IconScoreBase`, which are supposed to be set by ICON platform to deliver some necessary information to the SCORE.  So these are read-only variables and do not allowed to be modified by the contract.
 
-* msg : Holds information of the account who called the SCORE
-	- msg.sender : Address of the account who called this function. 
-			If other contact called this function, msg.sender points to the caller contract's address.
-	- msg.value : Amount of icx that the sender attempts to transfer to the current SCORE.
+* `msg` : Holds information of the account who called the SCORE
+    - `msg.sender`: Address of the account who called this method.
+                  If other contact called this method, `msg.sender` points to the caller contract's address.
+    - `msg.value`: Amount of ICX that the sender attempts to transfer to the SCORE.
 
-* tx : Transaction information
-	- tx.origin : The account who created the transaction.
-	- tx.index : Transaction index.
-	- tx.hash : Transaction hash.
-	- tx.timestamp : Transaction creation time.
-	- tx.nonce : (optional) random value.
+* `tx` : Transaction information
+    - `tx.origin`: The account who created the transaction.
+    - `tx.index`: Transaction index.
+    - `tx.hash`: Transaction hash.
+    - `tx.timestamp`: Transaction creation time.
+    - `tx.nonce`: (optional) an arbitrary number set by the sender.
 
-* icx : An object used to transfer icx coin
-	- icx.transfer(addr_to(address), amount(integer)) -> bool
-		
-		Transfers designated amount of icx coin to addr_to.
-		If exception occurs during execution, the exception will be escalated.
-		Returns True if coin transfer succeeds.
+* `icx` : An object used to transfer ICX coin
+    - `icx.transfer(addr_to: Aaddress, amount: int) -> None`
+       Transfers designated amount of ICX coin to `addr_to`.
+       If an exception occurs during execution, the exception will be escalated to the user.
+    - `icx.send(addr_to: Address, amount: int) -> bool`
+       Sends designated amount of ICX coin to `addr_to`.
+       Basic behavior is same as `icx.transfer`, but the raised exception will be caught inside the method.
+       Returns `True` when coin transfer succeeded, `False` when it failed.
 
-	- icx.send(addr_to(address), amount(integer)) -> bool
-		
-		Sends designated amount of icx coin to addr_to.
-		Basic behavior is same as transfer, the difference is that exception is caught inside the function.	
-		Returns True when coin transfer succeeded, False when failed.
-
-* db : db instance used to access state DB
-* address : SCORE address
-* owner : Address of the account who deployed the contract
-* block_height : Current block height
-* now : Wrapping function of block.timestamp.
+* `db` : An instance used to access state DB
+* `address` : Address of the SCORE
+* `owner` : Address of the account who deployed the contract
+* `block_height` : Current block height
+* `now` : Wrapping method of `block.timestamp`.
 
 ## Built-in Classes
 ### Address
@@ -351,7 +345,7 @@ SCORE also provides the built-in library.
 ### create_interface_score
 **create_interface_score('score address', 'interface class') -> interface class instance**
 
-This function returns an object, through which you have an access to the designated SCORE's external functions.
+This method returns an object, through which you have an access to the designated SCORE's external methods.
 
 ### revert
 **revert(message: str) -> None**
@@ -379,11 +373,11 @@ Converts a python object obj to a JSON string
 Parses a JSON string src and converts to a python object
 
 
-## Invoking Other SCORE Functions
+## Invoking Other SCORE Methods
 
 ### InterfaceScore
-InterfaceScore is an interface class used to invoke other SCORE’s function.  
-This interface should be used instead of legacy ‘call’ function. Usage syntax is as follows.
+InterfaceScore is an interface class used to invoke other SCORE’s method.
+This interface should be used instead of legacy ‘call’ method. Usage syntax is as follows.
 
 ```python
 class TokenInterface(InterfaceScore):
@@ -391,13 +385,13 @@ class TokenInterface(InterfaceScore):
     def transfer(self, addr_to: Address, value: int) -> bool: pass
 ```
 
-If other SCORE has the function that has the same signature as defined here with @interface decorator, 
-then that function can be invoked via InterfaceScore class object.  
-Like @eventlog decorator, it is recommended to declare a function without implementation body.  
-If there is a function body, it will be simply ignored.
+If other SCORE has the method that has the same signature as defined here with @interface decorator,
+then that method can be invoked via InterfaceScore class object.
+Like @eventlog decorator, it is recommended to declare a method without implementation body.
+If there is a method body, it will be simply ignored.
 
-Example) You need to get an InterfaceScore object by using IconScoreBase’s built-in function create_interface_score('score address', 'interface class').  
-Using the object, you can invoke other SCORE’s external function as if it is a local function call.
+Example) You need to get an InterfaceScore object by using IconScoreBase’s built-in API, create_interface_score('score address', 'interface class').
+Using the object, you can invoke other SCORE’s external method as if it is a local method call.
 
 ```python
 #Crowdsale SCORE
@@ -431,33 +425,33 @@ Using the object, you can invoke other SCORE’s external function as if it is a
 
 ## Transfer ICX
 
-Using "icx" object and it offers 2 functions "send", "transfer"
+Using "icx" object and it offers 2 methods, "send" and "transfer".
 
-* **transfer** : Transfers designated amount of icx coin to addr_to.  
-If exception occurs during execution, the exception will be escalated.  
+* **transfer** : Transfers designated amount of icx coin to addr_to.
+If exception occurs during execution, the exception will be escalated.
 Returns True if coin transfer succeeds.
 
-* **send** : Sends designated amount of icx coin to addr_to.  
-Basic behavior is same as transfer, the difference is that exception is caught inside the function.  
+* **send** : Sends designated amount of icx coin to addr_to.
+Basic behavior is same as transfer, the difference is that exception is caught inside the method.
 Returns True when coin transfer succeeded, False when failed.
 
 ## Type Hints
 
-Hinting types is highly recommended for the input parameters and return value. When the clients want to query the list of SCORE's API, API specification is generated based on its type hints. If type hints are not given, only function names will return.
+Hinting types is highly recommended for the input parameters and return value. When the clients want to query the list of SCORE's API, API specification is generated based on its type hints. If type hints are not given, only method names will return.
 
 ```python
 @external(readonly=True)
 def func1(arg1: int, arg2: str) -> int:
     return 100
 ```
-Possible data types for function parameters are ``int``, ``str``, ``bytes``, ``bool``, and ``Address``.
+Possible data types for method parameters are ``int``, ``str``, ``bytes``, ``bool``, and ``Address``.
 ``List`` and ``Dict`` type parameters are not supported yet.
 Returning types can be ``int``, ``str``, ``bytes``, ``bool``, ``Address``, ``List``, and ``Dict``.
 
 
 ## Exception handling
 
-When you handle exceptions in your contract, it is recommended to use revert function rather 
+When you handle exceptions in your contract, it is recommended to use revert function rather
 than using an exception inherited from IconServiceBaseException.
 
 
@@ -466,7 +460,7 @@ than using an exception inherited from IconServiceBaseException.
 
 ### package.json
 
-Before deploying the SCORE, the required files should be packaged into a zip file. This file should have meta information as well as smart contract source code. The meta information file, package.json, should contain a version, main module name, and main class. 
+Before deploying the SCORE, the required files should be packaged into a zip file. This file should have meta information as well as smart contract source code. The meta information file, package.json, should contain a version, main module name, and main class.
 
 This json file describes like this.
 
@@ -511,12 +505,12 @@ The [Simple Token project](https://github.com/icon-project/documentation/blob/ma
 
 1. Open "tbears_cli_config.json" and edit it as belows.
 
-	Parameters for on_install() function should be set as belows.
+	Parameters for on_install() method should be set as belows.
 
-	* __initialSupply: 1000  
-	* __decimals: 18  
+	* __initialSupply: 1000
+	* __decimals: 18
 
-	
+
 
 	```json
 	# tbears_cli_config.json
@@ -542,17 +536,16 @@ The [Simple Token project](https://github.com/icon-project/documentation/blob/ma
 	```
 
 1. Deploy the SampleToken
-	
-	Using `deploy` command in `tbears`, you can deploy sample_token project with configuration 'tbears_cli_config.json'.
-	The `tbears` automatically makes zip file from sample_token directory.
 
-	```console
-	$ tbears deploy sample_token -c tbears_cli_config.json
-	Send deploy request successfully.
-	If you want to check SCORE deployed successfully, execute txresult command
-	transaction hash: 0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7
-	```
-	
+  Using `deploy` command in `tbears`, you can deploy sample_token project with configuration 'tbears_cli_config.json'.
+  The `tbears` automatically makes zip file from sample_token directory.
+
+  ```console
+  $ tbears deploy sample_token -c tbears_cli_config.json
+  Send deploy request successfully.
+  If you want to check SCORE deployed successfully, execute txresult command
+  transaction hash: 0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7
+  ```
 
 1. Get transaction result by transaction hash.
 
@@ -563,7 +556,7 @@ The [Simple Token project](https://github.com/icon-project/documentation/blob/ma
 	```
 
 	The results of trasaction contain several information as seen in below. You can find the `scoreAddress`, which is the address of this deployed SCORE.
-	
+
 	```console
 	Transaction result: {
 	    "jsonrpc": "2.0",
@@ -585,11 +578,11 @@ The [Simple Token project](https://github.com/icon-project/documentation/blob/ma
 	}
 	```
 
-## Call a SCORE functions
+## Call SCORE methods
 
-### Call a read-only functions to query some informations.
+### Call read-only methods to query some informations.
 
-The SCORE functions are executed by calling JSON RPC API. So, You need to generate JSON file which contains informations about calling method and prameters.
+The SCORE methods are executed by calling JSON RPC API. So, You need to generate JSON file which contains informations about calling method and prameters.
 
 To call a read-only functinos, the method in the JSON RPC API should be `icx_call`.
 
@@ -671,13 +664,13 @@ response : {
 ```
 
 
-### Call a writable functions.
+### Call writable methods.
 
-The method of calling writable funcgtions should be `icx_sendTransaction`. 
+The method of calling writable funcgtions should be `icx_sendTransaction`.
 
-The writable functions can change the states of the smart contract. So, the signature should be presented in the requests.
+The writable methods can change the states of the smart contract. So, the signature should be presented in the requests.
 
-The `to` is address of the smart contract, which has the writable functions.
+The `to` is address of the smart contract, which has the writable methods.
 
 The following example request is transfering 1 token to `hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6` from `hxe7af5fcfd8dfc67530a01a0e403882687528dfcb`.
 
@@ -709,13 +702,13 @@ The following example request is transfering 1 token to `hxef73db5d0ad02eb1fadb3
 }
 ```
 
-The request of calling writable functions with `tbears` is same as the one of calling read-only functions.
+The request of calling writable methods with `tbears` is same as the one of calling read-only methods.
 
 ```console
 $ tbears call send.json
 ```
 
-After calling a function, that is, sending a trasaction with the JSON request, you can get the following response containing the transaction hash as receipt of trasaction.
+After calling a methods, that is, sending a trasaction with the JSON request, you can get the following response containing the transaction hash as receipt of trasaction.
 
 ```console
 response : {
@@ -725,7 +718,7 @@ response : {
 }
 ```
 
-The transaction hash which is in the response of calling function, doesn't mean the success or fail of the transactions. It is just a receipt that the submitted transaction is executed. You can find the result of calling functions by checking `status`, `eventLog` or `logBloom` of transaction result.
+The transaction hash which is in the response of calling method, doesn't mean the success or fail of the transactions. It is just a receipt that the submitted transaction is executed. You can find the result of calling method by checking `status`, `eventLog` or `logBloom` of transaction result.
 
 ```console
 $ tbears txresult 0x41bf7b9ada89eb938ee4e36fce02ec86b3e68c1ceefd61decfe1e3dcc7df43a5
@@ -763,9 +756,9 @@ Transaction result: {
 
 
 ## Limitations
-The maximum limit of the total count of call, interface call and ICX transfer/send is 1024 in one transaction.  
-The limitation of stack size increment by calling external SCORE is 64 in one transaction.  
-Declaring member variables which not managed by states is prohibited.  
+The maximum limit of the total count of call, interface call and ICX transfer/send is 1024 in one transaction.
+The limitation of stack size increment by calling external SCORE is 64 in one transaction.
+Declaring member variables which not managed by states is prohibited.
 
 ## API reference
 https://icon-project.github.io/score-guide/api-references.html
