@@ -1,4 +1,8 @@
-# SCORE Deploy Guide
+---
+title: "How to deploy a SCORE"
+excerpt: ""
+---
+
 This document explains the deploy process of SCORE (Smart Contract on Reliable Environment) in the ICON network.
 
 Distribution of SCORE is possible through T-Bears, and DAPP developers will need a wallet to pay the transaction fee. Update of SCORE that has already been distributed is only possible through the same wallet address. 

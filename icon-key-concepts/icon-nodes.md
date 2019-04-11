@@ -1,5 +1,7 @@
-ICON Network
-==============
+---
+title: "ICON Nodes"
+excerpt: ""
+---
 
 This document presents what kinds of nodes are in the ICON network. 
 Node means the computer server which participates in the blockchain protocol.

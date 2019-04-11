@@ -7,6 +7,7 @@ You can understand from setting the workspace to deploying a SCORE.
 
 Exactly speaking, SCORE is the platform for ICON's smart contract. But it is also used to represent a ICON's smart contract itself.
 
+
 ## Intended Audience
 
 * Mid
