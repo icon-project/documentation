@@ -113,6 +113,30 @@ This method is called when the smart contract is deployed for the first time, an
 ### on\_update
 This method is called when the smart contract is updated.
 
+### Built-in Properties
+
+These are member variables supported by `IconScoreBase`, which are supposed to be set by ICON platform to deliver some necessary information to the SCORE.  So these are read-only variables and do not allowed to be modified by the contract.
+
+* `msg`: Holds information of the account who called the SCORE
+    - `msg.sender`: Address of the account who called this method.
+                  If other contact called this method, `msg.sender` points to the caller contract's address.
+    - `msg.value`: Amount of ICX that the sender attempts to transfer to the SCORE.
+
+* `tx`: Transaction information
+    - `tx.origin`: The account who created the transaction.
+    - `tx.index`: Transaction index.
+    - `tx.hash`: Transaction hash.
+    - `tx.timestamp`: Transaction creation time.
+    - `tx.nonce`: (optional) an arbitrary number set by the sender.
+
+* `icx`: An object used to transfer ICX coins
+    - This provides two methods, see [Transferring ICX](#transferring-icx) for details.
+* `db`: An instance used to access state DB
+* `address`: Address of the SCORE
+* `owner`: Address of the account who deployed the contract
+* `block_height`: Current block height
+* `now`: Wrapping method of `block.timestamp`.
+
 
 ## Implementing Methods
 
@@ -147,8 +171,8 @@ If ICX coins (`self.msg.value`) are passed to a non-payable method, that transac
 ### Eventlog decorator (@eventlog)
 
 Methods decorated with `@eventlog` can be called within SCORE codes during the execution of a transaction to include custom event logs in its TxResult as `eventlogs`.
-It is recommended to declare a method without implementation body.
-Even if the method has a implementation body, it does not be executed. When declaring a method, Python type hinting must be specified.
+It is recommended to declare a method without an implementation body.
+Even if the method has an implementation body, it does not be executed. When declaring a method, Python type hinting must be specified.
 Without the type hinting, SCORE loading will fail.
 
 If an `indexed` parameter is set in the decorator, designated number of parameters in the order of declaration will be indexed and included in the Bloom filter.
@@ -295,174 +319,88 @@ dictDB['key0'] = 100 # right
 dictDB = 100         # wrong
 ```
 
-## Built-in Properties
-
-These are member variables supported by `IconScoreBase`, which are supposed to be set by ICON platform to deliver some necessary information to the SCORE.  So these are read-only variables and do not allowed to be modified by the contract.
-
-* `msg` : Holds information of the account who called the SCORE
-    - `msg.sender`: Address of the account who called this method.
-                  If other contact called this method, `msg.sender` points to the caller contract's address.
-    - `msg.value`: Amount of ICX that the sender attempts to transfer to the SCORE.
-
-* `tx` : Transaction information
-    - `tx.origin`: The account who created the transaction.
-    - `tx.index`: Transaction index.
-    - `tx.hash`: Transaction hash.
-    - `tx.timestamp`: Transaction creation time.
-    - `tx.nonce`: (optional) an arbitrary number set by the sender.
-
-* `icx` : An object used to transfer ICX coin
-    - `icx.transfer(addr_to: Aaddress, amount: int) -> None`
-       Transfers designated amount of ICX coin to `addr_to`.
-       If an exception occurs during execution, the exception will be escalated to the user.
-    - `icx.send(addr_to: Address, amount: int) -> bool`
-       Sends designated amount of ICX coin to `addr_to`.
-       Basic behavior is same as `icx.transfer`, but the raised exception will be caught inside the method.
-       Returns `True` when coin transfer succeeded, `False` when it failed.
-
-* `db` : An instance used to access state DB
-* `address` : Address of the SCORE
-* `owner` : Address of the account who deployed the contract
-* `block_height` : Current block height
-* `now` : Wrapping method of `block.timestamp`.
-
-## Built-in Classes
-### Address
-Address class provides types and utilities for using the address in the smart contract.
-
-* prefix: AddressPrefix.EOA(0) or AddressPrefix.CONTRACT(1)
-* body: 20-byte address body part
-* is_contract: Whether the address is SCORE
-* to_bytes(self) -> bytes:R eturns data as bytes from the address object
-* from_string(address: str) -> Address: A static method creates an address object from given 42-char string address
-* from_data(prefix: AddressPrefix, data: bytes) -> Address: A static method creates an address object(type of prefix) using given bytes data
-
-
-## Built-in Global Functions
-
-SCORE also provides the built-in library.
-
-### create_interface_score
-**create_interface_score('score address', 'interface class') -> interface class instance**
-
-This method returns an object, through which you have an access to the designated SCORE's external methods.
-
-### revert
-**revert(message: str) -> None**
-
-Developer can force a revert exception.
-If the exception is thrown, all the changes in the state DB in current transaction will be rolled back.
-
-### sha3_256
-**sha3_256(data: bytes) -> bytes**
-
-Computes hash using the input data
-
-### recover_key
-
-TBD
-
-### json_dumps
-**json_dumps(obj: Any, \*\*kwargs) -> str**
-
-Converts a python object obj to a JSON string
-
-### json_loads
-**json_loads(src: str, \*\*kwargs) -> str**
-
-Parses a JSON string src and converts to a python object
-
-
 ## Invoking Other SCORE Methods
 
 ### InterfaceScore
-InterfaceScore is an interface class used to invoke other SCORE’s method.
-This interface should be used instead of legacy ‘call’ method. Usage syntax is as follows.
+`InterfaceScore` is an interface class that is used to invoke other SCORE’s method.
+This interface should be used instead of the legacy `call` method. Usage syntax is as follows.
 
 ```python
 class TokenInterface(InterfaceScore):
     @interface
-    def transfer(self, addr_to: Address, value: int) -> bool: pass
+    def transfer(self, _to: Address, _value: int, _data: bytes=None):
+        pass
 ```
 
-If other SCORE has the method that has the same signature as defined here with @interface decorator,
-then that method can be invoked via InterfaceScore class object.
-Like @eventlog decorator, it is recommended to declare a method without implementation body.
-If there is a method body, it will be simply ignored.
+If other SCORE has the method that its signature is same as defined here with `@interface` decorator,
+the method can be invoked via `InterfaceScore` class object.
+Like `@eventlog` decorator, it is recommended to declare a method without an implementation body.
+If there is an implementation body, it will be simply ignored.
 
-Example) You need to get an InterfaceScore object by using IconScoreBase’s built-in API, create_interface_score('score address', 'interface class').
+You need to get an `InterfaceScore` object by using `IconScoreBase`’s built-in API,
+`create_interface_score('score address', 'interface class')`.
 Using the object, you can invoke other SCORE’s external method as if it is a local method call.
 
+Example)
+
 ```python
-#Crowdsale SCORE
-...
-    @payable
-    def fallback(self):
-        """
-        Called when anyone sends funds to the SCORE.
-        This SCORE regards it as a contribution.
-        """
-        if self._crowdsale_closed.get():
-            revert('Crowdsale is closed.')
+# excerpt from Crowdsale SCORE
+@payable
+def fallback(self):
+    ...
+    data = b'called from Crowdsale'
 
-        # Accepts the contribution
-        amount = self.msg.value
-        self._balances[self.msg.sender] = self._balances[self.msg.sender] + amount
-        self._amount_raised.set(self._amount_raised.get() + amount)
-        value = int(amount / self._price.get())
-        data = b'called from Crowdsale'
-
-        # Gives tokens to the contributor as a reward
-        token_score = self.create_interface_score(self._addr_token_score.get(), TokenInterface) # InterfaceScore define
-        token_score.transfer(self.msg.sender, value, data) # InterfaceScore call
-
-        if self.msg.sender not in self._joiner_list:
-            self._joiner_list.put(self.msg.sender)
-
-        self.FundTransfer(self.msg.sender, amount, True)
-        Logger.debug(f'FundTransfer({self.msg.sender}, {amount}, True)', TAG)
+    # gets an interface object of the token SCORE
+    token_score = self.create_interface_score(self._addr_token_score.get(), TokenInterface)
+    # transfers tokens to the contributor as a reward
+    token_score.transfer(self.msg.sender, value, data)
+    ...
 ```
 
-## Transfer ICX
+## Transferring ICX
 
-Using "icx" object and it offers 2 methods, "send" and "transfer".
+Users can transfer ICX coins using `icx` object and it offers 2 methods, `send` and `transfer`.
 
-* **transfer** : Transfers designated amount of icx coin to addr_to.
-If exception occurs during execution, the exception will be escalated.
-Returns True if coin transfer succeeds.
+* `icx.transfer(addr_to: Aaddress, amount: int) -> None`
+   - Transfers designated amount of ICX coins to `addr_to`.
+   - If an exception occurs during execution, the exception will be escalated to the user.
 
-* **send** : Sends designated amount of icx coin to addr_to.
-Basic behavior is same as transfer, the difference is that exception is caught inside the method.
-Returns True when coin transfer succeeded, False when failed.
+* `icx.send(addr_to: Address, amount: int) -> bool`
+   - Sends designated amount of ICX coins to `addr_to`.
+   - Basic behavior is same as `icx.transfer`, but the raised exception will be caught inside the method.
+   - Returns `True` when the coin transfer succeeded, `False` when it failed.
+
 
 ## Type Hints
 
-Hinting types is highly recommended for the input parameters and return value. When the clients want to query the list of SCORE's API, API specification is generated based on its type hints. If type hints are not given, only method names will return.
+Type hinting is highly recommended for the input parameters and return value.
+When clients want to query the list of SCORE's API, the API specification is generated based on its type hints.
+If type hints are not given to external methods, only method names will return.
 
 ```python
 @external(readonly=True)
 def func1(arg1: int, arg2: str) -> int:
     return 100
 ```
-Possible data types for method parameters are ``int``, ``str``, ``bytes``, ``bool``, and ``Address``.
-``List`` and ``Dict`` type parameters are not supported yet.
-Returning types can be ``int``, ``str``, ``bytes``, ``bool``, ``Address``, ``List``, and ``Dict``.
+Possible data types for method parameters are `int`, `str`, `bytes`, `bool` and `Address`.
+`list` and `dict` type parameters are not supported for method parameters.
+Return types can be `int`, `str`, `bytes`, `bool`, `Address`, `list` and `dict`.
 
 
-## Exception handling
+## Exception Handling
 
-When you handle exceptions in your contract, it is recommended to use revert function rather
-than using an exception inherited from IconServiceBaseException.
+When you handle exceptions in your contract, it is recommended to use `revert` function
+rather than using an `IconScoreException`.
 
 
-## Packaging
-
+## Deploying SCOREs
 
 ### package.json
 
-Before deploying the SCORE, the required files should be packaged into a zip file. This file should have meta information as well as smart contract source code. The meta information file, package.json, should contain a version, main module name, and main class.
+Before deploying a SCORE, the required files should be packaged into a zip file, in which some meta information should be included as well as the smart contract source code itself.
+The meta information file, `package.json`, should contain a version, main module name, and main class.
 
-This json file describes like this.
+Here is an example of `package.json` file.
 
 ```json
 {
@@ -472,9 +410,9 @@ This json file describes like this.
 }
 ```
 
-The SCORE platform will find main_score class in the main_module.py to load into the ICON network.
+The SCORE execution runtime will find `main_score` class in the `main_module`.py to load and execute it on the ICON network.
 
-if you want to point main_module as submodule, you can specify the module name like below.
+If you want to point `main_module` as submodule, you can specify the module name like below.
 ```json
 {
     "version": "0.0.1",
@@ -483,139 +421,129 @@ if you want to point main_module as submodule, you can specify the module name l
 }
 ```
 
-## Deploy
+### Deploying SCOREs with T-Bears
 
-In this example for deploying a smart contract, local node emulator by TBears will be used. If you want to deploy on Main-net or Test-net, you can edit URL and KeyStore in tbears_cli_config.json.
+Here is an example of deploying a SCORE onto the local T-Bears emulator.
+If you want to deploy on Main-net or Test-net, you need to edit `uri` and `keyStore` fields appropriately in `tbears_cli_config.json`.
 
-The [Simple Token project](https://github.com/icon-project/documentation/blob/master/score/score-by-example.md) is used in this paragraph as sample.
+The [SampleToken](https://github.com/icon-project/documentation/blob/master/score/score-by-example.md) is used in this example.
 
-### Deploy SampleToken on Local-Node emulated by TBears
+#### Deploy SampleToken on Local T-Bears Emulator
 
-1. Generate T-Bears cli config
+1. Generate T-Bears CLI configuration.
 
-	```console
-	$ tbears genconf
-	```
+    ```console
+    $ tbears genconf
+    ```
 
-1. TBears start emulator on local environment.
+2. Start T-Bears emulator on the local environment.
 
-	```console
-	$ tbears start
-	```
+    ```console
+    $ tbears start
+    ```
 
-1. Open "tbears_cli_config.json" and edit it as belows.
+3. Open `tbears_cli_config.json` and edit it as follows.
 
-	Parameters for on_install() method should be set as belows.
+    Parameters for `on_install()` method (`_initialSupply` and `_decimals`) should be set under `scoreParams` field.
 
-	* __initialSupply: 1000
-	* __decimals: 18
+    ```json
+    {
+        "uri": "http://127.0.0.1:9000/api/v3",
+        "nid": "0x3",
+        "keyStore": null,
+        "from": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
+        "to": "cx0000000000000000000000000000000000000000",
+        "deploy": {
+            "stepLimit": "0x10000000",
+            "mode": "install",
+            "scoreParams": {
+                "_initialSupply": "0x3e8",
+                "_decimals": "0x12"
+            }
+        },
+        "txresult": {},
+        "transfer": {
+            "stepLimit": "0xf4240"
+        }
+    }
+    ```
 
+4. Deploy the SampleToken
 
+    Using `deploy` command in T-Bears, you can deploy the sample_token project with configuration `tbears_cli_config.json`.
+    T-Bears makes a zip file from the sample_token directory on the fly, and deploys it to the local server.
 
-	```json
-	# tbears_cli_config.json
-	{
-	    "uri": "http://127.0.0.1:9000/api/v3",
-	    "nid": "0x3",
-	    "keyStore": null,
-	    "from": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
-	    "to": "cx0000000000000000000000000000000000000000",
-	    "deploy": {
-		"stepLimit": "0x10000000",
-		"mode": "install",
-		"scoreParams": {
-		      "_initialSupply": "0x3e8",
-		      "_decimals": "0x12"
-		    }
-	    },
-	    "txresult": {},
-	    "transfer": {
-		"stepLimit": "0xf4240"
-	    }
-	}
-	```
+    ```console
+    $ tbears deploy sample_token -c tbears_cli_config.json
+    Send deploy request successfully.
+    If you want to check SCORE deployed successfully, execute txresult command
+    transaction hash: 0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7
+    ```
 
-1. Deploy the SampleToken
+5. Get transaction result by transaction hash.
 
-  Using `deploy` command in `tbears`, you can deploy sample_token project with configuration 'tbears_cli_config.json'.
-  The `tbears` automatically makes zip file from sample_token directory.
+    You can check the result of deployment by querying the transaction hash.
 
-  ```console
-  $ tbears deploy sample_token -c tbears_cli_config.json
-  Send deploy request successfully.
-  If you want to check SCORE deployed successfully, execute txresult command
-  transaction hash: 0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7
-  ```
+    ```console
+    $ tbears txresult 0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7
+    ```
 
-1. Get transaction result by transaction hash.
+    Here's the result of transaction. You can find the `scoreAddress`, which is the address of this deployed SCORE, and that address will be used for invoking external methods of SampleToken later.
 
-	You can check the result of deployment by querying the transaction hash.
+    ```consolie
+    Transaction result: {
+        "jsonrpc": "2.0",
+        "result": {
+            "txHash": "0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7",
+            "blockHeight": "0xbe",
+            "blockHash": "0xdc85bccb32109da6cfe5bb5308121ce68a1494c499d9dd8c724a0bd7397d0729",
+            "txIndex": "0x0",
+            "to": "cx0000000000000000000000000000000000000000",
+            "scoreAddress": "cx0841205d73b93aec1062877d8d4d5ea54c6665bb",
+            "stepUsed": "0x2cc8f10",
+            "stepPrice": "0x0",
+            "cumulativeStepUsed": "0x2cc8f10",
+            "eventLogs": [],
+            "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "status": "0x1"
+        },
+        "id": 1
+    }
+    ```
 
-	```console
-	$ tbears txresult 0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7
-	```
+## Invoking SCORE methods
 
-	The results of trasaction contain several information as seen in below. You can find the `scoreAddress`, which is the address of this deployed SCORE.
+### Invoking read-only methods
 
-	```console
-	Transaction result: {
-	    "jsonrpc": "2.0",
-	    "result": {
-		"txHash": "0xea834af48150189b4021b9a161d4c0aff3d983ccc47ddc189bac50f55bf580b7",
-		"blockHeight": "0xbe",
-		"blockHash": "0xdc85bccb32109da6cfe5bb5308121ce68a1494c499d9dd8c724a0bd7397d0729",
-		"txIndex": "0x0",
-		"to": "cx0000000000000000000000000000000000000000",
-		"scoreAddress": "cx0841205d73b93aec1062877d8d4d5ea54c6665bb",
-		"stepUsed": "0x2cc8f10",
-		"stepPrice": "0x0",
-		"cumulativeStepUsed": "0x2cc8f10",
-		"eventLogs": [],
-		"logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-		"status": "0x1"
-	    },
-	    "id": 1
-	}
-	```
+The SCORE methods can be executed by calling [JSON RPC APIs](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md) to ICON nodes.
+You need to generate a JSON file which contains information about calling method and its parameters.
 
-## Call SCORE methods
+To invoke a read-only method of SCORE, the JSON RPC API method should be `icx_call`.
 
-### Call read-only methods to query some informations.
+#### Getting total supply
 
-The SCORE methods are executed by calling JSON RPC API. So, You need to generate JSON file which contains informations about calling method and prameters.
-
-To call a read-only functinos, the method in the JSON RPC API should be `icx_call`.
-
-#### To query total supply of this Sample Token.
-
-Make JSON file to call `totalSupply` in Sampletoken.
+Make a JSON file for calling `totalSupply` in SampleToken as follows.
 
 ```json
-# sand.json
+# totalsupply.json
 {
-  "jsonrpc": "2.0",
-  "method": "icx_call",
-  "params": {
-    "from": "hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6",
-    "to": "cx0841205d73b93aec1062877d8d4d5ea54c6665bb",
-    "dataType": "call",
-    "data": {
-      "method": "totalSupply"
+    "jsonrpc": "2.0",
+    "method": "icx_call",
+    "id": 1,
+    "params": {
+        "to": "cx0841205d73b93aec1062877d8d4d5ea54c6665bb",
+        "dataType": "call",
+        "data": {
+            "method": "totalSupply"
+        }
     }
-  },
-  "id": 1
 }
 ```
 
-You can use `tbears` with command `call` and parameters `send.json`.
+You can use T-Bears `call` command to send the request.
 
 ```console
-$ tbears call send.json
-```
-
-You can get the result of calling `totalSupply` as seen below. The total supply of this Token is 0x3635c9adc5dea00000.
-
-```console
+$ tbears call totalsupply.json
 response : {
     "jsonrpc": "2.0",
     "result": "0x3635c9adc5dea00000",
@@ -623,39 +551,34 @@ response : {
 }
 ```
 
-#### To query balance of specific address.
+#### Getting balance of specific address
 
-Edit JSON file to call `balanceOf` on the SampleToken.
+Make another JSON file for calling `balanceOf` in SampleToken.
+In this case, you need to specify `_owner` parameter for the `balanceOf` method.
 
 ```json
-# sand.json
+# balanceof.json
 {
-  "jsonrpc": "2.0",
-  "method": "icx_call",
-  "params": {
-    "from": "hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6",
-    "to": "cx0841205d73b93aec1062877d8d4d5ea54c6665bb",
-    "dataType": "call",
-    "data": {
-      "method": "balanceOf",
-      "params": {
-        "_owner": "hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6"
-      }
+    "jsonrpc": "2.0",
+    "method": "icx_call",
+    "id": 1,
+    "params": {
+        "to": "cx0841205d73b93aec1062877d8d4d5ea54c6665bb",
+        "dataType": "call",
+        "data": {
+            "method": "balanceOf",
+            "params": {
+                "_owner": "hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6"
+            }
+        }
     }
-  },
-  "id": 1
 }
 ```
 
-You can use `tbears` with command `call` and parameters `send.json`.
+In the same way, you can use T-Bears command to send the request.
 
 ```console
-$ tbears call send.json
-```
-
-The result of calling method `balanceOf` is 0, that means the balance of address `hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6` is 0.
-
-```console
+$ tbears call balanceof.json
 response : {
     "jsonrpc": "2.0",
     "result": "0x0",
@@ -663,62 +586,58 @@ response : {
 }
 ```
 
+The result of calling method `balanceOf` is 0, that means the balance of address `hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6` is 0.
 
-### Call writable methods.
 
-The method of calling writable funcgtions should be `icx_sendTransaction`.
+### Invoking writable methods
 
-The writable methods can change the states of the smart contract. So, the signature should be presented in the requests.
+The JSON RPC method, `icx_sendTransaction`, should be used for invoking writable SCORE methods.
 
-The `to` is address of the smart contract, which has the writable methods.
+The writable methods can change the states of the smart contract. So the signature should be presented in the JSON RPC request to prove the transaction was originated by the `from` account.  The `to` is the address of the smart contract, which has the writable methods.
 
-The following example request is transfering 1 token to `hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6` from `hxe7af5fcfd8dfc67530a01a0e403882687528dfcb`.
+The following example request is transferring 1 token to `hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6` from `hxe7af5fcfd8dfc67530a01a0e403882687528dfcb`.
 
 ```json
-# send.json
+# sendtoken.json
 {
-  "jsonrpc": "2.0",
-  "method": "icx_sendTransaction",
-  "params": {
-    "version": "0x3",
-    "from": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
-    "value": "0x0",
-    "stepLimit": "0x3000000",
-    "timestamp": "0x573117f1d6568",
-    "nid": "0x3",
-    "nonce": "0x1",
-    "to": "cx658e956f66a1449212132a750d716cec418e6193",
-    "signature": "",
-    "dataType": "call",
-    "data": {
-      "method": "transfer",
-      "params": {
-        "_to": "hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6",
-        "_value": "0xDE0B6B3A7640000"
-      }
-    }
-  },
-  "id": 1
-}
-```
-
-The request of calling writable methods with `tbears` is same as the one of calling read-only methods.
-
-```console
-$ tbears call send.json
-```
-
-After calling a methods, that is, sending a trasaction with the JSON request, you can get the following response containing the transaction hash as receipt of trasaction.
-
-```console
-response : {
     "jsonrpc": "2.0",
-    "result": "0x41bf7b9ada89eb938ee4e36fce02ec86b3e68c1ceefd61decfe1e3dcc7df43a5",
+    "method": "icx_sendTransaction",
+    "params": {
+        "version": "0x3",
+        "from": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
+        "value": "0x0",
+        "stepLimit": "0x3000000",
+        "timestamp": "0x573117f1d6568",
+        "nid": "0x3",
+        "nonce": "0x1",
+        "to": "cx0841205d73b93aec1062877d8d4d5ea54c6665bb",
+        "signature": "",
+        "dataType": "call",
+        "data": {
+            "method": "transfer",
+            "params": {
+                "_to": "hxef73db5d0ad02eb1fadb37d0041be96bfa56d4e6",
+                "_value": "0xde0b6b3a7640000"
+            }
+        }
+    },
     "id": 1
 }
 ```
 
-The transaction hash which is in the response of calling method, doesn't mean the success or fail of the transactions. It is just a receipt that the submitted transaction is executed. You can find the result of calling method by checking `status`, `eventLog` or `logBloom` of transaction result.
+You can use T-Bears `sendtx` command for calling writable SCORE methods.
+You need to input an appropriate password of the keystore file, `keystore_test1`.
+
+```console
+$ tbears sendtx sendtoken.json -k keystore_test1
+Input your keystore password: 
+Send transaction request successfully.
+transaction hash: 0x41bf7b9ada89eb938ee4e36fce02ec86b3e68c1ceefd61decfe1e3dcc7df43a5
+```
+
+Getting the transaction hash itself in the response of sending transaction does not mean the success of the transaction.
+You need to check the actual result of the transaction by calling `icx_getTransactionResult` JSON RPC API.
+With T-Bears, you can use `txresult` command.
 
 ```console
 $ tbears txresult 0x41bf7b9ada89eb938ee4e36fce02ec86b3e68c1ceefd61decfe1e3dcc7df43a5
@@ -729,13 +648,13 @@ Transaction result: {
         "blockHeight": "0x4c",
         "blockHash": "0x7f53737f9ead2a04afe72d90bef072d49fa74c1f37b4029801e787aa15d37895",
         "txIndex": "0x0",
-        "to": "cx658e956f66a1449212132a750d716cec418e6193",
+        "to": "cx0841205d73b93aec1062877d8d4d5ea54c6665bb",
         "stepUsed": "0xfdb2e",
         "stepPrice": "0x0",
         "cumulativeStepUsed": "0xfdb2e",
         "eventLogs": [
             {
-                "scoreAddress": "cx658e956f66a1449212132a750d716cec418e6193",
+                "scoreAddress": "cx0841205d73b93aec1062877d8d4d5ea54c6665bb",
                 "indexed": [
                     "Transfer(Address,Address,int,bytes)",
                     "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
@@ -754,13 +673,10 @@ Transaction result: {
 }
 ```
 
+The `status` field in result indicates whether the transaction was succeeded or not (0x1 on success, 0x0 on failure).
 
-## Limitations
-The maximum limit of the total count of call, interface call and ICX transfer/send is 1024 in one transaction.
-The limitation of stack size increment by calling external SCORE is 64 in one transaction.
-Declaring member variables which not managed by states is prohibited.
 
-## API reference
+## API Reference
 https://icon-project.github.io/score-guide/api-references.html
 
 
