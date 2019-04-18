@@ -1,50 +1,44 @@
 - howto
-  - [account-management](./howto/account-management.md)
-  - [how-to-change-network-in-iconex-chrome](./howto/how-to-change-network-in-iconex-chrome.md)
-  - [how-to-deploy-score](./howto/how-to-deploy-score.md)
-  - [how-to-generate-a-transaction-signature](./howto/how-to-generate-a-transaction-signature.md)
-  - [how-to-write-score-integration-tests](./howto/how-to-write-score-integration-tests.md)
-  - [icon-development-network-on-aws-marketplace](./howto/icon-development-network-on-aws-marketplace.md)
+	- [account-management](./howto/account-management.md)
+	- [how-to-change-network-in-iconex-chrome](./howto/how-to-change-network-in-iconex-chrome.md)
+	- [how-to-deploy-score](./howto/how-to-deploy-score.md)
+	- [how-to-generate-a-transaction-signature](./howto/how-to-generate-a-transaction-signature.md)
+	- [how-to-write-score-integration-tests](./howto/how-to-write-score-integration-tests.md)
+	- [icon-development-network-on-aws-marketplace](./howto/icon-development-network-on-aws-marketplace.md)
 - icon-application-services
 - icon-key-concepts
-  - [accounts](./icon-key-concepts/accounts.md)
-  - [icon-nodes](./icon-key-concepts/icon-nodes.md)
-  - [parallel-processing](./icon-key-concepts/parallel-processing.md)
-  - [transactions](./icon-key-concepts/transactions.md)
+	- [accounts](./icon-key-concepts/accounts.md)
+	- [icon-nodes](./icon-key-concepts/icon-nodes.md)
+	- [parallel-processing](./icon-key-concepts/parallel-processing.md)
+	- [transactions](./icon-key-concepts/transactions.md)
 - introduction
-  - [about-this-guide](./introduction/about-this-guide.md)
+	- [about-this-guide](./introduction/about-this-guide.md)
 - loopchain
 - node
-  - c-rep
-  - citizen
-  - p-rep
+	- c-rep
+	- citizen
+	- p-rep
 - references
-  - ICONKit
-    - [api-reference](./references/ICONKit/api-reference.md)
-  - java-sdk
-    - [java-sdk-reference](./references/java-sdk/java-sdk-reference.md)
-  - javascript-sdk
-    - [api-reference](./references/javascript-sdk/api-reference.md)
-    - [quickstart](./references/javascript-sdk/quickstart.md)
-  - json-rpc
-    - [icon-json-rpc-v3](./references/json-rpc/icon-json-rpc-v3.md)
-  - python-sdk
-    - [api-reference](./references/python-sdk/api-reference.md)
-    - [quickstart](./references/python-sdk/quickstart.md)
-  - t-bears
-    - [t-bears-reference](./references/t-bears/t-bears-reference.md)
+	- [icon-json-rpc-v3](./references/icon-json-rpc-v3.md)
+	- [java-sdk](./references/java-sdk.md)
+	- [javascript-api-reference](./references/javascript-api-reference.md)
+	- [javascript-sdk](./references/javascript-sdk.md)
+	- [python-api-reference](./references/python-api-reference.md)
+	- [python-sdk](./references/python-sdk.md)
+	- [swift-sdk](./references/swift-sdk.md)
+	- [t-bears-reference](./references/t-bears-reference.md)
 - sample-scores
-  - [multi-signature-wallet](./sample-scores/multi-signature-wallet.md)
+	- [multi-signature-wallet](./sample-scores/multi-signature-wallet.md)
 - score
-  - [audit-checklist](./score/audit-checklist.md)
-  - [invoking-score-functions](./score/invoking-score-functions.md)
-  - [score-by-example](./score/score-by-example.md)
-  - [score-overview](./score/score-overview.md)
-  - [score-quickstart-p1](./score/score-quickstart-p1.md)
-  - [score-quickstart-p2](./score/score-quickstart-p2.md)
-  - [score-quickstart](./score/score-quickstart.md)
-  - [score-unit-test](./score/score-unit-test.md)
-  - [writing-score](./score/writing-score.md)
+	- [audit-checklist](./score/audit-checklist.md)
+	- [invoking-score-functions](./score/invoking-score-functions.md)
+	- [score-by-example](./score/score-by-example.md)
+	- [score-overview](./score/score-overview.md)
+	- [score-quickstart-p1](./score/score-quickstart-p1.md)
+	- [score-quickstart-p2](./score/score-quickstart-p2.md)
+	- [score-quickstart](./score/score-quickstart.md)
+	- [score-unit-test](./score/score-unit-test.md)
+	- [writing-score](./score/writing-score.md)
 - user-manual
 - [explanation-template](./explanation-template.md)
 - [howto-template](./howto-template.md)
