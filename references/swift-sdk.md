@@ -1,15 +1,30 @@
 ---
-title: "ICONKit, ICON sdk for Swift"
-excerpt: ""
+title: "Swift SDK"
+excerpt: "The source code is found on Github at https://github.com/icon-project/ICONKit"
 ---
 
 ICON supports SDK for 3rd party or user services development. You can integrate ICON SDK for your project and utilize ICON’s functionality.
-This document provides you with an information of installation and API specification.
+This document provides you with an information of installation and basic usage guideline.
+
+Get different types of examples as follows.
+
+| Example                                                 | Description                                                  |
+| ------------------------------------------------------- | ------------------------------------------------------------ |
+| [Wallet](#wallet)                                       | An example of creating and loading a keywallet.              |
+| [ICX Transfer](#icx-transfer)                           | An example of transferring ICX and confirming the result.    |
+| [Token Deploy and Transfer](#token-deploy-and-transfer) | An example of deploying an IRC token, transferring the token and confirming the result. |
+| [Sync Block](#sync-block)                               | An example of checking block confirmation and printing the ICX and token transfer information. |
+
+## Prerequisite
+
+[Enumereate any required knowledge, configuration, or resources to complete this tutorial.
+Provide links to other useful resources.]
+[Helping your readers to prepare increases the likelihood that they will continue reading.]
 
 ## Installation
 
-### CocoaPods
 [CocoaPods](https://cocoapods.org/) is a dependecy manager for Swift Cocoa projects.
+
 ```
 $ sudo gem install cocoapods
 ```
@@ -26,16 +41,39 @@ end
 ```
 
 Now install the ICONKit
+
 ```
 $ pod install
 ```
 
-## Result
+## Configuration (Optional)
+
+Such as env. variables 
+
+## Using the SDK
+
+[Import, initialize, deinitialize, and basic call that applies to every or most code to use the SDK. 
+This section also serves as a test if the SDK has been correctly installed and ready to use.] 
+
+### ICONService
+
+APIs called through `ICONService`.
+
+It can be initialized as follows.
+
+```Swift
+let iconService = ICONService(provider: "https://ctz.solidwallet.io/api/v3", nid: "0x1")
+```
+
+### Result
+
 ICONKit uses [Result](https://github.com/antitypical/Result) framework. All functions of ICONService returns Result<T, ICONResult>. `T` for successor, `ICONResult` for error.
 Refer to [Result](https://github.com/antitypical/Result) for more detail.
 
-## Quick start
+### Queries
+
 A simple query of the block by height is as follows.
+
 ```Swift
 let service = ICONService(provider: "https://ctz.solidwallet.io/api/v3", nid: "0x1")
 
@@ -50,15 +88,7 @@ case: .failure(let error):
     print(error)
 }
 ```
-## ICONService
-APIs called through `ICONService`.
 
-It can be initialized as follows.
-```Swift
-let iconService = ICONService(provider: "https://ctz.solidwallet.io/api/v3", nid: "0x1")
-```
-
-## Queries
 All queries are requested by a `Request<T>`.
 
 Its requests are executed as **Synchronized**.
@@ -74,7 +104,9 @@ case: .failure(let error):
     print(error)
 }
 ```
+
 The querying APIs are as follows.
+
 ```Swift
 // Gets the block
 let request:  = service.getBlock(height: height)
@@ -100,12 +132,15 @@ let request: Request<Response.TransactionResult> = service.getTransactionResult(
 let call = Call(from: wallet.address, to: scoreAddress, method: "balanceOf", params: params)
 let request: Request<Response.IntValue> = service.call(call)
 ```
-## Sending transactions
+
+### Transactions 
+
 Calling SCORE APIs to change states is requested as sending a transaction.
 
 Before sending a transaction, the transaction should be signed.
 
 **Loading wallets and storing the Keystore**
+
 ```Swift
 // Generates a wallet.
 let wallet = Wallet(privateKey: nil)
@@ -149,6 +184,7 @@ let transaction = Transaction()
     .nonce("0x1")
     .nid(service.nid)
 ```
+
 `SignedTransaction` object signs a transaction using the wallet.
 
 ```Swift
@@ -171,19 +207,52 @@ do {
     ...
 }
 ```
-## Reference
-- [ICON JSON-RPC API v3](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md)
-- [ICON Network](https://github.com/icon-project/icon-project.github.io/blob/master/docs/icon_network.md)
 
-## Version
-0.2.4 (Beta)
 
-## Requirement
-- Xcode 10 or higher
-- iOS 10 or higher
-- Swift 4
-- [Cocoapods](https://cocoapods.org)
 
-## License
+## Code Examples
 
-This project follows the Apache 2.0 License. Please refer to [LICENSE](https://www.apache.org/licenses/LICENSE-2.0) for details.
+
+
+### Wallet
+
+#### Create a wallet
+
+#### Load a wallet
+
+#### Store the wallet
+
+### ICX Transfer
+
+#### ICX transfer transaction
+
+#### Check the transaction result
+
+#### Check the ICX balance
+
+### Token Deploy and Transfers
+
+#### Token deploy transaction
+
+#### Token transfer transaction
+
+#### Check the Token Balance
+
+### Sync Blocks (Optional)
+
+#### Read Block Information
+
+#### Transaction Output
+
+#### Check the Token Name & Symbol
+
+#### 
+
+## References (Optional)
+
+- reference 1
+- reference 2
+
+
+## Licenses
+

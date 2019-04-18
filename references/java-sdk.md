@@ -1,40 +1,63 @@
 ---
-title: "ICON SDK for Java"
-excerpt: ""
+title: "Java SDK"
+excerpt: "The source code is found on Github at https://github.com/icon-project/icon-sdk-java"
 ---
 
-This document describes how to interact with `ICON Network` using Java SDK. This document contains API usages, examples and way to import to user's Java project.
+This document describes how to interact with `ICON Network` using Java SDK. This document contains SDK installation, API usage guide, and code examples.
 
-[TOC]
+Get different types of examples as follows.
 
-## Quick Start 
+| Code Example                                            | Description                                                  |
+| ------------------------------------------------------- | ------------------------------------------------------------ |
+| [Wallet](#wallet)                                       | An example of creating and loading a keywallet.              |
+| [ICX Transfer](#icx-transfer)                           | An example of transferring ICX and confirming the result.    |
+| [Token Deploy and Transfer](#token-deploy-and-transfer) | An example of deploying an IRC token, transferring the token and confirming the result. |
+| [Sync Block](#sync-block)                               | An example of checking block confirmation and printing the ICX and token transfer information. |
 
-A simple query of the block by height is as follows.
+This document is focused on how to use SDK properly. For the detailed API specification, see the API reference document.
 
-```java
-IconService iconService = new IconService(new HttpProvider("https://url"));
+## Prerequisite
 
-// Gets a block matching the block height.
-Request<Block> request = iconService.getBlock(height);
-try {
-    Block block = request.execute();
-    ...
-} catch (IOException e) {
-    ...    
-}
+This Java SDK works on following platforms:
+
+- Java 8+ (for Java7, you can explore source code [here](https://github.com/icon-project/icon-sdk-java/blob/sdk-for-java7/README.md))
+- Android 3.0+ (API 11+)
+
+## Installation
+
+Download [the latest JAR](https://search.maven.org/search?q=g:foundation.icon%20a:icon-sdk) or grab via Maven:
+
+```xml
+<dependency>
+  <groupId>foundation.icon</groupId>
+  <artifactId>icon-sdk</artifactId>
+  <version>[x.y.z]</version>
+</dependency>
 ```
 
-## IconService
+or Gradle:
+
+```groovy
+implementation 'foundation.icon:icon-sdk:[x.y.z]'
+```
+
+## Configuration (Optional)
+
+n/a
+
+## Using the SDK
+
+### IconService
 
 APIs are called through `IconService`.
-It can be initialized as follows.
+`IconService` can be initialized as follows.
 
 ```java
 // Creates an instance of IconService using the HTTP provider.
 IconService iconService = new IconService(new HttpProvider("https://url"));
 ```
 
-With the customized httpclient is 
+Code below shows initializing `IconService` with custom http client. 
 
 ```java
 OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -45,11 +68,11 @@ OkHttpClient okHttpClient = new OkHttpClient.Builder()
 IconService iconService = new IconService(new HttpProvider(okHttpClient, "https://url"));
 ```
 
-## Queries
+### Queries
 
 All queries are requested by a `Request` object.
-Its requests are executed as **Synchronized** or **Asynchronized**.
-Once the request has been executed, the request can not be executed again.
+Query requests can be executed as **Synchronized** or **Asynchronized**.
+Once the request has been executed, the same request object cannot be executed again.
 
 ```java
 Request<Block> request = iconService.getBlock(height);
@@ -98,7 +121,7 @@ Request<Transaction> request = iconService.getTransaction(new Bytes("0x000...000
 Request<TransactionResult> request = iconService.getTransactionResult(new Bytes("0x000...000"));
 
 
-// Calls a SCORE API just for reading
+// Calls a SCORE read-only API
 Call<BigInteger> call = new Call.Builder()
     .from(wallet.getAddress())
     .to(scoreAddress)
@@ -124,9 +147,7 @@ try {
 }                                                     
 ```
 
-
-
-## Sending Transactions
+### Transactions 
 
 Calling SCORE APIs to change states is requested as sending a transaction.
 
@@ -200,9 +221,9 @@ Transaction transaction = TransactionBuilder.newBuilder()
 
 `SignedTransaction` object signs a transaction using the wallet.
 
-And the request is executed as **Synchronized** or **Asynchronized** like a querying request.
+And the request can be executed as **Synchronized** or **Asynchronized** like a query request.
 
-Once the request has been executed, the request can not be executed again.
+Once the request has been executed, the same request object cannot be executed again.
 
 ```java
 SignedTransaction signedTransaction = new SignedTransaction(transaction, wallet);
@@ -229,9 +250,7 @@ try {
 }
 ```
 
-
-
-## Converter
+### Converter
 
 All the requests and responses values are parcelled as `RpcItem`(RpcObject, RpcArray, RcpValue). You can convert your own class using `RpcConverter`.
 
@@ -282,44 +301,50 @@ Person memberPerson = iconService.call(call).execute();
 ```
 
 
-## References
+
+## Code Examples
+
+### Wallet
+
+#### Create a wallet
+
+#### Load a wallet
+
+#### Store the wallet
+
+### ICX Transfer
+
+#### ICX transfer transaction
+
+#### Check the transaction result
+
+#### Check the ICX balance
+
+### Token Deploy and Transfers
+
+#### Token deploy transaction
+
+#### Token transfer transaction
+
+#### Check the token balance
+
+### Sync Blocks (Optional)
+
+#### Read block information
+
+#### Transaction output
+
+#### Check the token name & symbol
+
+
+
+## References 
 
 - [API Reference](http://www.javadoc.io/doc/foundation.icon/icon-sdk)
 - [ICON JSON-RPC API v3](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md)
 - [ICON Network](https://github.com/icon-project/icon-project.github.io/blob/master/docs/icon_network.md)
 
 
-## Version
-
-0.9.11 (beta)
-
-## Android Support
-
-- Android 3.0+ (API 11+)
-
-## Download
-
-Download [the latest JAR](https://search.maven.org/search?q=g:foundation.icon%20a:icon-sdk) or grab via Maven:
-
-```xml
-<dependency>
-  <groupId>foundation.icon</groupId>
-  <artifactId>icon-sdk</artifactId>
-  <version>[x.y.z]</version>
-</dependency>
-```
-
-or Gradle:
-
-```groovy
-implementation 'foundation.icon:icon-sdk:[x.y.z]'
-```
-
-Required at minimum Java 8 (for java7, you can explore source code  [here](https://github.com/icon-project/icon-sdk-java/blob/sdk-for-java7/README.md))
-
-
-## License
+## Licenses
 
 This project follows the Apache 2.0 License. Please refer to [LICENSE](https://www.apache.org/licenses/LICENSE-2.0) for details.
-
-

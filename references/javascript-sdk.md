@@ -1,63 +1,98 @@
 ---
-title: "How to interact with ICON network using icon-sdk-js"
-excerpt: ""
+title: "JavaScript SDK"
+excerpt: "The source code is found on Github at https://github.com/icon-project/icon-sdk-js"
 ---
 
-This is an example project of ICON SDK JavaScript. This document provides you with information on how to interact with ICON network using `icon-sdk-js`.
+This document describes how to interact with `ICON Network` using JavaScript SDK. This document contains SDK installation, API usage guide, and code examples.
 
-
-## Intended Audience
-
-This example document is focused on serving the following groups.
+This document is focused on serving the following groups.
 
 - Web Developer using JavaScript as main language
 - Web Developer who wants to make dApp using ICON Network
 
 This document is focused on how to use `icon-sdk-js` properly. If you would like to know about details of `icon-sdk-js` API, see official `icon-sdk-js` API Reference document.
 
-## Purpose
+Get different types of examples as follows. Complete source code is found on Github at https://github.com/icon-project/icon-sdk-js/tree/master/quickstart
 
-In this project, the examples are implemented as below.
+| Example                                                 | Description                                                  |
+| ------------------------------------------------------- | ------------------------------------------------------------ |
+| [Wallet](#wallet)                                       | An example of creating and loading a keywallet.              |
+| [ICX Transfer](#icx-transfer)                           | An example of transferring ICX and confirming the result.    |
+| [Token Deploy and Transfer](#token-deploy-and-transfer) | An example of deploying an IRC token, transferring the token and confirming the result. |
+| [Sync Block](#sync-block)                               | An example of checking block confirmation and printing the ICX and token transfer information. |
 
-| Example       | Description |
-| ------------- | ----------- |
-| [WalletExample](#walletexample) | An example of creating and loading a wallet. |
-| [IcxTransactionExample](#icxtransactionexample) | An example of transferring ICX and confirming the result. |
-| [DeployAndTransferTokenExample](#deployandtransfertokenexample) | An example of deploying IRC token and transferring deployed token. |
-| [SyncBlockExample](#syncblockexample) | An example of checking block confirmation and printing the ICX and token transfer information. |
 
-## Get Started
 
-### Install Dependency
+## Prerequisite
 
-Please go to `quickstart` directory and install dependency to use `icon-sdk-js`.
+[Enumereate any required knowledge, configuration, or resources to complete this tutorial.
+Provide links to other useful resources.]
+[Helping your readers to prepare increases the likelihood that they will continue reading.]
 
-npm
-```
-npm install   // install dependencies for executing the quickstart project (including icon-sdk-js package)
-```
 
-### Run example file
-Run example file.
-```
-npm start   // open http://localhost:3000/ in browser
-```
 
-If you want to rebuild icon-sdk-js library and run quickstart project, go to icon-sdk-js root directory and run `npm run quickstart:rebuild` command.
-```
-npm run quickstart:rebuild   // open http://localhost:3000/ in browser
+## Installation
+
+### Usage in Node.js
+
+Install `icon-sdk-js` module using `npm`.
+
+```bash
+npm install --save icon-sdk-js
 ```
 
-### Set Node URL
-
-If you want to use custom ICON node url, change the value of `NODE_URL` variable in `./mockData/index.js`. Default value of `NODE_URL` is `https://bicon.net.solidwallet.io/api/v3`
-
-*For more information on the testnet, see [the documentation](https://github.com/icon-project/icon-project.github.io/blob/master/docs/icon_network.md) for the ICON network.*
+Import `icon-sdk-js` module.
 
 ```javascript
-const NODE_URL = 'https://bicon.net.solidwallet.io/api/v3'; 
+const IconService = require('icon-sdk-js');
 ```
 
+### Usage in browser
+
+Install `icon-sdk-js` module using `npm`,
+
+```bash
+npm install --save icon-sdk-js
+```
+
+or using CDN.
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/icon-project/icon-sdk-js@latest/build/icon-sdk-js.web.min.js"></script>
+```
+
+Then, import `icon-sdk-js` module.
+
+```javascript
+import IconService from 'icon-sdk-js';
+```
+
+### Usage in react-native environment
+
+Install `icon-sdk-js` module using `npm`,
+
+```bash
+npm install --save icon-sdk-js
+```
+
+Then, import `icon-sdk-js/build/icon-sdk-js.web.min.js` module.
+
+```javascript
+import IconService from 'icon-sdk-js/build/icon-sdk-js.web.min.js';
+```
+
+
+
+## Configuration (Optional)
+
+[Such as env. variables ]
+
+
+
+## Using the SDK
+
+[Import, initialize, deinitialize, and basic call that applies to every or most code to use the SDK. 
+This section also serves as a test if the SDK has been correctly installed and ready to use.] 
 
 ### Generate IconService
 
@@ -74,12 +109,57 @@ const provider = new HttpProvider(MockData.NODE_URL);
 const iconService = new IconService(provider);
 ```
 
-## WalletExample
+
+
+### Queries
+
+### Transactions 
+
+
+
+## Code Examples
+
+### Install Dependency
+
+Please go to `quickstart` directory and install dependency to use `icon-sdk-js`.
+
+npm
+
+```
+npm install   // install dependencies for executing the quickstart project (including icon-sdk-js package)
+```
+
+### Run example file
+
+Run example file.
+
+```
+npm start   // open http://localhost:3000/ in browser
+```
+
+If you want to rebuild icon-sdk-js library and run quickstart project, go to icon-sdk-js root directory and run `npm run quickstart:rebuild` command.
+
+```
+npm run quickstart:rebuild   // open http://localhost:3000/ in browser
+```
+
+### Set Node URL
+
+If you want to use custom ICON node url, change the value of `NODE_URL` variable in `./mockData/index.js`. Default value of `NODE_URL` is `https://bicon.net.solidwallet.io/api/v3`
+
+*For more information on the testnet, see [the documentation](https://github.com/icon-project/icon-project.github.io/blob/master/docs/icon_network.md) for the ICON network.*
+
+```javascript
+const NODE_URL = 'https://bicon.net.solidwallet.io/api/v3'; 
+```
+
+### 
+
+### Wallet
 
 This example shows how to create a new `Wallet` and load wallet with privateKey or Keystore file.
 
-
-### Create Wallet
+#### Create a wallet
 
 Create new EOA by calling `create` function. After creation, the address and private Key can be looked up.
 
@@ -93,7 +173,7 @@ Address: hx4d37a7013c14bedeedbe131c72e97ab337aea159
 PrivateKey: 00e1d6541bfd8be7d88be0d24516556a34ab477788022fa07b4a6c1d862c4de516
 ```
 
-### Load Wallet
+#### Load a wallet
 
 You can call existing EOA by calling `loadKeystore` and `loadPrivateKey` function.
 
@@ -117,7 +197,7 @@ console.log(walletLoadedByKeyStore.getPrivateKey());
 // Output: 38f792b95a5202ab431bfc799f7e1e5c74ec0b9ede5c6142ee7364f2c84d72f6);
 ```
 
-### Store Wallet
+#### Store the wallet
 
 After `Wallet` object creation, Keystore file can be stored by calling `store` function.
 
@@ -151,13 +231,13 @@ console.log(wallet.store('qwer1234!'));
 // }
 ```
 
-## IcxTransactionExample
+### ICX Transfer
 
 This example shows how to transfer ICX and check the result.
 
 *For the Wallet and IconService creation, please refer to the information above.*
 
-### ICX Transfer
+#### ICX transfer transaction 
 
 In this example, you can create Wallet with `MockData.PRIVATE_KEY_1` and transfer 1 ICX to `MockData.WALLET_ADDRESS_2`.
 
@@ -223,6 +303,7 @@ const transaction = icxTransactionBuilder
       .timestamp(timestamp)
       .build();
 ```
+
 Generate SignedTransaction to add signature of the transaction.
 
 ```javascript
@@ -255,7 +336,7 @@ console.log(txHash);
 // 0x69c07ff23e2eafb068ec026f1a116082f0d869b3964531e43088f6638bcfe0f7
 ```
 
-### Check the Transaction Result
+#### Check the transaction result
 
 After transaction is sent, the result can be looked up with the returned hash value.
 
@@ -286,7 +367,7 @@ You can check the following information using the TransactionResult.
 - eventLogs :  Occurred EventLog’s list during execution of the transaction.
 - logsBloom : Indexed Data’s Bloom Filter value from the occurred Eventlog’s Data
 
-### Check the Balance
+#### Check the ICX balance
 
 In this example, you can check the ICX balance by looking up the transaction before and after the transaction.
 
@@ -303,13 +384,13 @@ console.log(balance);
 // 100432143214321432143
 ```
 
-## DeployAndTransferTokenExample
+### Token Deploy and Transfer
 
 This example shows how to deploy IRC token and transfer deployed token.
 
 *For the Wallet and IconService generation, please refer to the information above.*
 
-### Token Deploy
+#### Token deploy transaction
 
 You need the SCORE Project to deploy token.
 
@@ -427,6 +508,8 @@ You can check the transaction hash value by calling sendTransaction from ‘Icon
 this.deployTxHash = await this.iconService.sendTransaction(signedTransaction).execute();
 ```
 
+##### Check the deploy transaction result
+
 After transaction is sent, the result can be looked up with the returned hash value.
 You can also check the ST Token score address that you deployed.
 
@@ -446,7 +529,7 @@ console.log("Your score address: " + transactionResult.scoreAddress);
 
 *For the 'TransactionResult', please refer to the `IcxTransactionExample`.*
 
-### Token Transfer
+#### Token transfer transaction
 
 You can send the ST token that you deployed right before.
 
@@ -548,7 +631,7 @@ console.log(this.transactionTxHash);
 // 0x6b17886de346655d96373f2e0de494cb8d7f36ce9086cb15a57d3dcf24523c8f
 ```
 
-### Check the Result
+##### Check the transfer transaction result
 
 You can check the result with the returned hash value of your transaction.
 
@@ -565,7 +648,7 @@ console.log("transaction status(1:success, 0:failure): "+transactionResult.statu
 
 *For the TransactionResult, please refer to the `IcxTransactionExample`.*
 
-### Check the Token Balance
+### Check the token balance
 
 In this example, you can check the token balance before and after the transaction.
 
@@ -590,13 +673,13 @@ const call = callBuilder
 const balance = await this.iconService.call(call).execute();
 ```
 
-## SyncBlockExample
+### Sync Block
 
 This example shows how to read block information and print the transaction result for every block creation.
 
 *Please refer to above for Wallet and IconService creation.*
 
-### Read Block Information
+#### Read the block information
 
 In this example, 'getLastBlock' is called periodically in order to check the new blocks,
 
@@ -628,7 +711,7 @@ You can check the following information using the ConfirmedTransaction:
 - dataType: A value indicating the type of the data item (call, deploy, message)
 - data: Various types of data are included according to dataType.
 
-### Transaction Output
+#### Transaction output
 
 ```javascript
 async syncBlock(block) {
@@ -669,7 +752,7 @@ async syncBlock(block) {
 
 ```
 
-### Check the Token Name & Symbol
+#### Check the token name & symbol
 
 You can check the token SCORE by calling the `name` and `symbol` functions.
 
@@ -686,6 +769,7 @@ async getTokenName(to) {
     return result;
 }
 ```
+
 ```javascript
 async getTokenSymbol(to) {
     const { CallBuilder } = IconBuilder;
@@ -700,7 +784,13 @@ async getTokenSymbol(to) {
 }
 ```
 
-## References
 
-- [ICON JSON-RPC API v3](https://icondev.readme.io/docs/json-rpc-specification) 
-- [IRC2 Specification](https://github.com/icon-project/IIPs/blob/master/IIPS/iip-2.md)
+
+## References (Optional)
+
+- reference 1
+- reference 2
+
+
+## Licenses
+

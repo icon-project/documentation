@@ -114,53 +114,10 @@ ICON SDK for Python is a collection of libraries which allow you to interact wit
 
 ## Quick Start
 
-### Requirements
-
-ICON SDK for Python development and execution requires following environments.
-
-- Python
-    - Version: Python 3.6+
-    - IDE: Pycharm is recommended.
-
 ### Reference
 - [ICON JSON-RPC API v3](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md)
 - [ICON SDK for Python(Previous version)](https://github.com/icon-project/icon_sdk_for_python)
     - Reference to [ICON JSON-RPC API **v2**](https://github.com/icon-project/icx_JSON_RPC)
-
-### Version
-
-1.0.7 beta
-
-### Installation
-
-At first, you need to get ICON SDK for Python into your project. It can be installed using pip as follows:
-
-``````shell
-$ pip install iconsdk
-``````
-
-### Creating an IconService Instance and Setting a Provider
-
-After that, you need to create an IconService instance and set a provider.
-
-- The **IconService** class contains a set of API methods. It accepts a HTTPProvider which serves the purpose of connecting to HTTP and HTTPS based JSON-RPC servers.
-
-- A **provider** defines how the IconService connects to Loopchain.
-
-- The **HTTPProvider** takes the full URI where the server can be found. For local development, this would be something like http://localhost:9000.
-
-Here is an example of calling a simple API method to get a block by its height :
-
-```python
-from iconsdk.icon_service import IconService
-from iconsdk.providers.http_provider import HTTPProvider
-
-# Creates an IconService instance using the HTTP provider and set a provider.
-icon_service = IconService(HTTPProvider("https://iconx.io"))
-
-# Gets a block by a given block height.
-block = icon_service.get_block(1209)
-```
 
 
 

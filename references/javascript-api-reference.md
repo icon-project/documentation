@@ -25,55 +25,6 @@ ICON supports JavaScript SDK for 3rd party or user services development. You can
 * [Error cases][Error cases]
 * [References][References]
 
-## Installation
-
-### Usage in Node.js
-
-Install `icon-sdk-js` module using `npm`.
-
-```bash
-npm install --save icon-sdk-js
-```
-
-Import `icon-sdk-js` module.
-
-```javascript
-const IconService = require('icon-sdk-js');
-```
-
-### Usage in browser
-
-Install `icon-sdk-js` module using `npm`,
-
-```bash
-npm install --save icon-sdk-js
-```
-
-or using CDN.
-
-```html
-<script src="https://cdn.jsdelivr.net/gh/icon-project/icon-sdk-js@latest/build/icon-sdk-js.web.min.js"></script>
-```
-
-Then, import `icon-sdk-js` module.
-
-```javascript
-import IconService from 'icon-sdk-js';
-```
-
-### Usage in react-native environment
-
-Install `icon-sdk-js` module using `npm`,
-
-```bash
-npm install --save icon-sdk-js
-```
-
-Then, import `icon-sdk-js/build/icon-sdk-js.web.min.js` module.
-```javascript
-import IconService from 'icon-sdk-js/build/icon-sdk-js.web.min.js';
-```
-
 ## API Specification - Introduction
 
 `IconService` is a root class of `icon-sdk-js`, which provides APIs to communicate with ICON nodes and contains different type of modules. Details of modules are as below:
