@@ -18,6 +18,7 @@
 	- c-rep
 	- citizen
 	- p-rep
+		- [p-rep-installation-and-configuration](./node/p-rep/p-rep-installation-and-configuration.md)
 - references
 	- [icon-json-rpc-v3](./references/icon-json-rpc-v3.md)
 	- [java-sdk](./references/java-sdk.md)
@@ -45,3 +46,4 @@
 - [quick-start-sdk-template](./quick-start-sdk-template.md)
 - [reference-template](./reference-template.md)
 - [tutorial-template](./tutorial-template.md)
+
