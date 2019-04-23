@@ -22,30 +22,17 @@ We assume that you have previous knowledge and experience in:
 - Docker container
 - Linux server and docker service troubleshooting
 
-### HW Requirements
+### HW Requirements for Testnet
 
-Below server specification is recommended by the ICON Foundation, a final specification may differ depending on network conditions.
+Below specification is a minimum requirement for the testnet application. 
 
-#### Amazon Web Service (AWS)
-
-| Desciption    | Minimum Specification                         | Recommended Specifications                    |
-| ------------- | --------------------------------------------- | --------------------------------------------- |
-| Instance Type | C5.4xlarge                                    | C5.9xlarge                                    |
-| CPU Model     | Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz | Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz |
-| vCPU (core)   | 16                                            | 36                                            |
-| RAM           | 32G                                           | 72G                                           |
-| Disk          | 500G NVMe SSD ( EBS Bandwidth 4.5 Gbps)       | 500G NVMe SSD ( EBS Bandwidth 4.5 Gbps)       |
-| Network       | 10 Gbps                                       | 10 Gbps                                       |
-
-#### On premise
-
-| Description | Minimum Specification                         | Recommended Specifications                    |
-| ----------- | --------------------------------------------- | --------------------------------------------- |
-| CPU Model   | Intel(R) Xeon 6150 CPU @2.70GHz 18Core * 1CPU | Intel(R) Xeon 6150 CPU @2.70GHz 18Core * 2CPU |
-| Memory      | 32G                                           | 64G                                           |
-| Disk        | Usable 1TB<br/>500G SSD x 2 (Raid 1+0)        | Usable 1TB<br/>500G SSD x 4 (Raid 1+0)        |
-| Network     | 1 Gbps                                        | 1 Gbps                                        |
-
+| Desciption    | Minimum Specification for P-Rep TestNet Application | 
+| ------------- | ---------------------------------------------| 
+| CPU Model     | Intel(R) Xeon® Platinum 8124M CPU @ 3.00 GHz | 
+| vCPU (core)   | 8                                            |
+| RAM           | 16G                                          |
+| Disk          | 200G NVMe SSD                                | 
+| Network       | 1 Gbps                                       | 
 
 
 ### SW Requirements
