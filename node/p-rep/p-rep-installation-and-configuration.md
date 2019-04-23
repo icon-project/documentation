@@ -1,31 +1,30 @@
 ---
 title: "P-Rep Installation and Configuration"
-excerpt: "General information abot ICON P-Rep election - https://icon.community/iconsensus/"
+excerpt: "General information about the ICON P-Rep election - https://icon.community/iconsensus/"
 ---
 
-This guide describes how to install and operate a P-Rep node. We will use docker to install the node.
+This guide is for ICON Public Representative (P-Reps) candidates explaining how to install and operate a P-Rep node. We will use docker to install the node. ICON will provide a test environment for P-Rep candidates where they can install and run the P-Rep node to produce blocks. This guidance document will focus on setting up a node for the testnet. Complete guideline for the elected P-Reps to participate in the ICON mainnet will be released later.
 
 
 
 ## Intended Audience
 
-100 Public Representatives elected for the ICON Network.
+We recommend all P-Rep candidates to go through this guideline and participate in the block generation test.
 
 
 
 ## Pre-requisites
 
-We assume that you have you have prior knowledge and experice in 
+We assume that you have previous knowledge and experience in:
 
-- Server administation
-
-- Operations 
-
-  
+- IT infrastructure management
+- Linux or UNIX system administration
+- Docker container
+- Linux server and docker service troubleshooting
 
 ### HW Requirements
 
-The server specification is recommended by the ICON Foundation, final specification may differ depending on network conditions.
+Below server specification is recommended by the ICON Foundation, a final specification may differ depending on network conditions.
 
 #### Amazon Web Service (AWS)
 
@@ -53,107 +52,111 @@ The server specification is recommended by the ICON Foundation, final specificat
 
 #### OS requirements
 
-- Linux (CentOS 7 or Ubuntu 16.04 or newer)
+- Linux (CentOS 7 or Ubuntu 16.04+)
 
 #### Package requirements
 
-- Docker: 18.x and above
-- Python: 3.6.5 and above (included in the docker image)
-- RabbitMQ: 3.7 and above (included in the docker image)
+- Docker 18.x or higher
+
+For your reference, ICON node depends on the following packages. The packages are included in the P-Rep docker image that we provide, so you don't need to install them separately. 
+
+- Python 3.6.5 or higher (3.7 is not supported)
+- RabbitMQ 3.7 or higher
 
 
 
 ## Network Diagram of P-Rep nodes
 
-The explanation of the P-Rep Network diagram as follow:   
-
 ![P-Rep Networking Model](../../img/p-rep1.png)
 
-Figure-1. P-Rep Networking Model
+Above diagram shows how P-Rep nodes are interacting with each other in the test environment. To get access to the testnet, please read the medium post, [P-Rep TestNet Application Open](https://medium.com/helloiconworld/p-rep-testnet-application-open-97e3f7ad1e6d).
 
 
 
 
-- Endpoint : https://preptest.net.solidwallet.io
-- Tracker : [https://preptest.tracker.solidwallet.io](http://preptest.tracker.solidwallet.io/)
-- IP List : https://download.solidwallet.io/conf/prep_iplist.json
+- Endpoint: https://preptest.net.solidwallet.io
+
+  - Endpoint is the load balancer that accepts the transaction requests from DApps and relays the requests to an available P-Rep node. In the test environment, ICON foundation is running the endpoint. It is also possible for each P-Rep to setup own endpoint to directly serve DApps (as depicted in PRep-Node4), but that configuration is out of the scope of this document. 
+- Tracker: [https://preptest.tracker.solidwallet.io](http://preptest.tracker.solidwallet.io/)
+
+  - A block and transaction explorer attached to the test network.
+- IP List: https://download.solidwallet.io/conf/prep_iplist.json
+
+  - ICON foundation will maintain the IP list of P-Reps. The JSON file will contain the list of IPs. You should configure your firewalls to allow in/outbound traffic from/to the IP addresses.  Following TCP ports should be open.
+  - Port 7100: Used by gRPC for peer to peer communication between nodes.
+  - Port 9000: Used by  JSON-RPC API server.
+
+
+We highly recommend you to use a firewall to protect the P-Rep node.
 
 
 
+## Inside a P-Rep Node
 
-We are recommend to use firewall to protect the P-Rep Node.
+**A process view of a P-Rep node**  
 
-Each node communicates with a gRPC(TCP 7100) port and must have firewall which is open to each other.
-
-Referring the IP list which is provided by the API, the firewall should allow TCP 7100, TCP 9000 of the IP address(es).
-
-## Inside P-Rep Node
-
-The explanation of the P-Rep Process as follow:  
+There are five processes, `iconrpcserver`, `iconservice`, `loopchain`, `loop-queue`, and `loop-logger`. 
 
 ![P-Rep Architecture Diagram](../../img/p-rep2.png)
 
-Figure-2. P-Rep Architecture Diagram
-
-
-
-What process is using P-Rep Node?
-
 - iconrpcserver
 
-  - iconrpcserver handles JSON-RPC message requests
-  - ICON RPC Server receives request messages from external clients, and sends responses. when receiving the message, ICON RPC Server checks the method of requests and transfers it to appropriate components (loopchain or ICON Service). 
+  - `iconrpcserver` handles JSON-RPC message requests
+  - ICON RPC Server receives request messages from external clients and sends responses. When receiving a message, ICON RPC Server identifies the method that the request wants to invoke and transfers it to an appropriate component, either loopchain or ICON Service. 
 
-- iconservice :
+- iconservice
 
-  - ICON Service manages the state of ICON node including SCOREs using LevelDB.
-
-    Before processing transactions, ICON Service checks for syntax errors, balances, etc.
-
+  - ICON Service manages the state of ICON network (i.e., states of user accounts and SCOREs) using LevelDB.
+- Before processing transactions, ICON Service performs the syntax check on the request messages and prevalidates the status of accounts to see if the transactions can be executable.
+  
 - loopchain
 
-  - Loopchain is the high-performance Blockchain Consensus & Network engine of ICON project
+  - `loopchain` is the high-performance Blockchain Consensus & Network engine of ICON.
 
-- loop-queue(RabbitMQ)
+- loop-queue (RabbitMQ)
 
   - RabbitMQ is the most widely deployed open source message broker. 
-  - RabbitMQ is the message queue which is used in loopchain 
+  - loopchain uses RabbitMQ as a message queue for inter-process communication. 
 
-- loop-logger(Fluentd)
+- loop-logger (Fluentd)
 
-  - Fluentd is the open source data collector, which lets you unify the data collection and consumption for a better usage and understanding of data.
-  - You can use Fluentd if you want to centralize log 
-
-Which ports is using P-Rep Node?
-
-- TCP 7100 : gRPC port number of peer.  peer-to-peer connection requires establishment of a connection each between peer node.
-- TCP 9000 : RESTful API port number. 
-- TCP 5672 : RabbitMQ port number. 
-- TCP 15672 : RabbitMQ Management will listen on port 15672. 
-  - You can use RabbitMQ Management by enabling this port
-  - It must be enabled before it can be used.
-  - You can access to The management web console by  accessing to http://{node-hostname}:15672/.
-  - For example, if want node runs on a  machine with the hostname of prep-node, you can access to the Management web console by accessing to  [http://prep-node:15672/](http://warp10.local:15672/) 
+  - Fluentd is the open source data collector, which lets you unify the data collection and consumption.
+  - Fluentd is included in the P-Rep node image. You can use Fluentd to systemically collect and aggregate the log data that other processes produce. 
 
 
+
+**Which ports a P-Rep Node is using?**
+
+For external communication:
+
+- TCP 7100: gRPC port used for peer-to-peer connection between peer nodes.
+- TCP 9000: JSON-RPC or RESTful API port serving application requests.
+
+For internal communication:
+
+- TCP 5672: RabbitMQ port for inter-process communication.
+
+For RabbitMQ management console:
+
+- TCP 15672: RabbitMQ Management will listen on port 15672. 
+  - You can use RabbitMQ Management by enabling this port. It must be enabled before it is used.
+  - You can access the management web console at `http://{node-hostname}:15672/`
 
 
 
 ## P-Rep Installation using Docker
 
-Please read the SW requirements above. In this chapter we 
+Please read the SW requirements above. In this chapter, we start by going through the docker installation. 
 
 If you already have installed docker and docker compose, you can skip the part below, and directly go to the [Running P-Rep Node on Docker Container](#running-p-rep-node-on-docker-container)
 
 ### Prerequisites - Docker & Docker Compose Installation
 
-If you don't already have docker installed, you can download it here: <https://www.docker.com/community-edition>.
-
-- Logged in as a user with sudo privileges
+If you don't already have docker installed, you can download it here: <https://www.docker.com/community-edition>. Installation requires sudo privilege.
 
 #### On Centos 7
 
-Step 1: Install Docker
+**Step 1: Install Docker**
 
 ```shell
 ## Install necessary packages:
@@ -181,7 +184,7 @@ $ docker version
 
 
 
-Step 2: Install Docker Compose
+**Step 2: Install Docker Compose**
 
 ```shell
 ## Install Extra Packages for Linux
@@ -205,7 +208,7 @@ $ docker-compose version
 
 #### On Ubuntu 16.04+
 
-Step 1: Install Docker
+**Step 1: Install Docker**
 
 ```shell
 ## Update the apt package index:
@@ -242,7 +245,7 @@ $ docker version
 
 
 
-Step 2: Install Docker Compose
+**Step 2: Install Docker Compose**
 
 ```shell
 ## Install python-pip
@@ -258,70 +261,76 @@ $ docker-compose version
 
 
 
-### Running P-Rep Node on Docker Container
+### Running a P-Rep Node on Docker Container
 
-if you have docker installed, just follow the steps below.
+You have docker installed, then proceed the following steps to install the P-Rep node.
 
 #### Step 1. Pull the docker image
 
 **Pull the latest stable version of an image.**
 
+```shell
 $ docker pull iconloop/prep-node:1904111713xdde258
+```
 
 
 
 #### Step 2. Run the P-Rep Node as a Docker container
 
-**using docker command**
+**Using docker command**
 
-$ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/[data:/data](http://data/data) iconloop/prep-node:1904111713xdde258
+```shell
+$ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-node:1904111713xdde258
+```
 
 
 
-**using docker-compose command (Recommended)**
+**Using docker-compose command (Recommended)**
 
 Open `docker-compose.yml` in a text editor and add the following content:
 
-version: '3' services:    container:        image: 'iconloop/prep-node:1904111713xdde258'        container_name: 'prep-node'        volumes:            - ./[data:/data](http://data/data)        ports:           - 9000:9000           - 7100:7100
+```yml
+version: '3' services:    container:        image: 'iconloop/prep-node:1904111713xdde258'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100
+```
 
 
 
 **Run docker-compose**
 
+```shell
 $ docker-compose up -d
+```
 
 
 
-**Learn more about these settings below.**
+Above command options do the followings.
 
-1. Forward port 7100, 9000
+1. Map container ports 7100 and 9000 to the host ports.
 
-2. Mount volume to Docker image on OS   
+2. Mount a volume into the docker container.
 
-3.  "-v ${PWD}/data:/data"  sets up a bindmount volume that links the /data/ directory from inside the P-Rep Node container to the ${PWD}/data directory on the host machine.
+   - `-v ${PWD}/data:/data`  sets up a bind mount volume that links the `/data/` directory from inside the P-Rep Node container to the `${PWD}/data` directory on the host machine.
 
-   - It has the following directory structure
+   - `data` folder will have the following directory structure.
 
 ```shell
 .
 |---- data  
 |     |---- PREP-TestNet   → Default ENV directory  
 |          |---- .score_data  
-|          |      |-- db      → root directory that SCORE will be installed
-|          |      |-- score   → root directory that state DB file will be created
-|          |---- .storage     → root directory that block DB will be stored
-|          |---- log          → root directory that log file will be stored
+|          |      |-- db      → root directory that SCOREs will be installed
+|          |      |-- score   → root directory that the state DB file will be created
+|          |---- .storage     → root directory that the block DB will be stored
+|          |---- log          → root directory that log files will be stored
 ```
 
 
 
-## Setup P-Rep Node
+## P-Rep Node Operation and Configuration
 
-### Configuration
+### Start Node
 
-#### Start Node
-
-Run docker-compose
+Run docker-compose up.
 
 ```shell
 $ docker-compose up -d
@@ -330,7 +339,7 @@ prep_prep_1 is up-to-date
 
 
 
-The ``docker ps``  command shows running docker container. 
+The ``docker ps``  command shows the list of running docker containers. 
 
 ```shell
 $ docker ps
@@ -338,20 +347,20 @@ CONTAINER ID   IMAGE                                                          CO
 0de99e33cdc9     iconloop/prep-node:1904111713xdde258    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
-
+The meaning of each column in the `docker ps` result output is as follows. 
 
 | Column       | Description                                                  |
 | :----------- | :----------------------------------------------------------- |
 | CONTAINER ID | Container  ID                                                |
 | IMAGE        | P-Rep Node's  image name                                     |
-| COMMAND      | The Script will be executed first when a PRep-Node container is run |
-| STATUS       | Healthcheck status. One of  "starting" , "healthy", "unhealthy" or "none" |
-| PORTS        | Expose port on running P-Rep Node container                  |
-| NAMES        | Container Name                                               |
+| COMMAND      | The script will be executed whenever a P-Rep Node container is run |
+| STATUS       | Healthcheck status. One of "starting" , "healthy", "unhealthy" or "none" |
+| PORTS        | Exposed ports on the running container                       |
+| NAMES        | Container name                                               |
 
 
 
-You can read the container booting log.
+You can read the container booting log from the log folder.
 
 ```shell
 $ tail -f data/PREP-TestNet/log/booting_20190419.log
@@ -369,7 +378,7 @@ $ tail -f data/PREP-TestNet/log/booting_20190419.log
 
 
 
-#### Stop Node
+### Stop Node
 
 ```shell
 $ docker-compose down
@@ -381,7 +390,7 @@ Removing network prep_default
 
 
 
-#### View Node State
+### View Node Status
 
 ```shell
 $ curl localhost:9000/api/v1/status/peer
@@ -421,9 +430,9 @@ $ curl localhost:9000/api/v1/status/peer
 
 
 
-#### Docker Environment variables
+### Docker Environment Variables
 
-If you want change the TimeZone setting, open `docker-compose.yml` in a text editor and add the following content:
+If you want change the TimeZone, open `docker-compose.yml` in a text editor and add the following content:
 
 ```yml
 version: '3' services:    container:        image: 'iconloop/prep-node:1904111713xdde258'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100       environment:          TZ: "America/Los_Angeles"
@@ -431,29 +440,29 @@ version: '3' services:    container:        image: 'iconloop/prep-node:190411171
 
 
 
-The P-Rep Node image supports the following environment variable options:
+The P-Rep Node image supports the following environment variables:
 
 | Variable            | Description                                                  | Default Value          | Allowed Value                |
 | :------------------ | :----------------------------------------------------------- | :--------------------- | :--------------------------- |
-| TZ                  | Setting the TimeZone Environment <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones> | Asia/Seoul             | TZ database name             |
-| IPADDR              | Setting the IP address                                       | Your public ip address | IP address                   |
+| TZ                  | Setting the TimeZone Environment. <br>[List of TZ name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) | Asia/Seoul             | TZ database name             |
+|                     |                                                              |                        |                              |
+| IPADDR              | Setting the IP address                                       | Your public IP address | IP address                   |
 | DEFAULT_PATH        | Setting the Default Root PATH                                | /data/PREP-TestNet     | PATH String                  |
-| USE_MQ_ADMIN        | Enable RabbitMQ management Web interface.The management UI can be accessed using a Web browser at http://{node-hostname}:15672/.For example, for a node running on a machine with the hostname of prep-node, it can be accessed at [http://prep-node:15672/](http://warp10.local:15672/) | false                  | boolean(true / false)        |
+| USE_MQ_ADMIN        | Enable RabbitMQ management Web interface.The management UI can be accessed using a Web browser at http://{node-hostname}:15672/. For example, for a node running on a machine with the hostname of prep-node, it can be accessed at http://prep-node:15672/ | false                  | boolean (true/false)         |
 | MQ_ADMIN            | RabbitMQ management username                                 | admin                  |                              |
 | MQ_PASSWORD         | RabbitMQ management password                                 | iamicon                |                              |
-| LOOPCHAIN_LOG_LEVEL | Loopchain Log Level                                          | INFO                   | DEBUG, INFO, WARNING, ERROR  |
+| LOOPCHAIN_LOG_LEVEL | loopchain Log Level                                          | INFO                   | DEBUG, INFO, WARNING, ERROR  |
 | ICON_LOG_LEVEL      | iconservice Log Level                                        | INFO                   | DEBUG, INFO, WARNING, ERROR  |
 | LOG_OUTPUT_TYPE     | Choose a log output type                                     | file                   | file, console, file\|console |
 | RPC_WORKER          | Setting the number of RPC workers                            | 3                      | Number                       |
-|                     |                                                              |                        |                              |
 
 
 
 ## Troubleshooting
 
-### How to check if container is running or not
+### Q: How to check if container is running or not
 
-The ``docker ps``  command shows running docker container. 
+The ``docker ps``  command shows the list of running docker containers. 
 
 ```shell
 $ docker ps
@@ -461,48 +470,26 @@ CONTAINER ID   IMAGE                                                          CO
 0de99e33cdc9     iconloop/prep-node:1904111713xdde258    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
+You should look at the `STATUS` field to see if the container is running up and in `healthy` state. 
 
+Inside the container, there is a `healthcheck` script running with the following configuration. It will return `unhealthy` when fails. 
 
-container가 동작중인지, STATUS가 healthy인지 확인해봐야한다. 
-
-To verify if the P-Rep is running, it check the condition of the container.
-
-아래와 같은 규칙으로 컨테이너 내부에서 healthcheck를 수행하고 있고, 실패시에는 unhealthy라고 표시된다.
-
-The health of P-Rep Node check script is the command that runs inside the container to check the health.
-
-`healthcheck` script runs inside the container by
-
-the following settings is the default setting of the health check script:
-
-
-
-| option       | value |
-| :----------- | :---- |
-| retries      | 4     |
-| interval     | 30s   |
-| timeout      | 20s   |
-| start-period | 60s   |
-
-
+| Healthcheck option | value |
+| :----------------- | :---- |
+| retries            | 4     |
+| interval           | 30s   |
+| timeout            | 20s   |
+| start-period       | 60s   |
 
 The container can have three states:
 
-- starting - container starts
-- healthy - healthy status when health check passes
-- unhealthy -  unhealthy status when health check fails
+- starting - container just starts
+- healthy - when the health check passes
+- unhealthy - when the health check fails
 
 
 
-컨테이너가 실행하자마자 죽었거나 실행되지 않았을때는 아래와 같이 booting.log를  확인해야한다.
-
-If the container is dead or not running as soon as it runs, check the boot.log as shown below.
-
-If the container doesn't start, check the booting.log as fallow
-
-
-
-**Success log messages example** 성공적인 로그 패턴 (정상 로그 패턴)
+If the container does not start properly or went down unexpectedly, please check the `booting.log`. Below is the log messages on **success**. 
 
 ```shell
 $ cat data/PREP-TestNet/log/booting_${DATE}.log 
@@ -526,9 +513,11 @@ $ cat data/PREP-TestNet/log/booting_${DATE}.log
 
 
 
-### How to find error
+### Q: How to find error
 
 **Error log messages example**
+
+Grep the `ERROR` messages from the log files to find the possible cause of the failure.
 
 ```shell
 $ cat data/PREP-TestNet/log/booting_${DATE}.log | grep ERROR
@@ -540,37 +529,26 @@ $ cat data/PREP-TestNet/log/booting_${DATE}.log | grep ERROR
 
 
 
-**Docker container stores below log files**
+**Docker container generates below log files**
 
 - booting.log
-
-  →  The log file which contains any error when error conditions after  the docker container starts up.
-
+  - The log file contains the errors that occurred while the docker container starts up.
 - iconrpcserver.log
-
-  →The log file which contains the information about requests/responses through the iconrpcserver. 
-
+  - The log file contains information about the request/response message handling going through the iconrpcserver. 
 - iconservice.log
-
-  → The log file which contains how ICONService works
-
+  - The log file contains the internals of ICON Service
 - loopchain.channel-txcreator-icon_dex_broadcast.icon_dex.log
-
-  → The log file which contains the broadcast log telling TX broadcast from a node to other nodes
-
+  - The log file contains information about TX broadcast from a node to other nodes
 - loopchain.channel-txcreator.icon_dex.log
-
-  → The log file which contains process of confirming TX
-
+  - The log file contains information about the process of confirming TX
 - loopchain.channel-txreceiver.icon_dex.log
-
-  → The log file which contains the process in which each nodes receive the broadcasted TX.
-
+  - The log file contains information about receiving the broadcasted TX from a node.
 - loopchain.channel.icon_dex.log
+  - The log file contains information about internals of loopchain engine
 
-  → The log file which contains the information about loopchain engine
 
-### How to monitor **resources**
+
+### Q: How to monitor **resources**
 
 We recommend the following tools for resource monitoring
 
