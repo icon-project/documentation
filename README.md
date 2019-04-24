@@ -1,2 +1,8 @@
-# documentation
-ICON documentation
+- howto
+	- [icon-development-network-on-aws-marketplace](./howto/icon-development-network-on-aws-marketplace.md)
+- icon-key-concepts
+	- [accounts](./icon-key-concepts/accounts.md)
+	- [parallel-processing](./icon-key-concepts/parallel-processing.md)
+	- [transactions](./icon-key-concepts/transactions.md)
+- introduction
+	- [about-this-guide](./introduction/about-this-guide.md)
