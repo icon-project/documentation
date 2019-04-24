@@ -43,7 +43,7 @@ chmod 400 my-key-pair.pem
 
 1. Visit **AWS Marketplace**
 https://console.aws.amazon.com/marketplace
-![AWS Marketplace](./images/AWS_Marketplace.png) (LINK TO PICTURE IS BROKEN)
+![AWS Marketplace](./images/AWS_Marketplace.png)
 2. Search by keyword "ICON Development Network" or visit the URL below. Then, click **Continue to Subscribe**
 https://aws.amazon.com/marketplace/pp/B07KBTZHZD?ref_=aws-mp-console-subscription-detail
 ![ICON Development Network](./images/ICON_Development_Network.png)
