@@ -451,14 +451,6 @@ https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-resource-limits.html
 
 
 
-## Document History
-
-
-Version  | writer | Date
------------- | -------------
-v0.9 | Donghan Lee(Donghan.lee@icon.foundation) | 20th Feb 2019
-     |  | 
-
 
 
 
