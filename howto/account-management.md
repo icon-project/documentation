@@ -64,7 +64,7 @@ String fileName = KeyWallet.store(wallet, password, destinationDirectory);
 ```
 
 ### Using ICONex
-ICONex is a Chrome extention app. [Installing ICONex](https://chrome.google.com/webstore/detail/iconex/flpiciilemghbmfalicajoolhkkenfel)
+ICONex is a Chrome extension app. [Installing ICONex](https://chrome.google.com/webstore/detail/iconex/flpiciilemghbmfalicajoolhkkenfel)
 
 #### Create an account and download keystore file.
 1. Click "Create Wallet". 
