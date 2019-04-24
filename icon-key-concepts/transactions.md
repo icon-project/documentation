@@ -68,8 +68,11 @@ The block which contains a transaction is connected to the blockchain after the 
 
 #### Check the Transaction Validation
 
-If you get the transaction hash as a response to sending a transaction to the ICON network, this means that your transaction has passed the validation. ICON network returns the transaction hash only when a transaction is valid. For specific information about this process, see the JSON-RPC APIs "icx_sendTransaction" section of the [ICON JSON-RPC API v3 Specification](https://github.com/icon-project/documentation/blob/develop/references/json-rpc/icon-json-rpc-v3.md) documentation.
+If you get the transaction hash as a response to sending a transaction to the ICON network, this means that your transaction has passed the validation. ICON network returns the transaction hash only when a transaction is valid. For specific information about this process, see the JSON-RPC APIs "icx_sendTransaction" section of the [ICON JSON-RPC API v3 Specification] documentation.
 
 #### Check the Transaction Confirmation
 
-You can check if a transaction is confirmed or pending using "icx_getTransactionResult" JSON-RPC API. "Pending" means that a transaction is in the transaction pool or block generation stage (except in the case of consensus failure on the block, it can be temporarily marked as "pending"). For specific information about this process, see the JSON-RPC APIs "icx_getTransactionResult" section of the [ICON JSON-RPC API v3 Specification](https://github.com/icon-project/documentation/blob/develop/references/json-rpc/icon-json-rpc-v3.md) documentation.
+You can check if a transaction is confirmed or pending using "icx_getTransactionResult" JSON-RPC API. "Pending" means that a transaction is in the transaction pool or block generation stage (except in the case of consensus failure on the block, it can be temporarily marked as "pending"). For specific information about this process, see the JSON-RPC APIs "icx_getTransactionResult" section of the [ICON JSON-RPC API v3 Specification] documentation.
+
+
+[ICON JSON-RPC API v3 Specification]: json-rpc-specification
