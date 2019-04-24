@@ -1,4 +1,6 @@
 - howto
+	- [account-management](./howto/account-management.md)
+	- [how-to-change-network-in-iconex-chrome](./howto/how-to-change-network-in-iconex-chrome.md)
 	- [icon-development-network-on-aws-marketplace](./howto/icon-development-network-on-aws-marketplace.md)
 - icon-key-concepts
 	- [accounts](./icon-key-concepts/accounts.md)
