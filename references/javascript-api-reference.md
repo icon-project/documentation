@@ -1,12 +1,11 @@
 ---
-title: "ICON SDK for JavaScript"
+title: "ICON JavaScript SDK API Reference"
 excerpt: ""
 ---
 
-ICON supports JavaScript SDK for 3rd party or user services development. You can integrate ICON JavaScript SDK into your project and utilize ICON’s functionality. This document provides you with an information of installation and API specification.
+ICON supports JavaScript SDK for 3rd party or user services development. You can integrate ICON JavaScript SDK into your project and utilize ICON’s functionality. This document provides you an API specification.
 
 ## Table of Contents
-* [Installation](#installation)
 * [API Specification - Introduction](#api-specification---introduction)
 * [IconService][IconService]
 * [IconService.IconWallet][IconWallet]
