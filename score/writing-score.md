@@ -267,7 +267,7 @@ print(test_dict2['key1']['key2']) ## get 'a'
 print(test_dict2['key1']['nonexistent_key']) # prints "" (key does not exist and value_type=str)
 ```
 
-If the depth is 2 or greatoe, `test_dictN['key']` returns new DictDB with the depth N-1.
+If the depth is 2 or greater, `test_dictN['key']` returns new DictDB with the depth N-1.
 Attempting to set a value to the wrong depth in the DictDB will raise an exception.
 
 Example 3)
