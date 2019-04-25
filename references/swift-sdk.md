@@ -3,17 +3,16 @@ title: "Swift SDK"
 excerpt: "The source code is found on Github at https://github.com/icon-project/ICONKit"
 ---
 
-ICON supports SDK for 3rd party or user services development. You can integrate ICON SDK for your project and utilize ICON’s functionality.
-This document provides you with an information of installation and basic usage guideline.
+ICON supports SDK for 3rd party or user services development. You can integrate ICON SDK for your project and utilize ICON’s functionality. This document provides you with an information of installation and basic usage guideline.
 
 Get different types of examples as follows.
 
-| Example                                                 | Description                                                  |
-| ------------------------------------------------------- | ------------------------------------------------------------ |
-| [Wallet](#wallet)                                       | An example of creating and loading a keywallet.              |
-| [ICX Transfer](#icx-transfer)                           | An example of transferring ICX and confirming the result.    |
-| [Token Deploy and Transfer](#token-deploy-and-transfer) | An example of deploying an IRC token, transferring the token and confirming the result. |
-| [Sync Block](#sync-block)                               | An example of checking block confirmation and printing the ICX and token transfer information. |
+| Example                           | Description                                                  |
+| --------------------------------- | ------------------------------------------------------------ |
+| [Wallet](#wallet)                 | An example of creating and loading a keywallet.              |
+| [ICX Transfer](#icx-transfer)     | An example of transferring ICX and confirming the result.    |
+| [Token Transfer](#token-transfer) | An example of deploying an IRC token, transferring the token and confirming the result. |
+| [Sync Block](#sync-block)         | An example of checking block confirmation and printing the ICX and token transfer information. |
 
 ## Prerequisite
 
@@ -28,7 +27,7 @@ This SDK works on following platforms:
 
 [CocoaPods](https://cocoapods.org/) is a dependecy manager for Swift Cocoa projects.
 
-```
+```shell
 $ sudo gem install cocoapods
 ```
 
@@ -45,23 +44,27 @@ end
 
 Now install the ICONKit
 
-```
+```shell
 $ pod install
 ```
 
-## Configuration (Optional)
 
-n/a
 
 ## Using the SDK
 
 ### Result
 
-ICONKit uses [Result](https://github.com/antitypical/Result) framework. All functions of ICONService returns Result<T, ICONResult>. `T` for successor, `ICONResult` for error.
-Refer to [Result](https://github.com/antitypical/Result) for more detail.
-## Quick start
+ICONKit uses [Result](https://github.com/antitypical/Result) framework. All functions of ICONService returns `Result<T, ICONResult>`. `T` for successor, `ICONResult` for error. Refer to [Result](https://github.com/antitypical/Result) for more detail.
 
-A simple query of the block by height is as follows.
+### ICONService
+
+APIs are called through `ICONService`. It can be initialized as follows.
+
+```Swift
+let iconService = ICONService(provider: "https://ctz.solidwallet.io/api/v3", nid: "0x1")
+```
+
+A simple query of a block by height is as follows.
 
 ```Swift
 // ICON Mainnet
@@ -79,21 +82,11 @@ case .failure(let error):
 }
 ```
 
-## ICONService
-
-APIs called through `ICONService`.
-
-It can be initialized as follows.
-
-```Swift
-let iconService = ICONService(provider: "https://ctz.solidwallet.io/api/v3", nid: "0x1")
-```
-
-# Queries
+### Queries
 
 All queries are requested by a `Request<T>`.
 
-#### Synchronous
+#### Synchronous query
 `execute()` requests a query synchronously.
 
 ```Swift
@@ -109,7 +102,7 @@ case .failure(let error):
 }
 ```
 
-#### Asynchronous
+#### Asynchronous query
 
 You can request a query asynchronously using a `async` closure as below.
 
@@ -126,7 +119,7 @@ iconService.getLastBlock().async { (result) in
 }
 ```
 
-## Querying API
+
 
 The querying APIs are as follows.
 
@@ -139,9 +132,10 @@ The querying APIs are as follows.
 * [getTotalSupply](#getTotalSupply)
 * [getTransaction](#getTransaction)
 * [getTransactionResult](#getTransactionResult)
-* [sendTransaction](#Sending-transactions)
 
-### getLastBlock
+
+
+#### getLastBlock
 
 Gets the last block information.
 
@@ -149,7 +143,7 @@ Gets the last block information.
 let request: Request<Response.Block> = iconService.getLastBlock()
 ```
 
-### getBlock(height)
+#### getBlock(height)
 
 Gets block information by block height. 
 
@@ -157,7 +151,7 @@ Gets block information by block height.
 let request: Request<Response.Block> = iconService.getBlock(height: height)
 ```
 
-### getBlock(hash)
+#### getBlock(hash)
 
 Gets block information by block hash.
 
@@ -165,9 +159,9 @@ Gets block information by block hash.
 let request: Request<Response.Block> = iconService.getBlock(hash: "0x000...000")
 ```
 
-### call
+#### call
 
-Calls a SCORE API.
+Calls a SCORE read-only API.
 Use the return type of method's outputs you want to call in generic type.
 For example, the type of output that is `String` use `String`.
 
@@ -193,23 +187,23 @@ let request: Request<String> = iconService.call(call)
 let response: Result<String, ICError> = request.execute() // return "0x56bc75e2d63100000" or ICError
 ```
 
-### getBalance
+#### getBalance
 
-Gets the balance of an given account.
+Gets the balance of a given account.
 
 ```swift
 let request: Request<BigUInt> = iconService.getBalance(address: "hx000...1")
 ```
 
-### getScoreAPI
+#### getScoreAPI
 
-Gets a list of ScoreAPI.
+Gets the list of APIs that the given SCORE exposes.
 
 ```swift
 let request: Request<Response.ScoreAPI> = iconService.getScoreAPI(scoreAddress: "cx000...1")
 ```
 
-### getTotalSupply
+#### getTotalSupply
 
 Gets the total supply of ICX.
 
@@ -217,7 +211,7 @@ Gets the total supply of ICX.
 let request: Request<BigUInt> = iconService.getTotalSupply()
 ```
 
-### getTransaction
+#### getTransaction
 
 Gets a transaction matching the given transaction hash.
 
@@ -225,7 +219,7 @@ Gets a transaction matching the given transaction hash.
 let request: Request<Response.TransactionByHashResult> = iconService.getTransaction(hash: "0x000...000")
 ```
 
-### getTransactionResult
+#### getTransactionResult
 
 Gets the transaction result requested by transaction hash.
 
@@ -233,13 +227,15 @@ Gets the transaction result requested by transaction hash.
 let request: Request<Response.TransactionResult> = iconService.getTransactionResult(hash: "0x000...000")
 ```
 
-### Sending transactions
+
+
+### Transactions
 
 Calling SCORE APIs to change states is requested as sending a transaction.
 
-Before sending a transaction, the transaction should be signed.
+Before sending a transaction, the transaction should be signed. It can be done using a `Wallet` object.
 
-#### Loading wallets and storing the Keystore
+#### Loading wallets and storing the keystore
 
 ```Swift
 // Generates a wallet.
@@ -301,7 +297,7 @@ let transaction = MessageTransaction()
     .message("Hello, ICON!")
 ```
 
-#### Sending Requests
+#### Sending requests
 
 `SignedTransaction` object signs a transaction using the wallet.
 
@@ -376,8 +372,6 @@ let confirmedDate: Date = timestamp.hexToDate()! // 2019-03-27 03:16:22 +0000
 
 
 ## Code Examples
-
-
 
 ### Wallet
 
@@ -476,10 +470,7 @@ case .failure(let error):
 }
 ```
 
-### Token Deploy and Transfers
-
-#### Token deploy transaction
-n/a
+### Token Transfers
 
 #### Token transfer transaction
 ```Swift
@@ -511,7 +502,7 @@ do {
 }
 ```
 
-#### Check the Token Balance
+#### Check the token balance
 
 If the output type of method is hex String (ex. `"0x56bc75e2d63100000"`), you can use `String` and `BigUInt` too! 
 Just input `BigUInt` at generic type, then ICONKit convert the output value to BigUInt.
@@ -529,9 +520,9 @@ let request: Request<String> = iconService.call(call)
 let response: Result<String, ICError> = request.execute() // return "0x56bc75e2d63100000" or ICError
 ```
 
-### Sync Blocks (Optional)
+### Sync Blocks
 
-#### Read Block Information
+#### Read block information
 
 ```Swift
 // get last block
@@ -551,7 +542,7 @@ case .failure:
 }
 ```
 
-#### Transaction Output
+#### Transaction output
 ```Swift
 let request: Request<Response.TransactionByHashResult> = iconService.getTransaction(hash: "0x000...000")
 
@@ -565,7 +556,7 @@ case .failure(let error):
 }
 ```
 
-#### Check the Token Name & Symbol
+#### Check the token name & symbol
 
 ```swift
 let call = Call<String>(from: wallet.address, to: scoreAddress, method: "name", params: params)
@@ -573,9 +564,9 @@ let request: Request<String> = iconService.call(call)
 let response: Result<String, ICError> = request.execute()
 ```
 
-#### 
 
-## References (Optional)
+
+## References
 
 - [ICON JSON-RPC API v3](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md)
 - [ICON Network](https://github.com/icon-project/icon-project.github.io/blob/master/docs/icon_network.md)

@@ -2,22 +2,11 @@
 title: "Audit Checklist"
 ---
 
-Described about How to audit SCORE.  
-This document offers "Severity level", "Critical", "Warning"
+This document explains ICON audit criteria and suggests secure SCORE implementation practices. 
+Audit checklist consists of 2 severity levels of items, Critical and Warning. Audit results will come as Pass/Fail/NA for each Critical items, and Pass/Warning/NA for each Warning items. If any Critical item is determined to be Fail, the SCORE deployment will be rejected.
 
-## Intended Audience
-
-* Mid  
-* Experienced
-
-## Purpose 
-
-You can understand how to audit SCORE
-
-## Prerequisite 
-
-* [score-overview](https://github.com/icon-project/documentation/blob/master/score/score-overview.md)
-* [score-writing-score](https://github.com/icon-project/documentation/blob/master/score/writing-score.md)
+Listed below are the checklist grouped by severity.
+We assume that you have read [Token & Crowdsale](/docs/token-crowdsale) and [Writing SCORE](/docs/syntax), and understand the basics of SCORE development.
 
 ## Severity level
 
