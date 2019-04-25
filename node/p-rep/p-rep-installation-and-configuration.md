@@ -3,8 +3,7 @@ title: "P-Rep Installation and Configuration"
 excerpt: "General information about the ICON P-Rep election - https://icon.community/iconsensus/"
 ---
 
-This guide is for ICON Public Representative (P-Reps) candidates explaining how to install and operate a P-Rep node. We will use docker to install the node. ICON will provide a test environment for P-Rep candidates where they can install and run the P-Rep node to produce blocks. This guidance document will focus on setting up a node for the testnet. Complete guideline for the elected P-Reps to participate in the ICON mainnet will be released later.
-
+This document is a guideline about how to install and operate a Public Representative (“P-Rep”) node on the Testnet using a docker. P-Reps are the consensus nodes that produce, verify blocks and participate in network policy decisions on the ICON Network. The purpose of the Testnet is to provide a test environment for the P-Rep candidates. The Candidates can simulate various activities such as block production to check technical stability of the nodes on the Testnet. (The node operation guideline on the ICON Mainnet for the elected P-Reps will be released in the future.)
 
 
 ## Intended Audience
@@ -28,10 +27,10 @@ Below specification is a minimum requirement for the testnet application.
 
 | Desciption    | Minimum Specification for P-Rep TestNet Application | 
 | ------------- | ---------------------------------------------| 
-| CPU Model     | Intel(R) Xeon® Platinum 8124M CPU @ 3.00 GHz | 
-| vCPU (core)   | 8                                            |
-| RAM           | 16G                                          |
-| Disk          | 200G NVMe SSD                                | 
+| CPU Model     | Intel(R) Xeon(R) CPU @ 3.00 GHz | 
+| vCPU (core)   | 2                                            |
+| RAM           | 4 G                                          |
+| Disk          | 100 G                                | 
 | Network       | 1 Gbps                                       | 
 
 
