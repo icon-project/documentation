@@ -8,3 +8,6 @@
 	- [transactions](./icon-key-concepts/transactions.md)
 - introduction
 	- [about-this-guide](./introduction/about-this-guide.md)
+- node
+	- p-rep
+		- [p-rep-installation-and-configuration](./node/p-rep/p-rep-installation-and-configuration.md)
