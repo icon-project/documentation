@@ -1,9 +1,9 @@
 ---
-title: "P-Rep Installation and Configuration"
-excerpt: "General information about the ICON P-Rep election - https://icon.community/iconsensus/"
+title: "P-Rep Node Installation and Configuration"
+excerpt: "General information about the ICON P-Rep election: https://icon.community/iconsensus/"
 ---
 
-This document is a guideline about how to install and operate a Public Representative (“P-Rep”) node on the Testnet using a docker. P-Reps are the consensus nodes that produce, verify blocks and participate in network policy decisions on the ICON Network. The purpose of the Testnet is to provide a test environment for the P-Rep candidates. The Candidates can simulate various activities such as block production to check technical stability of the nodes on the Testnet. (The node operation guideline on the ICON Mainnet for the elected P-Reps will be released in the future.)
+This document is a guideline on how to install and operate a Public Representative (“P-Rep”) node on the Testnet using a docker. P-Reps are the consensus nodes that produce and verify blocks and participate in network policy decisions on the ICON Network. The purpose of the Testnet is to provide a test environment for the P-Rep candidates. The candidates can simulate various activities, such as block production to check technical stability of the nodes, on the Testnet. The node operation guideline on the ICON Mainnet for the elected P-Reps will be released in the future.
 
 
 ## Intended Audience
@@ -23,11 +23,11 @@ We assume that you have previous knowledge and experience in:
 
 ### HW Requirements for Testnet
 
-Below specification is a minimum requirement for the testnet application. 
+Specifications below is the minimum requirement for the Testnet application. 
 
-| Desciption    | Minimum Specification for P-Rep TestNet Application | 
+| Component     | Minimum Requirement | 
 | ------------- | ---------------------------------------------| 
-| CPU Model     | Intel(R) Xeon(R) CPU @ 3.00 GHz | 
+| CPU           | Intel(R) Xeon(R) CPU @ 3.00 GHz | 
 | vCPU (core)   | 2                                            |
 | RAM           | 4 G                                          |
 | Disk          | 100 G                                | 
@@ -44,7 +44,7 @@ Below specification is a minimum requirement for the testnet application.
 
 - Docker 18.x or higher
 
-For your reference, ICON node depends on the following packages. The packages are included in the P-Rep docker image that we provide, so you don't need to install them separately. 
+For your reference, ICON node depends on the following packages (the packages are included in the P-Rep docker image that we provide, so you don't need to install them separately):
 
 - Python 3.6.5 or higher (3.7 is not supported)
 - RabbitMQ 3.7 or higher
@@ -55,25 +55,25 @@ For your reference, ICON node depends on the following packages. The packages ar
 
 ![P-Rep Networking Model](../../img/p-rep1.png)
 
-Above diagram shows how P-Rep nodes are interacting with each other in the test environment. To get access to the testnet, please read the medium post, [P-Rep TestNet Application Open](https://medium.com/helloiconworld/p-rep-testnet-application-open-97e3f7ad1e6d).
+Above diagram shows how the P-Rep nodes are interacting with each other in the test environment. To get access to the Testnet, please read the medium post, [P-Rep Testnet Application Open](https://medium.com/helloiconworld/p-rep-testnet-application-open-97e3f7ad1e6d).
 
 
 
 
 - Endpoint: https://preptest.net.solidwallet.io
 
-  - Endpoint is the load balancer that accepts the transaction requests from DApps and relays the requests to an available P-Rep node. In the test environment, ICON foundation is running the endpoint. It is also possible for each P-Rep to setup own endpoint to directly serve DApps (as depicted in PRep-Node4), but that configuration is out of the scope of this document. 
+  - Endpoint is the load balancer that accepts the transaction requests from DApps and relays the requests to an available P-Rep node. In the test environment, the ICON foundation is running the endpoint. It is also possible for each P-Rep to setup their own endpoint to directly serve DApps (as depicted in PRep-Node4), but that configuration is out of the scope of this document. 
 - Tracker: [https://preptest.tracker.solidwallet.io](http://preptest.tracker.solidwallet.io/)
 
   - A block and transaction explorer attached to the test network.
 - IP List: https://download.solidwallet.io/conf/prep_iplist.json
 
-  - ICON foundation will maintain the IP list of P-Reps. The JSON file will contain the list of IPs. You should configure your firewalls to allow in/outbound traffic from/to the IP addresses.  Following TCP ports should be open.
+  - The ICON foundation will maintain the IP list of P-Reps. The JSON file will contain the list of IPs. You should configure your firewalls to allow in/outbound traffic from/to the IP addresses. The following TCP ports should be open:
   - Port 7100: Used by gRPC for peer to peer communication between nodes.
   - Port 9000: Used by  JSON-RPC API server.
 
 
-We highly recommend you to use a firewall to protect the P-Rep node.
+We highly recommend you use a firewall to protect the P-Rep node.
 
 
 
@@ -81,7 +81,7 @@ We highly recommend you to use a firewall to protect the P-Rep node.
 
 **A process view of a P-Rep node**  
 
-There are five processes, `iconrpcserver`, `iconservice`, `loopchain`, `loop-queue`, and `loop-logger`. 
+There are five processes: `iconrpcserver`, `iconservice`, `loopchain`, `loop-queue`, and `loop-logger`. 
 
 ![P-Rep Architecture Diagram](../../img/p-rep2.png)
 
@@ -93,7 +93,7 @@ There are five processes, `iconrpcserver`, `iconservice`, `loopchain`, `loop-que
 - iconservice
 
   - ICON Service manages the state of ICON network (i.e., states of user accounts and SCOREs) using LevelDB.
-- Before processing transactions, ICON Service performs the syntax check on the request messages and prevalidates the status of accounts to see if the transactions can be executable.
+- Before processing transactions, ICON Service performs a syntax check on the request messages and pre-validates the status of accounts to see if the transactions are executable.
   
 - loopchain
 
@@ -101,12 +101,12 @@ There are five processes, `iconrpcserver`, `iconservice`, `loopchain`, `loop-que
 
 - loop-queue (RabbitMQ)
 
-  - RabbitMQ is the most widely deployed open source message broker. 
+  - RabbitMQ is the most widely deployed open-source message broker. 
   - loopchain uses RabbitMQ as a message queue for inter-process communication. 
 
 - loop-logger (Fluentd)
 
-  - Fluentd is the open source data collector, which lets you unify the data collection and consumption.
+  - Fluentd is the open-source data collector, which lets you unify the data collection and consumption.
   - Fluentd is included in the P-Rep node image. You can use Fluentd to systemically collect and aggregate the log data that other processes produce. 
 
 
@@ -122,7 +122,7 @@ For internal communication:
 
 - TCP 5672: RabbitMQ port for inter-process communication.
 
-For RabbitMQ management console:
+For RabbitMQ Management console:
 
 - TCP 15672: RabbitMQ Management will listen on port 15672. 
   - You can use RabbitMQ Management by enabling this port. It must be enabled before it is used.
@@ -132,7 +132,7 @@ For RabbitMQ management console:
 
 ## P-Rep Installation using Docker
 
-Please read the SW requirements above. In this chapter, we start by going through the docker installation. 
+Please read the SW requirements above. In this chapter, we will walk you through the docker installation. 
 
 If you already have installed docker and docker compose, you can skip the part below, and directly go to the [Running P-Rep Node on Docker Container](#running-p-rep-node-on-docker-container)
 
@@ -154,7 +154,7 @@ $ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/do
 ## Install docker-ce:
 $ sudo yum install docker-ce
 
-## Add your user to the docker group with the following command.
+## Add your user to the docker group with the following command:
 $ sudo usermod -aG docker $(whoami)
 
 ## Set Docker to start automatically at boot time:
@@ -173,10 +173,10 @@ $ docker version
 **Step 2: Install Docker Compose**
 
 ```shell
-## Install Extra Packages for Linux
+## Install Extra Packages for Linux:
 $ sudo yum install epel-release
 
-## Install python-pip
+## Install python-pip:
 $ sudo yum install -y python-pip
 
 ## Then install Docker Compose:
@@ -206,7 +206,7 @@ $ sudo apt-get install  -y systemd apt-transport-https ca-certificates curl gnup
 ## Add Docker's official GPG key:
 $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-## Add the apt repository
+## Add the apt repository:
 $ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
 ## Update the apt package index:
@@ -215,7 +215,7 @@ $ sudo apt-get update
 ## Install docker-ce:
 $ sudo apt-get -y install docker-ce docker-ce-cli containerd.io
 
-## Add your user to the docker group with the following command.
+## Add your user to the docker group with the following command:
 $ sudo usermod -aG docker $(whoami)
 
 ## Set Docker to start automatically at boot time:
@@ -234,7 +234,7 @@ $ docker version
 **Step 2: Install Docker Compose**
 
 ```shell
-## Install python-pip
+## Install python-pip:
 $ sudo apt-get install -y python-pip
 
 ## Then install Docker Compose:
@@ -249,11 +249,11 @@ $ docker-compose version
 
 ### Running a P-Rep Node on Docker Container
 
-You have docker installed, then proceed the following steps to install the P-Rep node.
+You have docker installed, then proceed with the following steps to install the P-Rep node.
 
 #### Step 1. Pull the docker image
 
-**Pull the latest stable version of an image.**
+**Pull the latest stable version of the image.**
 
 ```shell
 $ docker pull iconloop/prep-node:1904111713xdde258
@@ -289,7 +289,7 @@ $ docker-compose up -d
 
 
 
-Above command options do the followings.
+Above command options do the following:
 
 1. Map container ports 7100 and 9000 to the host ports.
 
@@ -333,14 +333,14 @@ CONTAINER ID   IMAGE                                                          CO
 0de99e33cdc9     iconloop/prep-node:1904111713xdde258    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
-The meaning of each column in the `docker ps` result output is as follows. 
+The meaning of each column in the `docker ps` result output is as follows: 
 
 | Column       | Description                                                  |
 | :----------- | :----------------------------------------------------------- |
 | CONTAINER ID | Container  ID                                                |
-| IMAGE        | P-Rep Node's  image name                                     |
-| COMMAND      | The script will be executed whenever a P-Rep Node container is run |
-| STATUS       | Healthcheck status. One of "starting" , "healthy", "unhealthy" or "none" |
+| IMAGE        | P-Rep Node's image name                                      |
+| COMMAND      | The script will be executed whenever a P-Rep Node container is ran |
+| STATUS       | Healthcheck status. One of "starting", "healthy", "unhealthy", or "none" |
 | PORTS        | Exposed ports on the running container                       |
 | NAMES        | Container name                                               |
 
@@ -418,7 +418,7 @@ $ curl localhost:9000/api/v1/status/peer
 
 ### Docker Environment Variables
 
-If you want change the TimeZone, open `docker-compose.yml` in a text editor and add the following content:
+If you want change the TimeZone, open `docker-compose.yml` in a text editor and add the following:
 
 ```yml
 version: '3' services:    container:        image: 'iconloop/prep-node:1904111713xdde258'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100       environment:          TZ: "America/Los_Angeles"
@@ -499,7 +499,7 @@ $ cat data/PREP-TestNet/log/booting_${DATE}.log
 
 
 
-### Q: How to find error
+### Q: How to find errors
 
 **Error log messages example**
 
@@ -515,7 +515,7 @@ $ cat data/PREP-TestNet/log/booting_${DATE}.log | grep ERROR
 
 
 
-**Docker container generates below log files**
+**Docker container generates the log files below**
 
 - booting.log
   - The log file contains the errors that occurred while the docker container starts up.
