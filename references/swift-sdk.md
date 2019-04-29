@@ -3,7 +3,7 @@ title: "Swift SDK"
 excerpt: "The source code is found on Github at https://github.com/icon-project/ICONKit"
 ---
 
-ICON supports SDK for 3rd party or user services development. You can integrate ICON SDK for your project and utilize ICON’s functionality. This document provides you with an information of installation and basic usage guideline.
+ICON supports SDK for 3rd party or user services development. You can integrate ICON SDK for your project and utilize ICON’s functionality. This document provides you with information on installation and basic usage guideline.
 
 Get different types of examples as follows.
 
@@ -16,7 +16,7 @@ Get different types of examples as follows.
 
 ## Prerequisite
 
-This SDK works on following platforms:
+This SDK works on the following platforms:
 
 - Xcode 10 or higher
 - iOS 10 or higher
@@ -25,7 +25,7 @@ This SDK works on following platforms:
 
 ## Installation
 
-[CocoaPods](https://cocoapods.org/) is a dependecy manager for Swift Cocoa projects.
+[CocoaPods](https://cocoapods.org/) is a dependency manager for Swift Cocoa projects.
 
 ```shell
 $ sudo gem install cocoapods
@@ -104,7 +104,7 @@ case .failure(let error):
 
 #### Asynchronous query
 
-You can request a query asynchronously using a `async` closure as below.
+You can request a query asynchronously using an `async` closure as below.
 
 ```swift
 iconService.getLastBlock().async { (result) in
@@ -123,16 +123,15 @@ iconService.getLastBlock().async { (result) in
 
 The querying APIs are as follows.
 
-* [getLastBlock](#getLastBlock)
-* [getBlock(height)](#getblock(height))
-* [getBlock(hash)](#getBlock(hash))
-* [call](#call)
-* [getBalance](#getBalance)
-* [getScoreAPI](#getScoreAPI)
-* [getTotalSupply](#getTotalSupply)
-* [getTransaction](#getTransaction)
-* [getTransactionResult](#getTransactionResult)
-
+* [getLastBlock](#section-getlastblock)
+* [getBlock(height)](#section-getblock-height-)
+* [getBlock(hash)](#section-getblock-hash-)
+* [call](#section-call)
+* [getBalance](#section-getbalance)
+* [getScoreAPI](#section-getscoreapi)
+* [getTotalSupply](#section-gettotalsupply)
+* [getTransaction](#section-gettransaction)
+* [getTransactionResult](#section-gettransactionresult)
 
 
 #### getLastBlock
@@ -470,7 +469,7 @@ case .failure(let error):
 }
 ```
 
-### Token Transfers
+### Token Transfer
 
 #### Token transfer transaction
 ```Swift
@@ -520,7 +519,7 @@ let request: Request<String> = iconService.call(call)
 let response: Result<String, ICError> = request.execute() // return "0x56bc75e2d63100000" or ICError
 ```
 
-### Sync Blocks
+### Sync Block
 
 #### Read block information
 
@@ -568,8 +567,8 @@ let response: Result<String, ICError> = request.execute()
 
 ## References
 
-- [ICON JSON-RPC API v3](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md)
-- [ICON Network](https://github.com/icon-project/icon-project.github.io/blob/master/docs/icon_network.md)
+- [ICON JSON-RPC API v3](icon-json-rpc-v3)
+- [ICON Network](the-icon-network)
 
 
 ## Licenses

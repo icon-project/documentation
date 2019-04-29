@@ -834,7 +834,7 @@ You can do one of the followings using this method.
 - Invoke a function of the SCORE in the 'to' address.
 - Transfer a message.
 
-This function causes state transition.
+This function causes state transitions.
 
 #### Parameters
 
@@ -877,7 +877,7 @@ It is used when installing or updating a SCORE, and `data` has dictionary value 
 
 **3. dataType == message**
 
-It is used when transfering a message, and `data` has a HEX string.
+It is used when transferring a message, and `data` has a HEX string.
 
 #### Returns
 
@@ -1110,7 +1110,7 @@ None
 
 #### Returns
 
-- The list of Representatives of last block
+- The list of Representatives of the last block
 
 #### Example
 
