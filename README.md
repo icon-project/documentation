@@ -11,3 +11,11 @@
 - node
 	- p-rep
 		- [p-rep-installation-and-configuration](./node/p-rep/p-rep-installation-and-configuration.md)
+- references
+	- [icon-json-rpc-v3](./references/icon-json-rpc-v3.md)
+	- [swift-sdk](./references/swift-sdk.md)
+- score
+	- [score-overview](./score/score-overview.md)
+	- [score-quickstart-p1](./score/score-quickstart-p1.md)
+	- [score-quickstart-p2](./score/score-quickstart-p2.md)
+	- [score-quickstart](./score/score-quickstart.md)
