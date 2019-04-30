@@ -205,7 +205,7 @@ def balanceOf(self, _owner: Address) -> int:
 
 ### Eventlog on Token Transfer
 
-Token transfer must trigger Eventlog.
+Token transfer must trigger Eventlog. 
 
 ```python
 # Good
@@ -218,6 +218,25 @@ def transfer(self, _to: Address, _value: int, _data: bytes = None):
     self._balances[self.msg.sender] -= _value
     self._balances[_to] += _value
     self.Transfer(self.msg.sender, _to, _value, _data)
+```
+
+In addition to sending tokens between the two addresses, you must leave Eventlog even if tokens are minted or burned. For mint and burn, use a specific address as follows:
+```python
+# Good
+
+EOA_ZERO = Address.from_string('hx' + '0' * 40)
+
+@external
+def mint(self, amount: int):
+    self._total_supply.set(self._total_supply.get() + amount)
+    self._balances[self.owner] += amount
+    self.Transfer(EOA_ZERO, self.owner, amount, b'mint')
+
+@external
+def burn(self, amount: int):    
+    self._total_supply.set(self._total_supply.get() - amount)    
+    self._balances[self.owner] -= amount
+    self.Transfer(self.owner, EOA_ZERO, amount, b'burn')
 ```
 
 ### Eventlog without Token Transfer
