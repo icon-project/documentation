@@ -15,6 +15,8 @@
 		- [p-rep-installation-and-configuration](./node/p-rep/p-rep-installation-and-configuration.md)
 - references
 	- [icon-json-rpc-v3](./references/icon-json-rpc-v3.md)
+	- [java-sdk](./references/java-sdk.md)
+	- [swift-api-reference](./references/swift-api-reference.md)
 	- [swift-sdk](./references/swift-sdk.md)
 - score
 	- [audit-checklist](./score/audit-checklist.md)
