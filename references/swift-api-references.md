@@ -1,38 +1,17 @@
 ---
-title: "ICONKit, ICON SDK for Swift"
-excerpt: ""
+title: "Swift API Reference"
+excerpt: "The source code is found on GitHub at [https://github.com/icon-project/ICONKit](https://github.com/icon-project/ICONKit)"
 ---
 
-ICON supports SDK for 3rd party or user services development. You can integrate ICON SDK for your project and utilize ICON’s functionality.
-This document provides you with an information of API specification.
+ICON supports SDK for 3rd party or user services development. You can integrate ICON SDK for your project and utilize the ICON’s functionality.
+This document provides you with information about API specification.
 
-# API Specification
 
-## ICONService
+## `class` ICONService
 
-`ICONService` is a class which provides APIs to communicate with ICON nodes. It enables you to easily use [ICON JSON-RPC APIs](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md) (version 3). All methods of `IconService` returns a `Request<T, ICError>` instance. 
+`ICONService` is a class which provides APIs to communicate with ICON nodes. It enables you to easily use [ICON JSON-RPC APIs](icon-json-rpc-v3) (version 3). All methods of `IconService` returns a `Request<T, ICError>` instance. 
 
-### Initialize
-```Swift
-init(provider: String, nid: String)
-```
-
-#### Parameters
-| Parameter | Type | Description |
-| --------- | ---- | ----------- |
-| provider | `String` | ICON node url. |
-| nid | `String` | Network ID. |
-
-For more details of node url and network id, see [ICON Network](https://github.com/icon-project/icon-project.github.io/blob/master/docs/icon_network.md) document.
-
-#### Example
-
-```Swift
-// ICON Mainnet
-let iconService = ICONService(provider: "https://ctz.solidwallet.io/api/v3", nid: "0x1")
-```
-
-## Queries
+### Query Execution
 
 `Request` are executed as **synchronized** and **asynchronized**.
 
@@ -88,19 +67,65 @@ iconService.getLastBlock().async { (result) in
 }
 ```
 
-### List of Queries
+### Transaction Execution
 
-- [getLastBlock](#getLastBlock)
-- [getBlock](#getblock)
-- [call](#call)
-- [getBalance](#getBalance)
-- [getScoreAPI](#getScoreAPI)
-- [getTotalSupply](#getTotalSupply)
-- [getTransaction](#getTransaction)
-- [getTransactionResult](#getTransactionResult)
+`Transaction` class is used to make a transaction instance. There are 3 types of Transaction class.
+
+| Class                                                   | Description                                                  |
+| ------------------------------------------------------- | ------------------------------------------------------------ |
+| [Transaction](#section--class-transaction)               | A class for Transaction instance which is for sending ICX.   |
+| [CallTransaction](#section--class-calltransaction)       | A class for CallTransaction instance which is for SCORE function call. CallTransaction extends `Transaction` class. |
+| [MessageTransaction](#section--class-messagetransaction) | A class for MessageTransaction instance which is for transfer message. Extends `Transaction` class. |
+
+Request is executed as **Synchronized** or **Asynchronized** like a querying request.
+
+**Example**
+
+```Swift
+// Synchronized request
+let response = iconService.sendTransaction(signedTransaction: signed).execute()
+
+switch response {
+case .success(let result): // result == String
+    print(result)
+case .error(let error):
+    print(error)
+}
+
+// Asynchronized request
+let request = iconService.sendTransaction(signedTransaction: signed)
+request.async { (result) in
+    switch result {
+    case .success(let result): // result == String
+        print(result)
+    case .failure(let error):
+        print(error)
+    }
+}
+```
+
+### Initialize
+```Swift
+init(provider: String, nid: String)
+```
+
+#### Parameters
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| provider | `String` | ICON node url. |
+| nid | `String` | Network ID. |
+
+For more details of node URL and network id, see [ICON Network](the-icon-network) document.
+
+#### Example
+
+```Swift
+// ICON Mainnet
+let iconService = ICONService(provider: "https://ctz.solidwallet.io/api/v3", nid: "0x1")
+```
 
 
-### getLastBlock
+### `func` getLastBlock
 
 Get the last block information.
 
@@ -130,7 +155,7 @@ case .error(let error):
 }
 ```
 
-### getBlock
+### `func` getBlock
 
 Get the block information.
 
@@ -139,7 +164,7 @@ Get the block information.
 func getBlock(height: UInt64) -> Request<Response.Block>
 
 // Get block information by hash.
-func getBlock(hash: String) -> Request<Resopnse.Block>
+func getBlock(hash: String) -> Request<Response.Block>
 ```
 
 #### Parameters
@@ -170,9 +195,9 @@ case .error(let error):
 }
 ```
 
-### call
+### `func` call
 
-Calls external function of SCORE API.
+Calls an external function of SCORE API.
 
 ```Swift
 func call<T>(_ call: Call<T>) -> Request<T>
@@ -209,9 +234,9 @@ case .failure(let error):
 }
 ```
 
-If SCORE call result is hex `String` , you can choice return types `String` or `BigUInt`. 
+If SCORE call result is hex `String`, you can choice return types `String` or `BigUInt`. 
 
-Using `Call<String>`, return original hex String value. 
+Using `Call<String>`, return an original hex String value. 
 
 Using `Call<BigUInt>` return converted BigUInt value.
 
@@ -245,7 +270,7 @@ case .failure(let error):
 }
 ```
 
-### getBalance
+### `func` getBalance
 
 Get the balance of the address.
 
@@ -277,7 +302,7 @@ case .error(let error):
 }
 ```
 
-### getScoreAPI
+### `func` getScoreAPI
 
 Get the SCORE API list.
 
@@ -309,7 +334,7 @@ case .error(let error):
 }
 ```
 
-### getTotalSupply
+### `func` getTotalSupply
 
 get the total number of issued coins.
 ```Swift
@@ -337,7 +362,7 @@ case .error(let error):
 }
 ```
 
-### getTransaction
+### `func` getTransaction
 Get the transaction information.
 ```Swift
 func getTransaction(hash: String) -> Request<Response.TransactionByHashResult>
@@ -364,7 +389,7 @@ case .error(let error):
 }
 ```
 
-### getTransactionResult
+### `func` getTransactionResult
 Get the transaction result information.
 ```Swift
 func getTransactionResult(hash: String) -> Request<Response.TransactionResult>
@@ -391,12 +416,57 @@ case .error(let error):
 }
 ```
 
-## Wallet
+
+### `func` sendTransaction
+
+Send a transaction that changes the state of address. Request is executed as **Synchronized** or **Asynchronized** like a querying request.
+
+```Swift
+func sendTransaction(signedTransaction: SignedTransaction) -> Request<String>
+```
+
+#### Parameters
+
+| Parameter         | Type                | Description                                                  |
+| ----------------- | ------------------- | ------------------------------------------------------------ |
+| signedTransaction | `SignedTransaction` | an instance of [SignedTransaction](#section--class-signedtransaction) class. |
+
+#### Returns
+
+`Request` - Request instance for `icx_sendTransaction` JSON-RPC request. If the execution is successful, returns `Result<String, ICError>`.
+
+#### Example
+
+```Swift
+// Synchronized request
+let response = iconService.sendTransaction(signedTransaction: signed).execute()
+
+switch response {
+case .success(let result): // result == String
+    print(result)
+case .error(let error):
+    print(error)
+}
+
+// Asynchronized request
+let request = iconService.sendTransaction(signedTransaction: signed)
+request.async { (result) in
+    switch result {
+    case .success(let result): // result == String
+        print(result)
+    case .failure(let error):
+        print(error)
+    }
+}
+```
+
+
+## `class` Wallet
 
 ```Swift
 class Wallet
 ```
-A class which provides EOA funcstions. It enables you to create, transform to Keystore or load wallet from Keystore.
+A class which provides EOA functions. It enables you to create, transform to Keystore or load wallet from Keystore.
 
 ### Initialize
 ```Swift
@@ -421,9 +491,9 @@ let privateKey = PrivateKey(hexData: privateKeyData)
 let wallet = Wallet(privateKey: privateKey)
 ```
 
-### Loading wallets and storing the Keystore
-
 ```swift
+// Loading wallets and storing the Keystore
+
 // Save wallet keystore.
 let wallet = Wallet(privateKey: nil)
 do {
@@ -444,7 +514,7 @@ do {
 }
 ```
 
-### getSignature
+### `func` getSignature
 
 Generate signature string by signing transaction data.
 ```Swift
@@ -476,24 +546,16 @@ do {
 | --- | --- | --- |
 | address | `String` | Return wallet's address (read-only) |
 
-## Transactions
 
-`Transaction` class is enable you to make transaction instance. There are 3 types of Transaction class.
 
-| Class                                     | Description                                                  |
-| ----------------------------------------- | ------------------------------------------------------------ |
-| [Transaction](#Transaction)               | A class for Transaction instance which is for sending ICX.   |
-| [CallTransaction](#CallTransaction)       | A class for CallTransaction instance which is for SCORE function call. CallTransaction extends `Transaction` class. |
-| [MessageTransaction](#MessageTransaction) | A class for MessageTransaction instance which is for transfer message. Extends `Transaction` class. |
-
-### Transaction
+## `class` Transaction
 
 ```Swift
 class Transaction
 ```
 `Transaction` is a class representing a transaction data used for sending ICX.
 
-#### Initialize
+### Initialize
 
 ```Swift
 // Create empty transaction object
@@ -510,27 +572,27 @@ convenience init(from: String, to: String, stepLimit: BigUInt, nid: String, valu
 | to        | An EOA address to receive coins or SCORE address to execute the transaction. |
 | stepLimit | Amounts of Step limit.                                       |
 | nid       | A network ID.                                                |
-| value     | Sending amount of ICX in loop unit.                          |
+| value     | Sending the amount of ICX in loop unit.                          |
 | nonce     | An arbitrary number used to prevent transaction hash collision. |
 
-#### from
+### `func` from
 
 Setter for `from` property.
 ```Swift
 func from(_ from: String) -> Self
 ```
 
-**Parameters**
+#### Parameters
 
 | Parameter | Type | Description |
 | --- | --- | --- |
 | from | `String` | An EOA address that creates the transaction. |
 
-**Returns**
+#### Returns
 
 Returns `Transaction` itself.
 
-**Example**
+#### Example
 
 ```swift
 // Set from property
@@ -538,122 +600,125 @@ let transaction = Transaction()
 		.from("hx9043346dbaa72bca42ecec6b6e22845a4047426d")
 ```
 
-#### to
+### `func` to
+
 Setter for `to` property.
 ```Swift
 func to(_ to: String) -> Self
 ```
 
-**Paramters**
+#### Paramters
 
 | Paramter | Type | Description |
 | --- | --- | --- |
 | to | `String` | An EOA or SCORE address. |
 
-**Returns**
+#### Returns
 
 Returns `Transaction` itself.
 
-**Example**
+#### Example
 
 ```swift
 let transaction = Transaction()
 		.to("hx2e26d96bd7f1f46aac030725d1e302cf91420458")
 ```
 
-#### stepLimit
+### `func` stepLimit
+
 Setter for `setpLimit` property.
 ```Swift
 func stepLimit(_ limit: BigUInt) -> Self
 ```
 
-**Parameters**
+#### Parameters
 
 | Parameter | Type | Description |
 | --- | --- | --- |
 | limit | `BigUInt` | Amounts of Step limit |
 
-**Returns**
+#### Returns
 
 Returns `Transaction` itself.
 
-**Example**
+#### Example
 
 ```swift
 let transaction = Transaction()
 		.stepLimit(BigUInt(1000000))
 ```
 
-#### nid
+### `func` nid
+
 Setter for `nid` property.
 ```Swift
 func nid(_ nid: String) -> Self
 ```
 
-**Parameters**
+#### Parameters
 
 | Parameter | Type | Description |
 | --- | --- | --- |
 | nid | `String` | A network ID. (Mainnet = "0x1", Testnet = "0x2", [etc](https://github.com/icon-project/icon-project.github.io/blob/master/docs/icon_network.md)) |
 
-**Returns**
+#### Returns
 
 Returns `Transaction` itself.
 
-**Example**
+#### Example
 
 ```swift
 let transaction = Transaction()
 		.nid("0x1")
 ```
 
-#### value
+### `func` value
+
 Setter for `value` property.
 ```Swift
 func value(_ value: BigUInt) -> Self
 ```
 
-**Parameters**
+#### Parameters
 
 | Parameter | Type | Description |
 | --- | --- | --- |
 | value | `BigUInt` | Sending amount of ICX in loop unit. (1 ICX = 10^18^ loop) |
 
-**Returns**
+#### Returns
 
 Returns `Transaction` itself.
 
-**Example**
+#### Example
 
 ```swift
 let transaction = Transaction()
     .value(BigUInt(15000000))
 ```
 
-#### nonce
+### `func` nonce
+
 Setter for `nonce` property.
 ```Swift
 func nonce(_ nonce: String) -> Self
 ```
 
-**Parameters**
+#### Parameters
 
 | Parameter | Type | Description |
 | --- | --- | --- |
 | nonce | `String` | A nonce value. |
 
-**Returns**
+#### Returns
 
 Returns `Transaction` itself.
 
-**Example**
+#### Example
 
 ```swift
 let transaction = Transaction()
     .nonce("0x1")
 ```
-
-#### Example
 
 ```swift
 // Creating transaction instance for Sending ICX.
@@ -666,13 +731,13 @@ let transaction = Transaction()
     .nonce("0x1")
 ```
 
-### CallTransaction
+## `class` CallTransaction
 
 ```swift
 class CallTransaction: Transaction
 ```
 
-`CallTransaction` class is used for invoking a state-transition function of SCORE. It extends `Transaction` class, so instance parameters and methods of class are mostly identical to `Transaction` class, except for the following:
+`CallTransaction` class is used for invoking a state-transition function of SCORE. It extends `Transaction` class, so instance parameters and methods of the class are mostly identical to `Transaction` class, except for the following:
 
 #### Parameters
 
@@ -683,7 +748,7 @@ class CallTransaction: Transaction
 
 For details of extended parameters and methods, see [Transaction](#Transaction) section.
 
-#### method
+### `func` method
 
 Transaction for invoking a *state-transition* function of SCORE.
 
@@ -705,7 +770,7 @@ Returns `CallTransaction` itself.
 
 #### params
 
-The parameters for SCORE method used for `call` function.
+The input parameters of the SCORE method that will be executed by `call` function.
 
 ```swift
 func params(_ params: [String: Any]) -> Self
@@ -735,13 +800,13 @@ let call = CallTransaction()
     .params(["_to": to, "_value": "0x1234"])
 ```
 
-### MessageTransaction
+## `class` MessageTransaction
 
 ```swift
 class MessageTransaction: Transaction
 ```
 
-`MessageTransaction` class is used for sending message data. It extends `Transaction` class, so instance parameters and methods of class are mostly identical to `Transaction` class, except for the following:
+`MessageTransaction` class is used for sending message data. It extends `Transaction` class, so instance parameters and methods of the class are mostly identical to `Transaction` class, except for the following:
 
 #### Parameters
 
@@ -749,9 +814,9 @@ class MessageTransaction: Transaction
 | ---------- | ------------------ |
 | message    | A message to send. |
 
-For details of extended parameters and methods, see [Transaction](#Transaction) section.
+For details of extended parameters and methods, see [Transaction](#section--class-transaction) section.
 
-#### message
+### `func` message
 
 Send messages.
 
@@ -761,13 +826,13 @@ Send messages.
 func message(_ message: String) -> Self
 ```
 
-**Parameters**
+#### Parameters
 
 | Parameter | Type | Description |
 | --- | --- | --- |
 | message | `String` | A message String. |
 
-**Returns**
+#### Returns
 
 Returns `MessageTransaction` itself.
 
@@ -785,17 +850,17 @@ let messageTransaction = MessageTransaction()
     .message("Hello, ICON!")
 ```
 
-### SignedTransaction
+## `class` SignedTransaction
 
-`SignedTransaction` is a class for signing transaction object. It enables you to make signed transaction.
+`SignedTransaction` is a class to make a signed transaction.
 
-#### Initialize
+### Initialize
 
 ```swift
 init(transaction: Transaction, privateKey: PrivateKey)
 ```
 
-**parameters**
+#### Parameters
 
 | Parameter   | Type          | Description                        |
 | ----------- | ------------- | ---------------------------------- |
@@ -806,49 +871,6 @@ init(transaction: Transaction, privateKey: PrivateKey)
 
 ```swift
 let signed = try SignedTransaction(transaction: transaction, privateKey: yourPrivateKey)
-```
-
-### sendTransaction
-
-Send a transaction that changes the state of address. Request is executed as **Synchronized** or **Asynchronized** like a querying request.
-
-```Swift
-func sendTransaction(signedTransaction: SignedTransaction) -> Request<String>
-```
-
-#### Parameters
-
-| Parameter         | Type                | Description                                                  |
-| ----------------- | ------------------- | ------------------------------------------------------------ |
-| signedTransaction | `SignedTransaction` | an instance of [SignedTransaction](#SignedTransaction) class. |
-
-#### Returns
-
-`Request` - Request instance for `icx_sendTransaction` JSON-RPC request. If the execution is successful, returns `Result<String, ICError>`.
-
-#### Example
-
-```Swift
-// Synchronized request
-let response = iconService.sendTransaction(signedTransaction: signed).execute()
-
-switch response {
-case .success(let result): // result == String
-    print(result)
-case .error(let error):
-    print(error)
-}
-
-// Asynchronized request
-let request = iconService.sendTransaction(signedTransaction: signed)
-request.async { (result) in
-    switch result {
-    case .success(let result): // result == String
-        print(result)
-    case .failure(let error):
-        print(error)
-    }
-}
 ```
 
 ## ICError
@@ -863,16 +885,16 @@ There are 5 types of errors.
   - wrongPassword - Wrong password.
 
 - **fail**
-  - sign - Failed to signing.
-  - parsing - Failed to parsing.
+  - sign - Failed to sign.
+  - parsing - Failed to parse.
   - decrypt - Failed to decrypt.
-  - convert - Failed to convert to url or data.
+  - convert - Failed to convert to URL or data.
 
 - **error(error: Error)**
 
-- **message(error: String**) -  [JSON-rpc-Error Messages](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md#error-codes)
+- **message(error: String**) -  [JSON RPC Error Messages](icon-json-rpc-v3#section-json-rpc-error-codes)
 
-## Converters
+## Converter Functions
 
 ICONKit supports converter functions.
 
@@ -960,7 +982,5 @@ let hexBigUInt: BigUInt = hexString.hexToBigUInt()! // 100000000000000000000
 
 ## References
 
-- [ICON JSON-RPC API v3](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md)
-
-- [ICON Network](https://github.com/icon-project/icon-project.github.io/blob/master/docs/icon_network.md)
-
+- [ICON JSON-RPC API v3](icon-json-rpc-v3)
+- [ICON Network](the-icon-network)
