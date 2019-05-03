@@ -9,16 +9,16 @@ Get different types of examples as follows.
 
 | Code Example                                            | Description                                                  |
 | ------------------------------------------------------- | ------------------------------------------------------------ |
-| [Wallet](#wallet)                                       | An example of creating and loading a keywallet.              |
-| [ICX Transfer](#icx-transfer)                           | An example of transferring ICX and confirming the result.    |
-| [Token Deploy and Transfer](#token-deploy-and-transfer) | An example of deploying an IRC token, transferring the token and confirming the result. |
-| [Sync Block](#sync-block)                               | An example of checking block confirmation and printing the ICX and token transfer information. |
+| [Wallet](#section-wallet)                                       | An example of creating and loading a keywallet.              |
+| [ICX Transfer](#section-icx-transfer)                           | An example of transferring ICX and confirming the result.    |
+| [Token Deploy and Transfer](#section-token-deploy-and-transfer) | An example of deploying an IRC token, transferring the token and confirming the result. |
+| [Sync Block](#section-sync-block)                               | An example of checking block confirmation and printing the ICX and token transfer information. |
 
-This document is focused on how to use SDK properly. For the detailed API specification, see the API reference document.
+This document is focused on how to use the SDK properly. For the detailed API specification, see the API reference documentation.
 
 ## Prerequisite
 
-This Java SDK works on following platforms:
+This Java SDK works on the following platforms:
 
 - Java 8+ (for Java7, you can explore source code [here](https://github.com/icon-project/icon-sdk-java/blob/sdk-for-java7/README.md))
 - Android 3.0+ (API 11+)
@@ -41,10 +41,6 @@ or Gradle:
 implementation 'foundation.icon:icon-sdk:[x.y.z]'
 ```
 
-## Configuration (Optional)
-
-n/a
-
 ## Using the SDK
 
 ### IconService
@@ -57,7 +53,7 @@ APIs are called through `IconService`.
 IconService iconService = new IconService(new HttpProvider("https://url"));
 ```
 
-Code below shows initializing `IconService` with custom http client. 
+The code below shows initializing `IconService` with a custom HTTP client. 
 
 ```java
 OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -337,9 +333,9 @@ System.out.println("privateKey:"+wallet.getPrivateKey()); // PrivateKey lookup
 
 #### Store the wallet
 
-After `KeyWallet` object creation, Keystore file can be stored by calling `store` function.
+After `KeyWallet` object creation, the Keystore file can be stored by calling `store` function.
 
-After calling `store`, Keystore file’s name can be looked up with the returned value.
+After calling `store`, the Keystore file’s name can be looked up with the returned value.
 
 ```java
 String password; /* password */
@@ -393,7 +389,7 @@ Transaction transaction = TransactionBuilder.newBuilder()
 			.build();
 ```
 
-Generate SignedTransaction to add signature of the transaction.
+Generate `SignedTransaction` to add the signature of the transaction.
 
 ```java
 // Create signature of the transaction
@@ -404,7 +400,7 @@ System.out.println(signedTransaction.getProperties());
 
 #### Check the transaction result
 
-After transaction is sent, the result can be looked up with the returned hash value.
+After a transaction is sent, the result can be looked up with the returned hash value.
 
 In this example, you can check your transaction result in every 2 seconds because of the block confirmation time. Checking the result is as follows:
 
@@ -421,23 +417,23 @@ You can check the following information using the TransactionResult.
 
 - status : 1 (success), 0 (failure)
 - to : transaction’s receiving address
-- failure : Only exists if status is 0(failure). code(str), message(str) property included
+- failure : Only exists if the status is 0(failure). code(str), message(str) property included
 - txHash : transaction hash
 - txIndex : transaction index in a block
 - blockHeight : Block height of the transaction
 - blockHash : Block hash of the transaction
-- cumulativeStepUsed : Accumulated amount of consumed step’s until the transaction is executed in block
+- cumulativeStepUsed : Accumulated amount of consumed step until the transaction is executed in block
 - stepUsed : Consumed step amount to send the transaction
 - stepPrice : Consumed step price to send the transaction
 - scoreAddress : SCORE address if the transaction generated SCORE (optional)
-- eventLogs : Occurred EventLog’s list during execution of the transaction.
-- logsBloom : Indexed Data’s Bloom Filter value from the occurred Eventlog’s Data
+- eventLogs : List of EventLogs written during the execution of the transaction.
+- logsBloom : Bloom Filter of the indexed data of the Eventlogs.
 
 #### Check the ICX balance
 
 In this example, you can check the ICX balance by looking up the transaction before and after the transaction.
 
-ICX balance can be confirmed by calling getBalance function from `IconService`
+ICX balance can be confirmed by calling `getBalance` function from `IconService`
 
 ```java
 KeyWallet wallet; /* create or load */
@@ -449,7 +445,7 @@ System.out.println("balance:"+balance));
 balance:5000000000000000000
 ```
 
-### Token Deploy and Transfers
+### Token Deploy and Transfer
 
 This example shows how to deploy a token and check the result. After that, shows how to send tokens and check the balance.
 
@@ -544,10 +540,10 @@ Transaction transaction = TransactionBuilder.newBuilder() //Enter transaction in
     .build();
 ```
 
-Generate SignedTransaction to add signature to the transaction.
+Generate `SignedTransaction` to add a signature to the transaction.
 
 ```java
-// Generate signature of the transaction.
+// Generate the signature of the transaction.
 SignedTransaction signedTransaction = new SignedTransaction(transaction, wallet);
 // Read params to send to nodes.
 System.out.println(signedTransaction.getProperties());
@@ -572,9 +568,9 @@ After sending the transaction, you can check the result with the returned hash v
 
 In this example, you can check your transaction result in every 2 seconds because of the block confirmation time.
 
-If the transaction succeeds, you can check scoreAddress from the result.
+If the transaction succeeds, you can check the `scoreAddress` from the result.
 
-You can use SCORE after SCORE audit is successfully accepted.
+You can use the SCORE after the SCORE passes the audit and is finally accepted to deploy.
 
 ```java
 // Checking the results with transaction hash
@@ -597,7 +593,7 @@ You can send the token(CommonData.TOKEN_ADDRESS) that is already generated as an
 
 You can generate KeyWallet using `CommonData.PRIVATE_KEY_STRING` just like in the case of `IcxTransactionExample`, then send 1 Token to `CommonData.ADDRESS_1`
 
-You need token address to send your token.
+You need the token contract address to send your token.
 
 ```java
 Wallet wallet = KeyWallet.load(new Bytes(CommonData.PRIVATE_KEY_STRING));
@@ -672,7 +668,7 @@ Transaction transaction = TransactionBuilder.newBuilder()
                 .build();
 ```
 
-Generate SignedTransaction to add signature to your transaction.
+Generate `SignedTransaction` to add a signature to your transaction.
 
 ```java
 // Generate transaction signature.
@@ -709,13 +705,13 @@ System.out.println("transaction status(1:success, 0:failure):"+result.getStatus(
 transaction status(1:success, 0:failure):1
 ```
 
-*For the TransactionResult, please refer to the IcxTransactionExample.*
+*For the TransactionResult, please refer to the [ICX Transfer](#section-icx-transfer) example.*
 
 #### Check the token balance
 
 In this example, you can check the token balance before and after the transaction.
 
-You can check the token balance by calling ‘balanceOf’ from the token SCORE.
+You can check the token balance by calling `balanceOf` from the token SCORE.
 
 ```java
 Address tokenAddress = new Address(CommonData.TOKEN_ADDRESS); //Token Address
@@ -743,7 +739,7 @@ System.out.println("balance:"+balance));
 balance:6000000000000000000
 ```
 
-### Sync Blocks (Optional)
+### Sync Block
 
 This example shows how to read block information and print the transaction result for every block creation.
 
@@ -751,7 +747,7 @@ This example shows how to read block information and print the transaction resul
 
 #### Read block information
 
-In this example, 'getLastBlock' is called periodically in order to check the new blocks,
+In this example, `getLastBlock` is called periodically in order to check the new blocks,
 
 by updating the transaction information for every block creation.
 
@@ -776,10 +772,10 @@ transaction hash:0x0d2b71ec3045bfd39f90da844cb03c58490fe364c7715cc299db346c1153f
 transaction:ConfirmedTransaction...stepLimit=0xfa0...value=0x21e19e...version=0x3...
 ```
 
-You can check the following information using the ConfirmedTransaction:
+You can check the following information using the `ConfirmedTransaction`:
 
 - version : json rpc server version
-- to : Receiving address of transaction
+- to : Receiving address of the transaction
 - value: The amount of ICX coins to transfer to the address. If omitted, the value is assumed to be 0
 - timestamp: timestamp of the transmitting transaction (unit: microseconds)
 - nid : network ID
@@ -831,7 +827,7 @@ if (transaction.getDataType() != null &&
 
 #### Check the token name & symbol
 
-You can check the token SCORE by calling the `name` and` symbol` functions.
+You can check the token SCORE by calling the `name` and `symbol` functions.
 
 ```java
 Address tokenAddress = new Address(CommonData.TOKEN_ADDRESS); //Token Address
@@ -863,8 +859,8 @@ tokenSymbol:ST
 ## References 
 
 - [API Reference](http://www.javadoc.io/doc/foundation.icon/icon-sdk)
-- [ICON JSON-RPC API v3](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md)
-- [ICON Network](https://github.com/icon-project/icon-project.github.io/blob/master/docs/icon_network.md)
+- [ICON JSON-RPC API v3](icon-json-rpc-v3)
+- [ICON Network](the-icon-network)
 
 
 ## Licenses
