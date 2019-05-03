@@ -16,6 +16,7 @@
 - references
 	- [icon-json-rpc-v3](./references/icon-json-rpc-v3.md)
 	- [java-sdk](./references/java-sdk.md)
+	- [python-api-reference](./references/python-api-reference.md)
 	- [swift-api-reference](./references/swift-api-reference.md)
 	- [swift-sdk](./references/swift-sdk.md)
 - score
