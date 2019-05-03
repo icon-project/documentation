@@ -5,13 +5,6 @@ excerpt: ""
 
 ---
 
-### Reference
-- [ICON JSON-RPC API v3](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md)
-- [ICON SDK for Python(Previous version)](https://github.com/icon-project/icon_sdk_for_python)
-    - Reference to [ICON JSON-RPC API **v2**](https://github.com/icon-project/icx_JSON_RPC)
-
-
-
 ## Querying API Methods
 
 ### Examples
@@ -917,3 +910,8 @@ Transaction hash prefixed with '0x'
 # Sends the transaction
 tx_hash = icon_service.send_transaction(signed_transaction)
 ```
+
+### Reference
+- [ICON JSON-RPC API v3](icon-json-rpc-v3)
+- [ICON SDK for Python (Previous version)](https://github.com/icon-project/icon_sdk_for_python) - Reference to [ICON JSON-RPC API **v2**](https://github.com/icon-project/icx_JSON_RPC)
+
