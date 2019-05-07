@@ -1,3 +1,9 @@
+Documents that merged into the master branch are published on the developers portal: https://www.icondev.io/v0.9/docs
+- Once merged, please make a **pull request to the master branch** for further updates. 
+
+#### Note that minor typo or cosmetic changes are applied directly on the developers portal, so the contents are not 100% identical.
+
+ 
 - howto
 	- [account-management](./howto/account-management.md)
 	- [how-to-change-network-in-iconex-chrome](./howto/how-to-change-network-in-iconex-chrome.md)
@@ -16,7 +22,10 @@
 - references
 	- [icon-json-rpc-v3](./references/icon-json-rpc-v3.md)
 	- [java-sdk](./references/java-sdk.md)
+	- [javascript-api-reference](./references/javascript-api-reference.md)
+	- [javascript-sdk](./references/javascript-sdk.md)
 	- [python-api-reference](./references/python-api-reference.md)
+	- [python-sdk](./references/python-sdk.md)
 	- [swift-api-reference](./references/swift-api-reference.md)
 	- [swift-sdk](./references/swift-sdk.md)
 - score
