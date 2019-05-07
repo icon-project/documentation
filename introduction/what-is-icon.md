@@ -5,7 +5,7 @@ excerpt: ""
 
 ## What is ICON
 
-The ICON project is started to ensure the integrity of data shared between institutions and companies transparently, and to move mutual assets on a block-chain and link heterogeneous blockchains without a centralized organization. 
+The ICON project was started to ensure the integrity of data shared between institutions and companies transparently, and to move mutual assets on heterogeneous blockchains without a centralized organization. 
 ICON blockchain technology enables companies to reduce their human and financial resources in treating data and various asset management and create an unprecedented experience for users on blockchain.
 
 ### Interchain - connect heterogeneous blockchains 
@@ -14,7 +14,7 @@ The ICON Network has a structure for connecting heterogeneous blockchains operat
 **Problem to solve**
 
 Current blockchains are independently operating in different area and domian, however, there is no standard protocol to exchange data and assets between different blockchains.
-For example, when you move the assets of an security domain blockchain to an insurance domain blockchain or an Etherium or ICON, it is almost impossible to transfer because there is no secure and standards way. 
+For example, when you move the assets of security domain blockchain to insurance domain blockchain or an Etherium or ICON, it is almost impossible to transfer because there is no secure and standard way. 
 
 Even though you use oracle relayer to transfer the asset, there remains risk of trust in the oracle centralized. To avoid the trust issue of oracle, a secure standard protocol that prevents forgery and tampering when moving assets between heterogeneous blockchains is mandatory.
 
