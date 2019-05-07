@@ -116,9 +116,88 @@ result = icon_service.call(call)
 ```
 
 
-
 ### Transactions 
 
+Calling SCORE APIs to change states is requested as sending a transaction. 
+Befor sending a transaction, the transaction should be signed. It can be done using a `Wallet` object. 
+
+#### Generating a Transaction
+After then, you should create an instance of the transaction using different types of transaction builders as follows.
+
+```python
+from iconsdk.builder.transaction_builder import (
+    TransactionBuilder,
+    DeployTransactionBuilder,
+    CallTransactionBuilder,
+    MessageTransactionBuilder
+)
+from iconsdk.signed_transaction import SignedTransaction
+
+# Generates an instance of transaction for sending icx.
+transaction = TransactionBuilder()\
+    .from_(wallet.get_address())\
+    .to("cx00...02")\
+    .value(150000000)\
+    .step_limit(1000000)\
+    .nid(3)\
+    .nonce(100)\
+    .build()
+
+# Generates an instance of transaction for deploying SCORE.
+transaction = DeployTransactionBuilder()\
+    .from_(wallet.get_address())\
+    .to("cx00...02")\
+    .step_limit(1000000)\
+    .nid(3)\
+    .nonce(100)\
+    .content_type("application/zip")\
+    .content(b'D8\xe9...\xfc')\
+    .params(params)\
+    .build()
+
+# Generates an instance of transaction for calling method in SCORE.
+transaction = CallTransactionBuilder()\
+    .from_(wallet.get_address())\
+    .to("cx00...02")\
+    .step_limit(1000000)\
+    .nid(3)\
+    .nonce(100)\
+    .method("transfer")\
+    .params(params)\
+    .build()
+
+# Generates an instance of transaction for sending a message.
+transaction = MessageTransactionBuilder()\
+    .from_(wallet.get_address())\
+    .to("cx00...02")\
+    .step_limit(1000000)\
+    .nid(3)\
+    .nonce(100)\
+    .data("0x74657374")\
+    .build()
+
+# Returns the signed transaction object having a signature
+signed_transaction = SignedTransaction(transaction, wallet)
+
+# Sends the transaction
+tx_hash = icon_service.send_transaction(signed_transaction)
+```
+
+#### Signing a Transaction
+Before sending a transaction, the transaction should be signed by using SignedTransaction class. The SignedTransaction class is used to sign the transaction by returning an instance of the signed transaction as demonstrated in the example below. The instance of the signed transaction has the property of a signature.
+
+```python
+# Returns the signed transaction object having a signature
+signed_transaction = SignedTransaction(transaction, wallet)
+```
+
+#### Sending a Transaction
+Finally, you can send a transaction with the signed transaction object as follows.
+
+```python
+# Sends the transaction
+tx_hash = icon_service.send_transaction(signed_transaction)
+```
 
 
 ## Code Examples
