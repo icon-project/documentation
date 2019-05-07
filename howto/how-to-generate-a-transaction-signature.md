@@ -53,8 +53,9 @@ ICON follows the JSON-RPC v2.0 protocol spec. A signed transaction request looks
         "value": "0xde0b6b3a7640000",
         "stepLimit": "0x12345",
         "timestamp": "0x563a6cf330136",
+        "nid": "0x1",
         "nonce": "0x1",
-        "signature": "VAia7YZ2Ji6igKWzjR2YsGa2m53nKPrfK7uXYW78QLE+ATehAVZPC40szvAiA6NEU5gCYB4c4qaQzqDh2ugcHgA="
+        "signature": "X1tpJdHBvqroonpTbdsNEur7KAeYcZd9XGa39AkW51Uck8EqgJnioedm5W2jZSQuBzZJHWm0Uf5BeXSmXoOByAA="
     }
 }
 ```
@@ -87,19 +88,18 @@ Example:
 
 ```json
 {
-       "version": "0x3",
-       "from": "hxbe258ceb872e08851f1f59694dac2558708ece11",
-       "to": "cxb0776ee37f5b45bfaea8cff1d8232fbb6122ec32",
-       "value": "0xde0b6b3a7640000",
-       "stepLimit": "0x12345",
-       "timestamp": "0x563a6cf330136"
+    "method": "transfer",
+    "params": {
+        "to": "hxab2d8215eab14bc6bdd8bfb2c8151257032ecd8b",
+        "value": "0x1"
+    }
 }
 ```
 
 Serialized as
 
 ``` 
-{from.hxbe258ceb872e08851f1f59694dac2558708ece11.stepLimit.0x12345.timestamp.0x563a6cf330136.to.cxb0776ee37f5b45bfaea8cff1d8232fbb6122ec32.value.0xde0b6b3a7640000.version.0x3}
+{method.transfer.params.{to.hxab2d8215eab14bc6bdd8bfb2c8151257032ecd8b.value.0x1}}
 ```
 
 #### Array type
@@ -136,6 +136,7 @@ Original JSON request:
         "value": "0xde0b6b3a7640000",
         "stepLimit": "0x12345",
         "timestamp": "0x563a6cf330136",
+        "nid": "0x1",
         "nonce": "0x1"
     }
 }
@@ -144,7 +145,7 @@ Original JSON request:
 Serialized params:
 
 ```
-icx_sendTransaction.from.hxbe258ceb872e08851f1f59694dac2558708ece11.nonce.0x1.stepLimit.0x12345.timestamp.0x563a6cf330136.to.hx5bfdb090f43a808005ffc27c25b213145e80b7cd.value.0xde0b6b3a7640000.version.0x3
+icx_sendTransaction.from.hxbe258ceb872e08851f1f59694dac2558708ece11.nid.0x1.nonce.0x1.stepLimit.0x12345.timestamp.0x563a6cf330136.to.hx5bfdb090f43a808005ffc27c25b213145e80b7cd.value.0xde0b6b3a7640000.version.0x3
 ```
 
 #### SCORE API invocation
@@ -163,6 +164,7 @@ Original JSON request:
         "to": "cxb0776ee37f5b45bfaea8cff1d8232fbb6122ec32",
         "stepLimit": "0x12345",
         "timestamp": "0x563a6cf330136",
+        "nid": "0x1",
         "nonce": "0x1",
         "dataType": "call",
         "data": {
@@ -179,7 +181,7 @@ Original JSON request:
 Serialized params:
 
  ```
-icx_sendTransaction.data.{method.transfer.params.{to.hxab2d8215eab14bc6bdd8bfb2c8151257032ecd8b.value.0x1}}.dataType.call.from.hxbe258ceb872e08851f1f59694dac2558708ece11.nonce.0x1.stepLimit.0x12345.timestamp.0x563a6cf330136.to.cxb0776ee37f5b45bfaea8cff1d8232fbb6122ec32.version.0x3
+icx_sendTransaction.data.{method.transfer.params.{to.hxab2d8215eab14bc6bdd8bfb2c8151257032ecd8b.value.0x1}}.dataType.call.from.hxbe258ceb872e08851f1f59694dac2558708ece11.nid.0x1.nonce.0x1.stepLimit.0x12345.timestamp.0x563a6cf330136.to.cxb0776ee37f5b45bfaea8cff1d8232fbb6122ec32.version.0x3
  ```
 
 ## How to Create Transaction Signature
@@ -221,7 +223,8 @@ Here is a sample transaction request message. We will create a signature for the
         "to": "cxb0776ee37f5b45bfaea8cff1d8232fbb6122ec32",
         "value": "0xde0b6b3a7640000",
         "stepLimit": "0x12345",
-        "timestamp": "0x563a6cf330136"
+        "timestamp": "0x563a6cf330136",
+        "nid": "0x1"
     }
 }
 ```
@@ -229,7 +232,7 @@ Here is a sample transaction request message. We will create a signature for the
 - step1: Serialize transaction data.
 
 ```
-icx_sendTransaction.from.hxbe258ceb872e08851f1f59694dac2558708ece11.stepLimit.0x12345.timestamp.0x563a6cf330136.to.cxb0776ee37f5b45bfaea8cff1d8232fbb6122ec32.value.0xde0b6b3a7640000.version.0x3
+icx_sendTransaction.from.hxbe258ceb872e08851f1f59694dac2558708ece11.nid.0x1.stepLimit.0x12345.timestamp.0x563a6cf330136.to.cxb0776ee37f5b45bfaea8cff1d8232fbb6122ec32.value.0xde0b6b3a7640000.version.0x3
 ```
 
 - step2: Create a transaction signature.
@@ -242,10 +245,10 @@ import base64
 import hashlib
 import secp256k1
 
-serialized_transaction = "icx_sendTransaction.from.hxbe258ceb872e08851f1f59694dac2558708ece11.stepLimit.0x12345.timestamp.0x563a6cf330136.to.cxb0776ee37f5b45bfaea8cff1d8232fbb6122ec32.value.0xde0b6b3a7640000.version.0x3"
+serialized_transaction = "icx_sendTransaction.from.hxbe258ceb872e08851f1f59694dac2558708ece11.nid.0x1.stepLimit.0x12345.timestamp.0x563a6cf330136.to.cxb0776ee37f5b45bfaea8cff1d8232fbb6122ec32.value.0xde0b6b3a7640000.version.0x3"
 
 # transaction_hash
-# result: b'\xc4\xa3\xa8\xae\xb5uH\x90\\\xfd\x9a1a\x9b\xe0\x05W\xf6\x03\x9a9\xac\xb8\xc5o\xce\x14\xcak\xae\x1f\x08'
+# result: b'z\xdc\xa3\xc5@\x19{\xc0\xc5\xe3b\xc3I\x84&k\xeb\xbc\xd2\xda\xe2\xfd\x06\x08\x95TR[\x9b\xfc\xd0\xff'
 msg_hash = hashlib.sha3_256(serialized_transaction.encode()).digest()
 
 # prepare the private key (this private key is for example purpose)
@@ -262,9 +265,9 @@ signature, recovery_id = private_key_object.ecdsa_recoverable_serialize(recovera
 recoverable_sig = bytes(bytearray(signature) + recovery_id.to_bytes(1, 'big'))
 
 # base64 encode
-transaction_signature = base64.b64encode(recoverable_sig) 
+transaction_signature = base64.b64encode(recoverable_sig)
 
-# transaction_signature: b'a5fs7KC8Qw3Rpgyhx2b02WG7jghqdRT58dznUVb8qV12QhWx0zXi0YnIAmHHL2NF55ULn1RaEwrzQq2Fiq5W8wA='
+# transaction_signature: b'HNsFOK1qRkVKMB8ePZhKg/ELmT53MmnZn4ftt2sD69VdobB94BT0h52Bb8ven53186A9u+eIiIiWrSu8VjMUpwE='
 ```
 
 ## Summary
