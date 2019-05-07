@@ -83,12 +83,6 @@ import IconService from 'icon-sdk-js/build/icon-sdk-js.web.min.js';
 
 
 
-## Configuration (Optional)
-
-[Such as env. variables ]
-
-
-
 ## Using the SDK
 
 [Import, initialize, deinitialize, and basic call that applies to every or most code to use the SDK. 
@@ -913,12 +907,14 @@ async getTokenSymbol(to) {
 ```
 
 
+## References 
 
-## References (Optional)
-
-- reference 1
-- reference 2
+- [API Reference](javascript-api-reference)
+- [ICON JSON-RPC API v3](icon-json-rpc-v3)
+- [ICON Network](the-icon-network)
 
 
 ## Licenses
+
+This project follows the Apache 2.0 License. Please refer to [LICENSE](https://www.apache.org/licenses/LICENSE-2.0) for details.
 
