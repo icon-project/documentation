@@ -98,24 +98,152 @@ This section also serves as a test if the SDK has been correctly installed and r
 
 Generate `IconService` to communicate with the nodes.
 
-`IconService` allows you to send transaction, check the result and block information, etc.
-
-`HttpProvider` is set as default to communicate with http.
+The `IconService` class contains a set of API methods. It allows you to send transaction, check the result and get block information, etc. It accepts the `HttpProvider` which serves the purpose of connecting to HTTP and HTTPS based JSON-RPC servers. The `HttpProvider` takes the full URI where the server can be found. Here is an simple example how to initialize `IconService` class.
 
 ```javascript
-// HttpProvider is used to communicate with http.
-const provider = new HttpProvider(MockData.NODE_URL);
-// Create IconService instance
+/*  HttpProvider is used to communicate with http. 
+    In this example, we use Yeouido node as provider. */
+const provider = new HttpProvider('https://bicon.net.solidwallet.io/api/v3');
+
+/* Create IconService instance */
 const iconService = new IconService(provider);
 ```
 
-
-
 ### Queries
+
+All query methods of `IconService` returns a `HttpCall` instance. To execute the request and get the result value, you need to run `execute()` function of `HttpCall` instance. All requests will be executed **asynchronously**. Synchronous request is not available. For more information, check [API reference documentation](https://www.icondev.io/docs/javascript-api-reference#section-iconservice).
+
+```javascript
+const { CallBuilder } = IconService.IconBuilder;
+
+/* Get block information by block height */
+const block = await iconService.getBlockByHeight(1000).execute();
+
+/* Get block information by block hash */
+const block = await iconService.getBlockByHash('0xdb3···d95').execute();
+
+/* Get latest block information */
+const block = await iconService.getLastBlock().execute();
+
+/* Returns the balance of a EOA address */
+const balance = await iconService.getBalance('hx9d8···b57').execute();
+
+/* Returns the SCORE API list */
+const apiList = await iconService.getScoreApi('cx000···001').execute();
+
+/* Returns the total number of issued ICX. */
+const totalSupply = await iconService.getTotalSupply().execute();
+
+/* Returns information about a transaction requested by transaction hash */
+const txObj = await iconService.getTransaction('0xb90···238').execute();
+
+/* Returns the result of a transaction by transaction hash */
+const txObj = await iconService.getTransactionResult('0xb90···238').execute();
+
+/* Generates a call instance using the CallBuilder */
+const callObj = new CallBuilder()
+    .to('cxc24···6c7')
+    .method('balanceOf')
+    .params({ _owner: 'hx87a···d6a' })
+    .build()
+
+/* Executes a call method to call a read-only API method on the SCORE immediately without creating a transaction on Loopchain */
+const result = await iconService.call(callObj).execute();
+```
 
 ### Transactions 
 
+To invoke SCORE API for changing states, you need to send a transaction. Before sending a transaction, the transaction should be signed. It can be done using the `Wallet` object.
 
+```javascript
+const { IconWallet } = IconService;
+
+/* Creates an instance of Wallet. */
+const wallet = IconWallet.create();
+
+/* Load Wallet object by private key */
+const wallet = IconWallet.loadPrivateKey('2ab···e4c');
+
+/* Load Wallet object by keystore object */
+const ks = { "version": 3 ··· "coinType": "icx" };
+const pw = 'qwer1234!';
+const wallet = IconWallet.loadKeystore(ks, pw);
+```
+
+Next, you need to build the transaction object using builder class.
+
+```javascript
+/* Build `IcxTransaction` instance for sending ICX. */
+const txObj = new IcxTransactionBuilder()
+    .from('hx462···bfd')
+    .to('hx87a···d6a')
+    .value(IconAmount.of(7, IconAmount.Unit.ICX).toLoop())
+    .stepLimit(IconConverter.toBigNumber(100000))
+    .nid(IconConverter.toBigNumber(3))
+    .nonce(IconConverter.toBigNumber(1))
+    .version(IconConverter.toBigNumber(3))
+    .timestamp((new Date()).getTime() * 1000)
+    .build()
+
+/* Build `MessageTransaction` instance for sending data. */
+const txObj = new MessageTransactionBuilder()
+    .from('hx462···bfd')
+    .to('hx87a···d6a')
+    .stepLimit(IconConverter.toBigNumber(100000))
+    .nid(IconConverter.toBigNumber(3))
+    .nonce(IconConverter.toBigNumber(1))
+    .version(IconConverter.toBigNumber(3))
+    .timestamp((new Date()).getTime() * 1000)
+    .data(IconConverter.fromUtf8('Hello'))
+    .build()
+
+/* Build `DeployTransaction` instance for deploying SCORE. */
+const txObj = new DeployTransactionBuilder()
+    .from('hx462···bfd')
+    .to('cx000···000')
+    .stepLimit(IconConverter.toBigNumber(2500000))
+    .nid(IconConverter.toBigNumber(3))
+    .nonce(IconConverter.toBigNumber(1))
+    .version(IconConverter.toBigNumber(3))
+    .timestamp((new Date()).getTime() * 1000)
+    .contentType('application/zip')
+    .content('0x504···000')
+    .params({
+        initialSupply: IconConverter.toHex('100000000000'),
+        decimals: IconConverter.toHex(18),
+        name: 'StandardToken',
+        symbol: 'ST',
+    })
+    .build()
+
+/* Build `CallTransaction` instance for executing SCORE function. */
+const txObj = new CallTransactionBuilder()
+    .from('hx902···3b5')
+    .to('cx350···48d')
+    .stepLimit(IconConverter.toBigNumber('2000000'))
+    .nid(IconConverter.toBigNumber('3'))
+    .nonce(IconConverter.toBigNumber('1'))
+    .version(IconConverter.toBigNumber('3'))
+    .timestamp((new Date()).getTime() * 1000)
+    .method('transfer')
+    .params({
+        _to: 'hxd00···497',
+        _value: IconConverter.toHex(IconAmount.of(1, IconAmount.Unit.ICX).toLoop()),
+    })
+    .build()
+```
+
+Using `SignedTransaction` object, you can make signature for transaction object. By passing `SignedTransaction` instance to `IconService.sendTransaction()` method, it will automatically generate transaction object including signature, and send to ICON node.
+
+`sendTransaction` method returns a `HttpCall` instance. To execute the request and get the result value, you need to run `execute()` function of `HttpCall` instance. All requests will be executed **asynchronously**. Synchronous request is not available. 
+
+```javascript
+/* Create SignedTransaction instance */
+const signedTransaction = new SignedTransaction(txObj, wallet)
+
+/* Send transaction. It returns transaction hash. */
+const txHash = await iconService.sendTransaction(signedTransaction).execute();
+```
 
 ## Code Examples
 
