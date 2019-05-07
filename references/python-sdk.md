@@ -115,7 +115,7 @@ result = icon_service.call(call)
 ### Transactions 
 
 Calling SCORE APIs to change states is requested as sending a transaction. 
-Befor sending a transaction, the transaction should be signed. It can be done using a `Wallet` object. 
+Before sending a transaction, the transaction should be signed. It can be done using a `Wallet` object. 
 
 #### Generating a Transaction
 After then, you should create an instance of the transaction using different types of transaction builders as follows.
