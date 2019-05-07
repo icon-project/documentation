@@ -25,10 +25,6 @@ Get different types of examples as follows. Complete source code is found on Git
 
 ## Prerequisite
 
-[Enumereate any required knowledge, configuration, or resources to complete this tutorial.
-Provide links to other useful resources.]
-[Helping your readers to prepare increases the likelihood that they will continue reading.]
-
 
 
 ## Installation
@@ -85,8 +81,6 @@ import IconService from 'icon-sdk-js/build/icon-sdk-js.web.min.js';
 
 ## Using the SDK
 
-[Import, initialize, deinitialize, and basic call that applies to every or most code to use the SDK. 
-This section also serves as a test if the SDK has been correctly installed and ready to use.] 
 
 ### Generate IconService
 
@@ -486,8 +480,8 @@ You can check the following information using the TransactionResult.
 - stepUsed : Consumed step amount to send the transaction
 - stepPrice : Consumed step price to send the transaction
 - scoreAddress : SCORE address if the transaction generated SCORE (optional)
-- eventLogs :  Occurred EventLog’s list during execution of the transaction.
-- logsBloom : Indexed Data’s Bloom Filter value from the occurred Eventlog’s Data
+- eventLogs : List of EventLogs written during the execution of the transaction.
+- logsBloom : Bloom Filter of the indexed data of the Eventlogs.
 
 #### Check the ICX balance
 
