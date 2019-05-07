@@ -348,8 +348,8 @@ You can check the following information using the TransactionResult.
 - stepUsed : Consumed step amount to send the transaction
 - stepPrice : Consumed step price to send the transaction
 - scoreAddress : SCORE address if the transaction generated SCORE (optional)
-- eventLogs :  Occurred EventLog’s list during execution of the transaction.
-- logsBloom : Indexed Data’s Bloom Filter value from the occurred Eventlog’s Data
+- eventLogs : List of EventLogs written during the execution of the transaction.
+- logsBloom : Bloom Filter of the indexed data of the Eventlogs.
 
 #### Check the ICX balance
 
