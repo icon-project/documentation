@@ -81,7 +81,7 @@ Apply UTF-8 encoding to the text. Characters listed below should be escaped with
 Enclosed with `{` and `}`, and key/value pairs are separated with `.`. Every keys in dictionary are string type, therefore, the same encoding rules apply. The order of keys in the serialized data follows the natural ordering of the UTF-8 encoded byte comparison (it’s same as Unicode string order).
 
 ```
-{<key1>.<value1>.<key2>.<value2>}
+{<key1>.<value1>.<key2>.<value2>....<keyN>.<valueN>}
 ```
 
 Example:
@@ -107,7 +107,7 @@ Serialized as
 Enclosed with `[` and `]`. All values are separated with `.`.
 
 ``` 
-[<value1>.<value2>.<value3>]
+[<value1>.<value2>.<value3>....<valueN>]
 ```
 
 #### Null type
