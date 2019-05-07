@@ -40,10 +40,6 @@ $ pip install iconsdk
 
 
 
-## Configuration (Optional)
-
-Such as env. variables 
-
 ## Using the SDK
 
 Import, initialize, deinitialize, and basic call that applies to every or most code to use the SDK. 
@@ -690,11 +686,5 @@ def get_token_symbol(token_address: str):
 
 
 
-## References (Optional)
 
-- reference 1
-- reference 2
-
-
-## Licenses
 
