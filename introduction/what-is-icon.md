@@ -3,22 +3,20 @@ title: "What is ICON"
 excerpt: ""
 ---
 
-## What is ICON
-
 The ICON project was started to ensure the integrity and transparency of data shared between institutions and companies, and to move mutual assets on heterogeneous blockchains without a centralized organization. 
 The ICON blockchain technology enables entities to reduce their human and financial resource spend when treating data and managing assets, and creates an unprecedented experience for users on the blockchain.
 
-### Interchain - connect heterogeneous blockchains 
+## Interchain - Connect Heterogeneous Blockchains 
 The ICON Network has a structure for connecting heterogeneous blockchains operating in different domains. 
 
-**Problems to solve**
+### Problems to solve
 
 Current blockchains are independently operating in different areas and domains, and there is no standard protocol to exchange data and assets between the different blockchains.
 For example, when you move assets on a security domain blockchain to an insurance domain blockchain, or when you move assets on Etherium to ICON, it is almost impossible to transfer because there is no secure and standard way of doing so. 
 
 Even though you use an oracle relayer to transfer the asset, there remains a risk of trust in the oracle being centralized. To avoid the trust issue of the oracle, a secure standard protocol that prevents forgery and tampering when moving assets across heterogeneous blockchains was needed.
 
-**Future with Interchain**
+### Future with Interchain
 
 In the 1970s, different private networks were independently operated and were disconnected from each other. 
 However, once the TCP/IP protocol standard came out to connect private networks and formed a huge network called the Internet, the power of the connected networks has been growing at an incredible rate.
@@ -26,14 +24,14 @@ However, once the TCP/IP protocol standard came out to connect private networks 
 The ICON project aims to create a strongly interconnected blockchain network by integrating various public and enterprise networks in a similar way as TCP/IP. 
 The ICON interchain protocol (BTP) will begin to integrate dApps and wallets (users) on different blockchains, have a role of bridging heterogeneous blockchains invisibly, and penetrate deeper into our lives.
 
-### Additional unique features of ICON
+## Additional Unique Features of ICON
 - **IISS (ICON Incentive Scoring System)** : Voting/DApp/EEP rewards to encourage contributions to the ICON Network  
 - **Configurable Fee** : fee sharing, zero fees using virtual step
 - **High Mobile Accessibility** : Mobile web, Android, iOS ( [IIP-14](https://github.com/icon-project/IIPs/blob/master/IIPS/iip-14.md) )
 - **Supports both Enterprise and Public Blockchains**  
 
 
-## What to do with ICON
+## Use Cases
 
 Developers can create the following unique services and features with the ICON network 
 
