@@ -29,6 +29,7 @@ Documents that merged into the master branch are published on the developers por
 	- [python-sdk](./references/python-sdk.md)
 	- [swift-api-reference](./references/swift-api-reference.md)
 	- [swift-sdk](./references/swift-sdk.md)
+	- [t-bears-reference](./references/t-bears-reference.md)
 - score
 	- [audit-checklist](./score/audit-checklist.md)
 	- [score-audit](./score/score-audit.md)
@@ -36,3 +37,4 @@ Documents that merged into the master branch are published on the developers por
 	- [score-quickstart-p1](./score/score-quickstart-p1.md)
 	- [score-quickstart-p2](./score/score-quickstart-p2.md)
 	- [score-quickstart](./score/score-quickstart.md)
+	- [writing-score](./score/writing-score.md)
