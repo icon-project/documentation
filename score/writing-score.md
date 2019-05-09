@@ -500,7 +500,7 @@ The [SampleToken](token-crowdsale) is used in this example.
 
 ### Invoking read-only methods
 
-The SCORE methods can be executed by calling [JSON RPC APIs](icon-json-rpc-v3.m) to ICON nodes.
+The SCORE methods can be executed by calling [JSON RPC APIs](icon-json-rpc-v3) to ICON nodes.
 You need to generate a JSON file which contains information about the calling method and its parameters.
 
 `icx_call` JSON-RPC API will be used to invoke a read-only method of SCORE.
