@@ -16,6 +16,7 @@ Documents that merged into the master branch are published on the developers por
 	- [transactions](./icon-key-concepts/transactions.md)
 - introduction
 	- [about-this-guide](./introduction/about-this-guide.md)
+	- [what-is-icon](./introduction/what-is-icon.md)
 - node
 	- p-rep
 		- [p-rep-installation-and-configuration](./node/p-rep/p-rep-installation-and-configuration.md)
