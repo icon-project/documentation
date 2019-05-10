@@ -38,7 +38,7 @@ In order for the submitted TX to be executed successfully, the value of the step
 
 ## STEP Estimation
 
-STEP estimation can be requested through JSON-RPC, similar form to sending transactions.
+The STEP estimation can be requested through JSON-RPC, similar form to sending transactions.
 
 #### Sending Transaction
 
@@ -53,21 +53,21 @@ This example shows the transaction request that invoking `transfer` on an IRC2 c
     "id": 1234,
     "params": {
         "version": "0x3",
-        "from": "hx0000000000000000000000000000000000000001",
-        "to": "cx0000000000000000000000000000000000000001",
-        "stepLimit": "0x123456",
-        "timestamp": "0x563a6cf330136",
+        "from": "hxcced4d83a03098f5976b5ed339b0cab3e51ca1f9",
+        "to": "cx65fc79aa09e867fd51d0c8361f42cb38bc1f08f3",
+        "stepLimit": "0x30d40",
+        "timestamp": "0x583f58f62eae0",
         "nid": "0x3",
         "nonce": "0x1",
-        "signature": "VAia7YZ2Ji6igKWzjR2YsGa2m53nKPrfK7uXYW78QLE+ATehAVZPC40szvAiA6NEU5gCYB4c4qaQzqDh2ugcHgA=",
         "dataType": "call",
         "data": {
             "method": "transfer",
             "params": {
-                "to": "hx0000000000000000000000000000000000000002",
-                "value": "0x8ac7230489e80000"
-            }
-        }
+                "_to": "hx25cd4028f055457b8fbdae1dbd8b5fe465248e55",
+                "_value": "0x8ac7230489e80000"
+          }
+        },
+        "signature": "rBaH0U6y85y1CWp/JbalUbzLVGjtGYG+hut/G5o30vBxhWoxPYtSYBQu6X0Tak1SdcnlZSCJL7DeOeKmI4y+5wE="
     }
 }
 ```
@@ -89,17 +89,17 @@ The following example shows the STEP estimation request of the transaction above
     "id": 1234,
     "params": {
         "version": "0x3",
-        "from": "hx0000000000000000000000000000000000000001",
-        "to": "cx0000000000000000000000000000000000000001",
-        "timestamp": "0x563a6cf330136",
+        "from": "hxcced4d83a03098f5976b5ed339b0cab3e51ca1f9",
+        "to": "cx65fc79aa09e867fd51d0c8361f42cb38bc1f08f3",
+        "timestamp": "0x583f58f62eae0",
         "nid": "0x3",
         "nonce": "0x1",
         "dataType": "call",
         "data": {
             "method": "transfer",
             "params": {
-                "to": "hx0000000000000000000000000000000000000002",
-                "value": "0x8ac7230489e80000"
+                "_to": "hx25cd4028f055457b8fbdae1dbd8b5fe465248e55",
+                "_value": "0x8ac7230489e80000"
             }
         }
     }
@@ -116,19 +116,16 @@ If there are no exceptions, the response shows the estimated STEPs as follow.
 }
 ```
 
-<!--
-## Using T-Bears
+## Using T-Bears (NOT CONFIRMED)
 
+Using T-Bears, the estimation can be queried by `estimate` command.
 
-## Using SDKs
+```shell
+(venv)$ tbears estimate transfer.json
+estimated steps: 147340
+```
 
-### Java
-
-### JavaScript
-
-### Python
-
--->
+For more details [here]()
 
 
 ## Summary
@@ -136,16 +133,11 @@ If there are no exceptions, the response shows the estimated STEPs as follow.
 As the above tutorial, users can know how much STEPs are required for a particular transaction at the current block state using `debug_estimateStep` API.
 
 However, the queried value is just an **ESTIMATED** value. 
-The required STEPs are variable by the current block state, it may not be the same state between at estimating TX and at submitting TX.
+The required STEPs are variable by the current block state, the block state may not be the same between when estimating and submitting.
 
 
 ## References
 
 - [ICON Yellowpaper](https://icon.foundation/resources/file/ICON_Yellowpaper_Transactionfee_EN_V1.0.pdf)
 - [ICON JSON RPC](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md#debug_estimateStep)
-<!--
 - [T-Bears]()
-- [Java SDK]()
-- [JavaScript SDK]()
-- [Python SDK]()
--->
