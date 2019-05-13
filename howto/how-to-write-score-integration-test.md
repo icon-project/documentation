@@ -1,36 +1,33 @@
 ---
-title: "How to write SCORE integration tests"
+title: "How to write SCORE integration test"
 ---
 
-Describe about How to write SCORE integrate-test using IconIntegrateTestBase.
-
-## Intended Audience
-
-* Mid  
-* Experienced
+This document explains how to write SCORE integration test using `IconIntegrateTestBase`.
 
 ## Purpose 
 
-Understand how to write SCORE integrate-test
+Understand how to write SCORE integration test
 
 ## Prerequisite 
 
-* [score-overview](https://github.com/icon-project/documentation/blob/develop/score/score-overview.md)
+* [SCORE Overview](score-overview)
+* [T-Bears Overview](tbears-overview) 
+* [ICON Python SDK](python-sdk)
 
-## How to write SCORE integration test code
+## How to Write SCORE Integration Test Code
 
-The SCORE integration test code works as follows
+The SCORE integration test code works as follows.
 
-1. Deploy SCORE to be tested
-2. Create a ICON JSON-RPC API request for the SCORE API you want to test
-3. If necessary, sign a ICON JSON-RPC API request
-4. Invoke a ICON JSON-RPC API request and get the result
+1. Deploy the SCORE to be tested
+2. Create an ICON JSON-RPC API request for the SCORE API you want to test
+3. If necessary, sign an ICON JSON-RPC API request
+4. Invoke an ICON JSON-RPC API request and get the result
 5. Check the result
 
 ### Packages and modules
 
-#### ICON python SDK
-You can create and sign a ICON JSON-RPC API request using the ICON python SDK
+#### ICON Python SDK
+You can create and sign an ICON JSON-RPC API request using the ICON Python SDK
 
 ```python
 # create key wallet
@@ -59,9 +56,9 @@ Every SCORE integration test class must inherit `IconIntegrateTestBase`.
 
 IconIntegrateTestBase class provides three functions
 
-1. Support python unittest
+1. Support Python unittest
    1. You can write and run the test method with prefix 'test_'
-   2. You can initalize and finalize the test by override setUp and tearDown method
+   2. You can initialize and finalize the test by override setUp and tearDown method
 
 2. Emulate ICON service for test
    1. Initialize ICON service and confirm genesis block
@@ -73,11 +70,11 @@ IconIntegrateTestBase class provides three functions
    1. process_transaction()
       Invoke transaction and return transaction result
    2. process_call()
-      Calls SCORE's external function which is read-only and return result
+      Calls SCORE's external function which is read-only and returns result
 
 ### examples
 
-You can get source code with `tbears init score_test ScoreTest` command.
+You can get the source code with `tbears init score_test ScoreTest` command.
 
 #### score_test.py
 
@@ -190,5 +187,6 @@ OK
 
 ## References
 
-* [ICON python SDK] (https://github.com/icon-project/icon-sdk-python)
-* [ICON SCORE samples] (https://github.com/icon-project/samples)
+* [ICON Python SDK](python-sdk)
+* [ICON SCORE samples](sample-scores)
+

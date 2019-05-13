@@ -1,27 +1,9 @@
 ---
-title: "SCORE by Example"
+title: "Token & Crowdsale"
 ---
 
-## Overview
-
-Let's make and deploy using T-Bears
-
-## Intended Audience
-
-* Mid  
-* Experienced
-
-## Purpose 
-
-You can deploy Samples using T-Bears
-
-## Prerequisite 
-
-* [score-overview](https://github.com/icon-project/documentation/blob/master/score/score-overview.md)
-* [writing-score](https://github.com/icon-project/documentation/blob/master/score/writing-score.md)
-
-## Token & Crowdsale
-This document will explain how to write SCOREs with T-Bears framework. Let’s start by creating a simple token contract. You can create an empty project using init command. Suppose your project name is ‘sample_token’ and the main class name is ‘SampleToken’.
+This document will explain how to write SCOREs with T-Bears framework.
+Let’s start by creating a simple token contract. You can create an empty project using init command. Suppose your project name is ‘sample_token’ and the main class name is ‘SampleToken’.
 
 ```console
 $ tbears init sample_token SampleToken
@@ -29,7 +11,7 @@ $ tbears init sample_token SampleToken
 
 Above command will create a project folder, sample_token, and generate __init__.py, sample_token.py, and package.json files in the folder. sample_token.py has the main class declaration whose name is SampleToken. You need to implement SampleToken class.
 
-IRC-2 standard defines the common behavior of tokens running on ICON. IRC-2 compliant token must implement following methods. The specification is here, IRC-2.
+IRC-2 standard defines the common behavior of tokens running on ICON. IRC-2 compliant token must implement following methods. The specification is here, [IRC-2](https://github.com/icon-project/IIPs/blob/master/IIPS/iip-2.md).
 
 ```python
 @external(readonly=True)
@@ -186,9 +168,10 @@ $ tbears init sample_crowdsale SampleCrowdsale
 ```
 Our crowdsale contract will do the following.
 
-Exchange ratio to ICX is 1:1. Crowdsale target, token contract address, and its duration are set when the contract is first deployed.
-total_joiner_count function returns the number of contributors, and check_goal_reached function tests if the crowdsale target has been met.
-After the crowdsale finished, safe_withdrawal function transfers the fund to the beneficiary, contract owner in this example, if the sales target has been met. If sales target failed, each contributors can withdraw their contributions back.
+- Exchange ratio to ICX is 1:1. Crowdsale target, token contract address, and its duration are set when the contract is first deployed.
+- total_joiner_count function returns the number of contributors, and check_goal_reached function tests if the crowdsale target has been met.
+- After the crowdsale finished, safe_withdrawal function transfers the fund to the beneficiary, contract owner in this example, if the sales target has been met. If sales target failed, each contributors can withdraw their contributions back.
+
 Again, complete source is given below. Note that crowdsale duration is given in number of blocks, because SCORE logic must be deterministic across nodes, thus it must not rely on clock time.
 
 ```python
@@ -382,10 +365,5 @@ class SampleCrowdsale(IconScoreBase):
                     self._funding_goal_reached.set(False)
 ```
 
-## Summary
-
-## Tips or FAQs
-
-## References
 
 
