@@ -8,6 +8,8 @@ Documents that merged into the master branch are published on the developers por
 	- [account-management](./howto/account-management.md)
 	- [how-to-change-network-in-iconex-chrome](./howto/how-to-change-network-in-iconex-chrome.md)
 	- [how-to-generate-a-transaction-signature](./howto/how-to-generate-a-transaction-signature.md)
+	- [how-to-write-score-integration-test](./howto/how-to-write-score-integration-test.md)
+	- [how-to-write-score-unit-test](./howto/how-to-write-score-unit-test.md)
 	- [icon-development-network-on-aws-marketplace](./howto/icon-development-network-on-aws-marketplace.md)
 - icon-key-concepts
 	- [accounts](./icon-key-concepts/accounts.md)
@@ -30,6 +32,9 @@ Documents that merged into the master branch are published on the developers por
 	- [swift-api-reference](./references/swift-api-reference.md)
 	- [swift-sdk](./references/swift-sdk.md)
 	- [t-bears-reference](./references/t-bears-reference.md)
+- sample-scores
+	- [multi-signature-wallet](./sample-scores/multi-signature-wallet.md)
+	- [token-crowdsale](./sample-scores/token-crowdsale.md)
 - score
 	- [audit-checklist](./score/audit-checklist.md)
 	- [score-audit](./score/score-audit.md)
