@@ -1,5 +1,5 @@
 ---
-title: "How to change network in ICONex Chrome extension"
+title: "How to change network in ICONex"
 ---
 
 When you develop a DApp, you will spend most of your time to test your smart contract on the testnet. ICONex chrome app is a good utility helping DApp development, as you can invoke smart contract functions from the web app without writing a single line of code, as well as sending ICX to test accounts. However, when you install the ICONex chrome app, the default configuration is connected to the mainnet, so, you can not send transactions to the accounts or smart contracts on the testnet. Thus, in this document, we will explain how to connect your ICONex chrome app to the testnet.  
