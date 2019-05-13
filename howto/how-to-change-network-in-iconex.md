@@ -13,6 +13,10 @@ When you develop a DApp, you will spend most of your time to test your smart con
 
 ![](https://raw.githubusercontent.com/icon-project/documentation/master/howto/images/iconex-network.png)
 
+## What about on iOS and Andoird ICONex
+You can enable developer mode on the ICONex apps to change the network. Please follow the guidelines below.
+- Android OS: https://github.com/icon-project/iconex_android#developer-mode
+- iOS: https://github.com/icon-project/iconex_ios#developer-mode
  
 
 
