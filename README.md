@@ -6,7 +6,7 @@ Documents that merged into the master branch are published on the developers por
  
 - howto
 	- [account-management](./howto/account-management.md)
-	- [how-to-change-network-in-iconex-chrome](./howto/how-to-change-network-in-iconex-chrome.md)
+	- [how-to-change-network-in-iconex](./howto/how-to-change-network-in-iconex.md)
 	- [how-to-generate-a-transaction-signature](./howto/how-to-generate-a-transaction-signature.md)
 	- [how-to-write-score-integration-test](./howto/how-to-write-score-integration-test.md)
 	- [how-to-write-score-unit-test](./howto/how-to-write-score-unit-test.md)
