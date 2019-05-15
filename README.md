@@ -37,6 +37,7 @@ Documents that merged into the master branch are published on the developers por
 	- [token-crowdsale](./sample-scores/token-crowdsale.md)
 - score
 	- [audit-checklist](./score/audit-checklist.md)
+	- [deploy-guideline](./score/deploy-guideline.md)
 	- [score-audit](./score/score-audit.md)
 	- [score-overview](./score/score-overview.md)
 	- [score-quickstart-p1](./score/score-quickstart-p1.md)
