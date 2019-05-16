@@ -81,7 +81,7 @@ Request is executed as **Synchronized** or **Asynchronized** like a querying req
 
 **Example**
 
-```Swift
+```swift
 // Synchronized request
 let response = iconService.sendTransaction(signedTransaction: signed).execute()
 
@@ -105,7 +105,7 @@ request.async { (result) in
 ```
 
 ### Initialize
-```Swift
+```swift
 init(provider: String, nid: String)
 ```
 
@@ -119,7 +119,7 @@ For more details of node URL and network id, see [ICON Network](the-icon-network
 
 #### Example
 
-```Swift
+```swift
 // ICON Mainnet
 let iconService = ICONService(provider: "https://ctz.solidwallet.io/api/v3", nid: "0x1")
 ```
@@ -129,7 +129,7 @@ let iconService = ICONService(provider: "https://ctz.solidwallet.io/api/v3", nid
 
 Get the last block information.
 
-```Swift
+```swift
 func getLastBlock() -> Request<Response.Block>
 ```
 
@@ -143,7 +143,7 @@ None
 
 #### Example
 
-```Swift
+```swift
 // Returns last block
 let response = iconService.getLastBlock().execute()
 
@@ -159,7 +159,7 @@ case .error(let error):
 
 Get the block information.
 
-```Swift
+```swift
 // Get block information by height.
 func getBlock(height: UInt64) -> Request<Response.Block>
 
@@ -180,7 +180,7 @@ func getBlock(hash: String) -> Request<Response.Block>
 
 #### Example
 
-```Swift
+```swift
 // Returns block information by block height
 let heightBlock = iconService.getBlock(height: 10532).execute()
 
@@ -199,7 +199,7 @@ case .error(let error):
 
 Calls an external function of SCORE API.
 
-```Swift
+```swift
 func call<T>(_ call: Call<T>) -> Request<T>
 ```
 
@@ -240,7 +240,7 @@ Using `Call<String>`, return an original hex String value.
 
 Using `Call<BigUInt>` return converted BigUInt value.
 
-```Swift
+```swift
 let ownerAddress: String = "hx07abc7a5b8a4941fc0b6930c88b462995acf929b"
 let scoreAddress: String = "cxf9148db4f8ec78823a50cb06c4fed83660af38d0"
 
@@ -274,7 +274,7 @@ case .failure(let error):
 
 Get the balance of the address.
 
-```Swift
+```swift
 func getBalance(address: String) -> Request<BigUInt>
 ```
 
@@ -290,7 +290,7 @@ func getBalance(address: String) -> Request<BigUInt>
 
 #### Example
 
-```Swift
+```swift
 // Returns the balance of specific address
 let response = iconService.getBalance(address: "hx9d8a8376e7db9f00478feb9a46f44f0d051aab57").execute()
 
@@ -306,7 +306,7 @@ case .error(let error):
 
 Get the SCORE API list.
 
-```Swift
+```swift
 func getScoreAPI(scoreAddress: String) -> Request<[Response.ScoreAPI]>
 ```
 
@@ -322,7 +322,7 @@ func getScoreAPI(scoreAddress: String) -> Request<[Response.ScoreAPI]>
 
 #### Example
 
-```Swift
+```swift
 // Returns the SCORE API list
 let response = iconService.getScoreAPI(scoreAddress: "cx0000000000000000000000000000000000000001").execute()
 
@@ -337,7 +337,7 @@ case .error(let error):
 ### `func` getTotalSupply
 
 get the total number of issued coins.
-```Swift
+```swift
 func getTotalSupply() -> Request<BigUInt>
 ```
 
@@ -350,7 +350,7 @@ None
 `Request` - Request instance for `icx_getTotalSupply` JSON-RPC API request. If the execution is successful, returns `Result<BigUInt, ICError>`.
 
 #### Example
-```Swift
+```swift
 // Returns total value of issued coins
 let response = iconService.getTotalSupply().execute()
 
@@ -364,7 +364,7 @@ case .error(let error):
 
 ### `func` getTransaction
 Get the transaction information.
-```Swift
+```swift
 func getTransaction(hash: String) -> Request<Response.TransactionByHashResult>
 ```
 
@@ -377,7 +377,7 @@ func getTransaction(hash: String) -> Request<Response.TransactionByHashResult>
 `Request` - Request instnace for `icx_getTransactionByHash` JSON-RPC API request. If the execution is successful, returns `Result<Response.TransactionByHashResult, ICError>`.
 
 #### Example
-```Swift
+```swift
 // Returns transaction information
 let response = iconService.getTransaction(hash: "0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238").execute()
 
@@ -391,7 +391,7 @@ case .error(let error):
 
 ### `func` getTransactionResult
 Get the transaction result information.
-```Swift
+```swift
 func getTransactionResult(hash: String) -> Request<Response.TransactionResult>
 ```
 
@@ -404,7 +404,7 @@ func getTransactionResult(hash: String) -> Request<Response.TransactionResult>
 `Request` - Request instance for `icx_getTransactionResult` JSON-RPC API request. If the execution is successful, returns `Result<Response.TransactionResult, ICError>`.
 
 #### Example
-```Swift
+```swift
 // Returns transaction result information
 let response = iconService.getTransactionResult(hash: "0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238").execute()
 
@@ -421,7 +421,7 @@ case .error(let error):
 
 Send a transaction that changes the state of address. Request is executed as **Synchronized** or **Asynchronized** like a querying request.
 
-```Swift
+```swift
 func sendTransaction(signedTransaction: SignedTransaction) -> Request<String>
 ```
 
@@ -437,7 +437,7 @@ func sendTransaction(signedTransaction: SignedTransaction) -> Request<String>
 
 #### Example
 
-```Swift
+```swift
 // Synchronized request
 let response = iconService.sendTransaction(signedTransaction: signed).execute()
 
@@ -463,13 +463,13 @@ request.async { (result) in
 
 ## `class` Wallet
 
-```Swift
+```swift
 class Wallet
 ```
 A class which provides EOA functions. It enables you to create, transform to Keystore or load wallet from Keystore.
 
 ### Initialize
-```Swift
+```swift
 init(privateKey: PrivateKey?)
 ```
 
@@ -482,7 +482,7 @@ init(privateKey: PrivateKey?)
 `Wallet` - Wallet instance.
 
 #### Example
-```Swift
+```swift
 // Create new wallet
 let wallet = Wallet(prviateKey: nil)    // will generate private key
 
@@ -517,7 +517,7 @@ do {
 ### `func` getSignature
 
 Generate signature string by signing transaction data.
-```Swift
+```swift
 func getSignature(data: Data) throws -> String
 ```
 
@@ -530,7 +530,7 @@ func getSignature(data: Data) throws -> String
 `String` - A signature string.(**Base64 encoded**)
 
 #### Example
-```Swift
+```swift
 let wallet = Wallet(privateKey: nil)
 do {
     let signature = try wallet.getSignature(data: toBeSigned)
@@ -550,14 +550,14 @@ do {
 
 ## `class` Transaction
 
-```Swift
+```swift
 class Transaction
 ```
 `Transaction` is a class representing a transaction data used for sending ICX.
 
 ### Initialize
 
-```Swift
+```swift
 // Create empty transaction object
 init()
 // Create transaction with data
@@ -578,7 +578,7 @@ convenience init(from: String, to: String, stepLimit: BigUInt, nid: String, valu
 ### `func` from
 
 Setter for `from` property.
-```Swift
+```swift
 func from(_ from: String) -> Self
 ```
 
@@ -603,7 +603,7 @@ let transaction = Transaction()
 ### `func` to
 
 Setter for `to` property.
-```Swift
+```swift
 func to(_ to: String) -> Self
 ```
 
@@ -627,7 +627,7 @@ let transaction = Transaction()
 ### `func` stepLimit
 
 Setter for `setpLimit` property.
-```Swift
+```swift
 func stepLimit(_ limit: BigUInt) -> Self
 ```
 
@@ -651,7 +651,7 @@ let transaction = Transaction()
 ### `func` nid
 
 Setter for `nid` property.
-```Swift
+```swift
 func nid(_ nid: String) -> Self
 ```
 
@@ -675,7 +675,7 @@ let transaction = Transaction()
 ### `func` value
 
 Setter for `value` property.
-```Swift
+```swift
 func value(_ value: BigUInt) -> Self
 ```
 
@@ -683,7 +683,7 @@ func value(_ value: BigUInt) -> Self
 
 | Parameter | Type | Description |
 | --- | --- | --- |
-| value | `BigUInt` | Sending amount of ICX in loop unit. (1 ICX = 10^18^ loop) |
+| value | `BigUInt` | Sending amount of ICX in loop unit. (1 ICX = 10<sup>18</sup> loop) |
 
 #### Returns
 
@@ -699,7 +699,7 @@ let transaction = Transaction()
 ### `func` nonce
 
 Setter for `nonce` property.
-```Swift
+```swift
 func nonce(_ nonce: String) -> Self
 ```
 
@@ -754,7 +754,7 @@ Transaction for invoking a *state-transition* function of SCORE.
 
 *Transaction parameter `dataType` will be fixed with `call`*
 
-```Swift
+```swift
 func method(_ method: String) -> Self
 ```
 
@@ -822,7 +822,7 @@ Send messages.
 
 *Transaction parameter `dataType` will be fixed with `message`.*
 
-```Swift
+```swift
 func message(_ message: String) -> Self
 ```
 
@@ -902,7 +902,7 @@ ICONKit supports converter functions.
 
 Convert ICX or gLoop to loop.
 
-> 1 ICX = 10 ^9^ gLoop = 10 ^18^ loop
+> 1 ICX = 10 <sup>9</sup> gLoop = 10<sup>18</sup> loop
 
 #### Paramters
 

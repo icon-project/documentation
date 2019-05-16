@@ -37,7 +37,7 @@ To integrate ICONKit into your project, specify it in your `Podfile`
 target '<Your Target Name>' do
     use_frameworks!
     ...
-    pod 'ICONKit', '~> 0.3.1    '
+    pod 'ICONKit', '~> 0.3.1'
     ...
 end
 ```
@@ -60,13 +60,13 @@ ICONKit uses [Result](https://github.com/antitypical/Result) framework. All func
 
 APIs are called through `ICONService`. It can be initialized as follows.
 
-```Swift
+```swift
 let iconService = ICONService(provider: "https://ctz.solidwallet.io/api/v3", nid: "0x1")
 ```
 
 A simple query of a block by height is as follows.
 
-```Swift
+```swift
 // ICON Mainnet
 let iconService = ICONService(provider: "https://ctz.solidwallet.io/api/v3", nid: "0x1")
 
@@ -89,7 +89,7 @@ All queries are requested by a `Request<T>`.
 #### Synchronous query
 `execute()` requests a query synchronously.
 
-```Swift
+```swift
 let response = iconService.getLastBlock().execute()
 
 switch response {
@@ -214,7 +214,7 @@ let request: Request<BigUInt> = iconService.getTotalSupply()
 
 Gets a transaction matching the given transaction hash.
 
-```Swift
+```swift
 let request: Request<Response.TransactionByHashResult> = iconService.getTransaction(hash: "0x000...000")
 ```
 
@@ -236,7 +236,7 @@ Before sending a transaction, the transaction should be signed. It can be done u
 
 #### Loading wallets and storing the keystore
 
-```Swift
+```swift
 // Generates a wallet.
 let wallet = Wallet(privateKey: nil)
 
@@ -265,7 +265,7 @@ do {
 
 #### Creating transactions
 
-```Swift
+```swift
 // Sending ICX
 let coinTransfer = Transaction()
     .from(wallet.address)
@@ -304,7 +304,7 @@ And a request is executed as **Synchronized** or **Asynchronized** like a queryi
 
 **Synchronous request** 
 
-```Swift
+```swift
 do {
     let signed = try SignedTransaction(transaction: coinTransfer, privateKey: privateKey)
     let request = iconService.sendTransaction(signedTransaction: signed)
@@ -375,7 +375,7 @@ let confirmedDate: Date = timestamp.hexToDate()! // 2019-03-27 03:16:22 +0000
 ### Wallet
 
 #### Create a wallet
-```Swift
+```swift
 // Create wallet with new private key.
 let wallet = Wallet(privateKey: nil)
 
@@ -385,7 +385,7 @@ let wallet = Wallet(privateKey: privateKey)
 ```
 
 #### Load a wallet
-```Swift
+```swift
  // Load a wallet from the keystore.
 do {
     let jsonData: Data = try Data(contentsOf: "YOUR_KEYSTORE_PATH")
@@ -398,7 +398,7 @@ do {
 ```
 
 #### Store the wallet
-```Swift
+```swift
 do {
     try wallet.generateKeystore(password: "YOUR_WALLET_PASSWORD")
     try wallet.save(filepath: "YOUR_STORAGE_PATH")
@@ -410,7 +410,7 @@ do {
 ### ICX Transfer
 
 #### ICX transfer transaction
-```Swift
+```swift
 // Sending ICX
 let coinTransfer = Transaction()
     .from(wallet.address)
@@ -456,7 +456,7 @@ case .failure(let error):
 
 #### Check the ICX balance
 
-```Swift
+```swift
 let iconService = ICONService(SELECTED_PROVIDER, nid: NID)
 let result = iconService.getBalance(address: wallet.address).execute()
 
@@ -472,7 +472,7 @@ case .failure(let error):
 ### Token Transfer
 
 #### Token transfer transaction
-```Swift
+```swift
 let call = CallTransaction()
     .from(wallet.address)
     .to(scoreAddress)
@@ -523,7 +523,7 @@ let response: Result<String, ICError> = request.execute() // return "0x56bc75e2d
 
 #### Read block information
 
-```Swift
+```swift
 // get last block
 let request: Request<Response.Block> = iconService.getLastBlock()
 // get block by height
@@ -542,7 +542,7 @@ case .failure:
 ```
 
 #### Transaction output
-```Swift
+```swift
 let request: Request<Response.TransactionByHashResult> = iconService.getTransaction(hash: "0x000...000")
 
 let result = request.execute()
