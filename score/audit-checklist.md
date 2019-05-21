@@ -454,30 +454,7 @@ def __init__(self, db: IconScoreDatabase) -> None:
 ```
 
 ### Temporary Limitation
-Due to the known issue of ArrayDB, declaring ArrayDB as a class member variable in __init__() may not work as intended. Following workaround is needed. ArrayDB instance must be initialized every time it is used.
-
-```python
-# Problematic (Original Usage)
-def __init__(self, db: IconScoreDatabase) -> None:
-    super().__init__(db)
-    self.test_array = ArrayDB('test_array', db, value_type=int)
-
-def func(self) -> None:
-    self.test_array.put(0)
-
-
-# Good (Temporary)
-@property
-def test_array(self) -> ArrayDB:
-    return ArrayDB('test_array', db, value_type=int)
-
-def __init__(self, db: IconScoreDatabase) -> None:
-    super().__init__(db)
-    # no declaration
-
-def func(self) -> None:
-    self.test_array.put(0)
-```
+N/A
 
 
 ## Warning
