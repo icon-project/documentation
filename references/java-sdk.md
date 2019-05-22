@@ -277,7 +277,7 @@ Bytes txHash = iconService.sendTransaction(signedTransaction).execute();
 ...
 ```
 
-Note that the estimation can be smaller or larger than the actual amount of step to be used by the transaction for several reasons,
+Note that the estimation can be smaller or larger than the actual amount of step to be used by the transaction,
 so it is recommended to add some margin to the estimation when you set the `stepLimit` of the `SignedTransaction`.
 
 ### Converter
