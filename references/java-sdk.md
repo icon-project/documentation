@@ -533,7 +533,7 @@ Get an estimated Step value using `estimateStep` API of `IconService`.
 BigInteger estimatedStep = iconService.estimateStep(transaction).execute();
 ```
 
-Generate a `SignedTransaction` with the same raw transaction and the estimated step.
+Generate a `SignedTransaction` with the same raw transaction and the estimated Step.
 Note that the estimation can be smaller or larger than the actual amount of step to be used by the transaction.
 So we need to add some margin value to the estimation when you set `stepLimit` parameter of `SignedTransaction`.
 
