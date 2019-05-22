@@ -20,7 +20,7 @@ This document is focused on how to use the SDK properly. For the detailed API sp
 
 This Java SDK works on the following platforms:
 
-- Java 8+ (for Java7, you can explore source code [here](https://github.com/icon-project/icon-sdk-java/blob/sdk-for-java7/README.md))
+- Java 8+ (for Java 7, you can explore source code [here](https://github.com/icon-project/icon-sdk-java/blob/sdk-for-java7/README.md))
 - Android 3.0+ (API 11+)
 
 ## Installation
@@ -268,7 +268,7 @@ Transaction transaction = TransactionBuilder.newBuilder()
 // get an estimated step value
 BigInteger estimatedStep = iconService.estimateStep(transaction).execute();
 
-// set some margin for the operation of `on_install`
+// set some margin
 BigInteger margin = BigInteger.valueOf(10000);
 
 // make a signed transaction with the same raw transaction and the estimated step
@@ -390,7 +390,7 @@ This example shows how to transfer ICX and check the result.
 
 #### ICX transfer transaction
 
-In this example, you can create a KeyWallet with `CommonData.PRIVATE_KEY_STRING` and transfer 1 ICX to `CommonData.ADDRESS_1`.
+In this example, you can create a `KeyWallet` with `CommonData.PRIVATE_KEY_STRING` and transfer 1 ICX to `CommonData.ADDRESS_1`.
 
 ```java
 Wallet wallet = KeyWallet.load(new Bytes(CommonData.PRIVATE_KEY_STRING));
@@ -448,7 +448,7 @@ System.out.println("transaction status(1:success, 0:failure):"+result.getStatus(
 transaction status(1:success, 0:failure):1
 ```
 
-You can check the following information using the TransactionResult.
+You can check the following information using the `TransactionResult`.
 
 - status : 1 (success), 0 (failure)
 - to : transaction’s receiving address
@@ -494,7 +494,7 @@ In this example, you will use ‘sampleToken.zip’ from the ‘resources’ fol
 
 * sampleToken.zip: SampleToken SCORE project zip file.
 
-Generate a keyWallet using `CommonData.PRIVATE_KEY_STRING`, then read the binary data from ‘sampleToken.zip’
+Generate a `KeyWallet` using `CommonData.PRIVATE_KEY_STRING`, then read the binary data from ‘sampleToken.zip’
 
 ```java
 Wallet wallet = KeyWallet.load(new Bytes(CommonData.PRIVATE_KEY_STRING));
@@ -514,7 +514,7 @@ RpcObject params = new RpcObject.Builder()
 	.build();
 ```
 
-Generate a raw transaction to deploy a token SCORE without the stepLimit value.
+Generate a raw transaction to deploy a token SCORE without the `stepLimit` value.
 
 ```java
 Transaction transaction = TransactionBuilder.newBuilder()
@@ -585,7 +585,7 @@ waiting accept score...
 
 You can get the token SCORE address by checking the `scoreAddress` from the deploy transaction result above, and use this to send the token.
 
-You can generate a KeyWallet using `CommonData.PRIVATE_KEY_STRING` just like in the case of `IcxTransactionExample`, then send 1 Token to `CommonData.ADDRESS_1`.
+You can generate a `KeyWallet` using `CommonData.PRIVATE_KEY_STRING` just like in the case of `IcxTransactionExample`, then send 1 Token to `CommonData.ADDRESS_1`.
 
 ```java
 Wallet wallet = KeyWallet.load(new Bytes(CommonData.PRIVATE_KEY_STRING));
