@@ -336,7 +336,7 @@ Person memberPerson = iconService.call(call).execute();
 
 ### Wallet
 
-This example shows how to create a new `KeyWallet` and load wallet with private key or Keystore file.
+This example shows how to create a new `KeyWallet` or load wallet with a private key or Keystore file.
 
 #### Create a wallet
 
