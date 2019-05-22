@@ -544,7 +544,7 @@ BigInteger margin = BigInteger.valueOf(10000);
 SignedTransaction signedTransaction = new SignedTransaction(transaction, wallet, estimatedStep.add(margin));
 ```
 
-You can check the transaction hash value by calling `sendTransaction` from `IconService`.
+Calling `sendTransaction` API of `IconService` will return the transaction hash.
 
 ```java
 Bytes txHash = iconService.sendTransaction(signedTransaction).execute();
