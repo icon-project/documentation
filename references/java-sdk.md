@@ -75,17 +75,6 @@ Once the request has been executed, the same request object cannot be executed a
 ```java
 Request<Block> request = iconService.getBlock(height);
 
-// Asynchronized request execution
-request.execute(new Callback<Block>(){
-    void onFailure(Exception exception) {
-        ...
-    }
-
-    void onResponse(Block block) {
-        ...
-    }
-});
-
 // Synchronized request execution
 try {
     Block block = request.execute();
@@ -93,6 +82,19 @@ try {
 } catch (Exception e) {
     ...
 }
+
+// Asynchronized request execution
+request.execute(new Callback<Block>(){
+    @Override
+    public void onSuccess(Block block) {
+        ...
+    }
+
+    @Override
+    public void onFailure(Exception exception) {
+        ...
+    }
+});
 ```
 
 The querying APIs are as follows.
@@ -217,26 +219,13 @@ Transaction transaction = TransactionBuilder.newBuilder()
 ```
 
 `SignedTransaction` object signs a transaction using the wallet.
-
 And the request can be executed as **Synchronized** or **Asynchronized** like a query request.
-
 Once the request has been executed, the same request object cannot be executed again.
 
 ```java
 SignedTransaction signedTransaction = new SignedTransaction(transaction, wallet);
 
 Request<Bytes> request = iconService.sendTransaction(signedTransaction);
-
-// Asynchronized request execution
-request.execute(new Callback<Bytes>(){
-    void onFailure(Exception e) {
-        ...
-    }
-
-    void onResponse(Bytes txHash) {
-        ...
-    }
-});
 
 // Synchronized request execution
 try {
@@ -245,6 +234,19 @@ try {
 } catch (Exception e) {
     ...
 }
+
+// Asynchronized request execution
+request.execute(new Callback<Bytes>() {
+    @Override
+    public void onSuccess(Bytes result) {
+        ...
+    }
+
+    @Override
+    public void onFailure(Exception exception) {
+        ...
+    }
+});
 ```
 
 
