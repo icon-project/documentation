@@ -268,7 +268,7 @@ Transaction transaction = TransactionBuilder.newBuilder()
 // get an estimated step value
 BigInteger estimatedStep = iconService.estimateStep(transaction).execute();
 
-// set some margin value
+// set some margin for the operation of `on_install`
 BigInteger margin = BigInteger.valueOf(10000);
 
 // make a signed transaction with the same raw transaction and the estimated step
@@ -535,10 +535,10 @@ BigInteger estimatedStep = iconService.estimateStep(transaction).execute();
 
 Generate a `SignedTransaction` with the same raw transaction and the estimated Step.
 Note that the estimation can be smaller or larger than the actual amount of step to be used by the transaction.
-So we need to add some margin value to the estimation when you set `stepLimit` parameter of `SignedTransaction`.
+So we need to add some margin to the estimation when you set the `stepLimit` of the `SignedTransaction`.
 
 ```java
-// Set some margin value for the operation of `on_install`
+// Set some margin for the operation of `on_install`
 BigInteger margin = BigInteger.valueOf(10000);
 
 SignedTransaction signedTransaction = new SignedTransaction(transaction, wallet, estimatedStep.add(margin));
