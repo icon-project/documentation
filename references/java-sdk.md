@@ -652,7 +652,7 @@ txHash:0x6b17886de346655d96373f2e0de494cb8d7f36ce9086cb15a57d3dcf24523c8f
 
 You can check the result with the returned hash value of your transaction.
 
-In this example, you can check your transaction result in every 2 seconds because of the block confirmation time.
+In this example, you check your transaction result in every 2 seconds because the block confirmation time is around 2 seconds.
 Checking the result is as follows:
 
 ```java
