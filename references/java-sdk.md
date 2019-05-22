@@ -527,7 +527,7 @@ Transaction transaction = TransactionBuilder.newBuilder()
 	.build();
 ```
 
-Get an estimated step value using `estimateStep` API of `IconService`.
+Get an estimated Step value using `estimateStep` API of `IconService`.
 
 ```java
 BigInteger estimatedStep = iconService.estimateStep(transaction).execute();
