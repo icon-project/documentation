@@ -252,7 +252,7 @@ try {
 
 It is important to set a proper `stepLimit` value in your transaction to make the submitted transaction executed successfully.
 
-You can get an estimated step before sending your transaction and use it later for making a `SignedTransaction`.
+`estimateStep` API provides a way to **estimate** the Step usage of a given transaction. Using the method, you can get an estimated Step usage before sending your transaction then make a `SignedTransaction` with the `stepLimit` based on the estimation.
 
 ```java
 // make a raw transaction without the stepLimit
