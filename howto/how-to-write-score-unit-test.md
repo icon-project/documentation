@@ -141,13 +141,14 @@ class SimpleScore(IconScoreBase):
         super().__init__(db)
         self.value = VarDB("value", db, value_type=str)
 
-    @eventlog()
+    @eventlog
     def SetValue(self, value: str): pass
 
     def on_install(self) -> None:
         super().on_install()
 
     def on_update(self) -> None:
+        """Set `value` attribute to `updated value`"""
         super().on_update()
         self.value.set("updated value")
     
@@ -157,12 +158,14 @@ class SimpleScore(IconScoreBase):
 
     @external
     def setValue(self, value: str):
+        """Set `value` attribute to given `value` parameter"""
         self.value.set(value)
 
         self.SetValue(value)
 
     @external(readonly=True)
     def getValue(self) -> str:
+        """Return value of `value` attribute"""
         return self.value.get()
         
 ```
@@ -199,21 +202,25 @@ class SimpleScore2(IconScoreBase):
         self.score_address.set(score_address)
 
     def on_update(self, value: str) -> None:
+        """"Set `value` attribute to given `value` parameter"""
         super().on_update()
         self.value.set(value)
     
     @external(readonly=True)
     def getValue(self) -> str:
+        """Return value of `value` attribute"""
         return self.value.get()
 
     @external
     def setValue(self, value: str):
+        """Set `value` attribute to given `value` parameter"""
         self.value.set(value)
 
         self.SetValue(value)
 
     @external
     def setSCOREValue(self, value: str):
+        """Invoke `setValue` method of SCORE having `self.score_address` as the address"""
         score = self.create_interface_score(self.score_address.get(), SimpleScoreInterface)
         score.setValue(value)
 
@@ -221,26 +228,28 @@ class SimpleScore2(IconScoreBase):
 
     @external(readonly=True)
     def getSCOREValue(self) ->str:
+        """Call `getValue` method of SCORE having `self.score_address` as the address"""
         score = self.create_interface_score(self.score_address.get(), SimpleScoreInterface)
 
         return score.getValue()
 
     @external(readonly=True)
     def write_on_readonly(self) ->str:
+        """Try set value on read-only method"""
         self.value.set('3')
         return 'd'
         
-    # This method is for understanding the ScoreTestCase.set_msg method.
     def t_msg(self):
+        """This method is for understanding the ScoreTestCase.set_msg method"""
         assert self.msg.sender == Address.from_string(f"hx{'1234'*10}")
         assert self.msg.value == 3
     
-    # This method is for understanding the ScoreTestCase.set_tx method.
     def t_tx(self):
+        """This method is for understanding the ScoreTestCase.set_tx method"""
         assert self.tx.origin == Address.from_string(f"hx{'1234'*10}")
     
-    # This method is for understanding the ScoreTestCase.set_block method.
     def t_block(self):
+        """This method is for understanding the ScoreTestCase.set_block method"""
         assert self.block.height == 3
         assert self.block.timestamp == 30
         assert self.block_height ==3
@@ -271,6 +280,7 @@ class TestSimple(ScoreTestCase):
         self.initialize_accounts(account_info)
 
     def test_set_value(self):
+        """Testing setValue method of SimpleScore2"""
         str_value = 'string_value'
         self.score2.setValue(str_value)
         # assert event log called with specified arguments
@@ -279,6 +289,7 @@ class TestSimple(ScoreTestCase):
         self.assertEqual(self.score2.getValue(), str_value)
 
     def test_get_value_and_set_value(self):
+        """Testing getValue method of SimpleScore2"""
         # at first, value is empty string
         self.assertEqual(self.score2.getValue(), '')
 
@@ -289,10 +300,12 @@ class TestSimple(ScoreTestCase):
 
     # try writing value inside readonly method
     def test_write_on_readonly(self):
+        """Testing write_on_readonly method of SimpleScore2"""
         self.assertRaises(DatabaseException, self.score2.write_on_readonly)
 
-    # internal call
+    # internal call(Calling other SCORE's method)
     def test_internal_call(self):
+        """Testing getSCOREValue method and setSCOREValue method of SimpleScore2"""
         self.patch_internal_method(self.mock_score_address, 'getValue', lambda: 150) # Patch the getValue function of SCORE at self.mock_score_address address with a function that takes no argument and returns 150
         value = self.score2.getSCOREValue()
         self.assertEqual(value, 150)
@@ -301,14 +314,15 @@ class TestSimple(ScoreTestCase):
         self.score2.setSCOREValue('asdf')
         self.assert_internal_call(self.mock_score_address, 'setValue', 'asdf') # assert setValue in self.mock_score_address is called with 'asdf'
 
-    # internal call
     def test_internal_call2(self):
+        """Testing setSCOREValue method of SimpleScore2"""
         # To determine whether a method is called properly with specified arguments, calling register_interface_score method is enough
         self.register_interface_score(self.mock_score_address)
         self.score2.setSCOREValue('asdf')
         self.assert_internal_call(self.mock_score_address, 'setValue', 'asdf')
         
     def test_msg(self):
+        """Testing t_msg method of SimpleScore2"""
         self.set_msg(Address.from_string(f"hx{'1234'*10}"), 3)
         self.score2.t_msg() # On the upper line, set the msg property to pass the assert statement so that no exception is raised.
 
@@ -316,6 +330,7 @@ class TestSimple(ScoreTestCase):
         self.assertRaises(AssertionError, self.score2.t_msg) # On the upper line, set the msg property not to pass the assert statement, and raise an exception.
 
     def test_tx(self):
+        """Testing t_tx method of SimpleScore2"""
         self.set_tx(Address.from_string(f"hx{'1234'*10}"))
         self.score2.t_tx() # On the upper line, set the tx property to pass the assert statement so that no exception is raised.
 
@@ -323,6 +338,7 @@ class TestSimple(ScoreTestCase):
         self.assertRaises(AssertionError, self.score2.t_tx) # On the upper line, set the tx property not to pass the assert statement, and raise an exception.
 
     def test_block(self):
+        """Testing t_block method of SimpleScore2"""
         self.set_block(3, 30)
         self.score2.t_block() # On the upper line, set the block property to pass the assert statement so that no exception is raised.
 
@@ -330,6 +346,7 @@ class TestSimple(ScoreTestCase):
         self.assertRaises(AssertionError, self.score2.t_block) # On the upper line, set the block property not to pass the assert statement, and raise an exception.
         
     def test_update(self):
+        """Testing on_update method of SimpleScore2"""
         self.score2 = self.update_score(self.score2.address, SimpleScore2, on_update_params={"value": "updated_value"})
         self.assertEqual(self.score2.value.get(), "updated_value") # In the on_update method of SimpleScore2, set the value of the value to "updated_value".
 
