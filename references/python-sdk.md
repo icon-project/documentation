@@ -224,7 +224,7 @@ You can load an existing EOA by calling `load` function.
 After creation, the address and private Key can be looked up.
 
 ```python
-# Loads a wallet from a key store file
+# Loads a wallet from a private key
 wallet = KeyWallet.load(TEST_PRIVATE_KEY) # bytes of the private key
 print("address: ", wallet.get_address()) # Returns an address
 print("private key: ", wallet.get_private_key()) # Returns a private key
