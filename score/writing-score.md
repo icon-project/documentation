@@ -386,8 +386,18 @@ Return types can be `int`, `str`, `bytes`, `bool`, `Address`, `list` and `dict`.
 When you handle exceptions in your contract, it is recommended to use `revert` function
 rather than using an `IconScoreException`.
 
+## Restrictions
+
+There are certain SCORE functions that ICON Tracker calls to display the SCORE information - `name`, `symbol`, and `decimal`. ICON Tracker loads this information once on the initial SCORE deploy, and will never update. This is to prevent any attempt to fraud, and not to confuse end-users. Therefore, ICON prevents changing `name`, `symbol`, and `decimal` of SCORE. Please read the [Audit Checklist](https://www.icondev.io/docs/audit-checklist#section-fixed-score-infomation) for detailed coding guideline. 
+
+**name, decimal, symbol**
+
+For IRC-2 token contract, you should not change `name`, `decimal`, and `symbol` of the token once deployed. 
+For every other SCORE, you should not change `name` once deployed. Note that unlike IRC tokens, `name` is not a mandatory function to implement. If you didn't implement `name` function in your first deploy, you cannot add `name` function on a subsequent update, because it is considered as changing the name.
+
 
 ## Reference
 - [iconservice API references](doc:iconservice-api-references)
 - [Token & Crowdsale](doc:token-crowdsale)
 - [T-Bears CLI Reference](doc:t-bears-cli-reference)
+- [Audit Checklist](audit-checklist#section-fixed-score-infomation)
