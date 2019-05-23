@@ -16,7 +16,7 @@ Service owners who want their users to use their dApp services without any trans
 
 Service owners are able to set some policy options for the transaction fee following this document.
 * Service owners can pay the transaction fee instead of service users.
-* Service owners can save the transaction fee with the new feature called **virtual step**.
+* Service owners want to use the new feature called virtual step to save the transaction fee.
 
 ## Prerequisite 
 
