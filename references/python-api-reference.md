@@ -402,7 +402,7 @@ from iconsdk.wallet.wallet import KeyWallet
 # Generates a wallet
 wallet = KeyWallet.create()
 
-# Loads a wallet from bytes of the private key
+# Loads a wallet from a private key in bytes
 wallet = KeyWallet.load(b'-B\x99...xedy')
 
 # Loads a wallet from a keystore file
@@ -911,7 +911,86 @@ Transaction hash prefixed with '0x'
 tx_hash = icon_service.send_transaction(signed_transaction)
 ```
 
+
+
+## Estimating Step
+
+It is important to set a proper `step_limit` value in your transaction to make the submitted transaction executed successfully.
+
+`estimate_step` API provides a way to **estimate** the Step usage of a given transaction. Using the method, you can get an estimated Step usage before sending your transaction then make a `SignedTransaction` with the `step_limit` based on the estimation.
+
+### Examples
+
+```python
+# Generates a raw transaction without the stepLimit
+transaction = TransactionBuilder()\
+    .from_(wallet.get_address())\
+    .to("cx00...02")\
+    .value(150000000)\
+    .nid(3)\
+    .nonce(100)\
+    .build()
+    
+# Returns an estimated step value
+estimate_step = icon_service.estimate_step(transaction)
+
+# Adds some margin to the estimated step 
+estimate_step += 10000
+
+# Returns the signed transaction object having a signature with the same raw transaction and the estimated step
+signed_transaction = SignedTransaction(transaction, wallet, estimate_step)
+
+# Sends the transaction
+tx_hash = icon_service.send_transaction(signed_transaction)
+```
+
+Note that the estimation can be smaller or larger than the actual amount of step to be used by the transaction, so it is recommended to add some margin to the estimation when you set the `step_limit` of the `SignedTransaction`.
+
+
+
+### estimate_step
+
+```python
+estimate_step(transaction: Transaction)
+```
+
+Returns an estimated step of how much step is necessary to allow the transaction to complete
+
+Delegates to **debug_estimateStep** RPC method
+
+#### Parameters
+
+transaction : An Transaction object made by TransactionBuilder
+
+#### Returns
+
+Number of an estimated step
+
+#### Error Cases
+
+- DataTypeException : Data type is invalid.
+- JSONRPCException :  JSON-RPC Response is error.
+
+#### Example
+
+```python
+# Generates a raw transaction without the stepLimit
+transaction = TransactionBuilder()\
+    .from_(wallet.get_address())\
+    .to("cx00...02")\
+    .value(150000000)\
+    .nid(3)\
+    .nonce(100)\
+    .build()
+    
+# Returns an estimated step value
+estimate_step = icon_service.estimate_step(transaction)
+```
+
+
+
 ### Reference
+
 - [ICON JSON-RPC API v3](icon-json-rpc-v3)
 - [ICON SDK for Python (Previous version)](https://github.com/icon-project/icon_sdk_for_python) - Reference to [ICON JSON-RPC API **v2**](https://github.com/icon-project/icx_JSON_RPC)
 
