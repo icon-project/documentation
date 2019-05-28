@@ -31,4 +31,4 @@ To pass an ICON audit, we recommend you do the following.
 
 ## Notes
 
-This audit process would be temporary as current ICON network is in the beginning of its journey as a public network. We confirm that we do not have any intention of controlling DApps. Our first priority is maintaining ICON network as stable as possible, and minimizing any negative impacts, if any, on our partners business running on ICON.
+We confirm that we do not have any intention of controlling DApps. Our first priority is maintaining ICON network as stable as possible, and minimizing any negative impacts, if any, on our partners business running on ICON.
