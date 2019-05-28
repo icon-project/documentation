@@ -3,32 +3,31 @@ title: "How to Estimate Required STEP"
 excerpt: ""
 ---
 
-To make the submitted TX be executed successfully, the `step_limit` property should be input properly. 
-This document explains how to estimate the required STEPs.
+It is important to set a proper `stepLimit` value in your transaction to make the submitted transaction executed successfully. 
+This document explains how to systemically estimate the required Step.
 
 
 ## Intended Audience
 
-Anybody who sends transactions to ICON Network using their own systems(using SDKs, TBears or JSON-RPC for ICON).
+Anyone who sends transactions to the ICON Network
 
 ## Purpose
 
-Users are able to estimate the required STEPs for their transactions following this document.
+To learn how to estimate the required Step for their transactions using ICON SDKs, T-Bears CLI or  JSON-RPC API calls.
 
 ## Prerequisite 
 
-- Knowledge of the ICON JSON RPC.
-- Need to know how to submit a transaction to the ICON Network.
+- Understand how ICON JSON-RPC APIs work.
+- Need to know how to submit a transaction to the ICON Network using various tools.
 
-## How-To 
+## How-To
 
-The STEP estimation can be requested through JSON-RPC, similar form to sending transactions.
+The mechanism of requesting Step estimation is very similar to sending transactions.
 
-#### Sending Transaction
+### Request and Response
+#### Transaction Request
 
-Transactions will be submitted as the following example.
-
-This example shows the transaction request that invoking `transfer` on an IRC2 contract.
+The following example is a transaction request message that will invoke the `transfer` method on the IRC2 token contract.
 
 ```json
 {
@@ -56,13 +55,12 @@ This example shows the transaction request that invoking `transfer` on an IRC2 c
 }
 ```
 
-#### Estimate
+#### Step Estimate Request
 
-The estimation request is quite similar to the above except the `stepLimit`, `signature` of the `params` fields.
+The step estimation request is the same as the above example except the `stepLimit` and `signature`.
+The `stepLimit` and `signature` fields are unnecessary because the step estimation process does not verify the sender, nor limit the execution until the cumulative step reaches the `stepLimit`. 
 
-The `stepLimit`, `signature` fields are unnecessary because it should not be limited STEPs when STEP calculating, and it is not necessary to verify the sender.
-
-The following example shows the STEP estimation request of the transaction above.
+The following example is the Step estimation request for the above token transfer transaction. You can simply remove the `stepLimit` and `signature` fields from the original transaction request.
 
 ```json
 {
@@ -88,9 +86,9 @@ The following example shows the STEP estimation request of the transaction above
 }
 ```
 
-#### Response
+#### Response - Success
 
-If there are no exceptions, the response shows the estimated STEPs as follow.
+If there are no exceptions, the response will return the estimated Step usage as follows.
 
 ```json
 {
@@ -100,9 +98,9 @@ If there are no exceptions, the response shows the estimated STEPs as follow.
 }
 ```
 
-#### Failure
+#### Response - Fail
 
-If there exist exceptions, the response shows the exception message.
+If there is an exception, the response will show the error message.
 
 ```json
 {
@@ -115,115 +113,46 @@ If there exist exceptions, the response shows the exception message.
 }
 ```
 
-## Using T-Bears (NOT CONFIRMED)
+### JSON-RPC API call
+Debug API Endpoint : <scheme>://<host>/api/debug/v3
 
-Using T-Bears, the estimation can be queried by `estimate` command.
-
-```shell
-(venv)$ tbears estimate transfer.json
-estimated steps: 147340
+You can make a step estimation request using curl from the CLI as follows. Note that in the below command example, `stepEstimationRequest.json` is the file that contains the request message. 
+```bash
+$ curl -H "Content-Type: application/json" -d @stepEstimationRequest.json https://bicon.net.solidwallet.io/api/debug/v3
+{"jsonrpc": "2.0", "result": "0x23f8c", "id": 1234}
 ```
 
-For more details [here]()
+### Java 
 
-## Using SDKs (NOT CONFIRMED)
+Coming Soon
 
-Official SDKs support the estimation functionality.
+### Python 
 
-### Java (NOT CONFIRMED)
+Coming Soon
 
-```java
-Transaction transaction = TransactionBuilder.newBuilder()
-    .nid(networkId)
-    .from(wallet.getAddress())
-    .to(scoreAddress)
-    .nonce(new BigInteger("1000000"))
-    .call("transfer")
-    .params(params)
-    .build();
+### JavaScript 
 
-Request<BigInteger> request = iconService.estimateStep(transaction);
+TBA
 
-try {
-    BigInteger estimatedSteps = request.execute();
-    ...
-} catch (...) {
-    ...
-}        
-```
+### Swift
 
-For more details [here]()
+TBA
 
-### JavaScript (NOT CONFIRMED)
+### T-Bears 
 
-```javascript
-const txObj = new CallTransactionBuilder()
-    .from('hx902···3b5')
-    .to('cx350···48d')
-    .stepLimit(IconConverter.toBigNumber('2000000'))
-    .nid(IconConverter.toBigNumber('3'))
-    .nonce(IconConverter.toBigNumber('1'))
-    .version(IconConverter.toBigNumber('3'))
-    .timestamp((new Date()).getTime() * 1000)
-    .method('transfer')
-    .params({
-        _to: 'hxd00···497',
-        _value: IconConverter.toHex(IconAmount.of(1, IconAmount.Unit.ICX).toLoop()),
-    })
-    .build()
-
-const estimatedSteps = await iconService.estimateStep(txObj).execute();
-```
-
-For more details [here]()
-
-### python (NOT CONFIRMED)
-
-```python
-transaction = CallTransactionBuilder()\
-    .from_(wallet.get_address())\
-    .to("cx00...02")\
-    .step_limit(1000000)\
-    .nid(3)\
-    .nonce(100)\
-    .method("transfer")\
-    .params(params)\
-    .build()
-
-estimated_steps = icon_service.estimate_step(transaction)
-```
-
-For more details [here]()
-
-### swift (NOT CONFIRMED)
-
-```swift
-let call = CallTransaction()
-    .from(wallet.address)
-    .to(scoreAddress)
-    .stepLimit(BigUInt(1000000))
-    .nid(self.iconService.nid)
-    .nonce("0x1")
-    .method("transfer")
-    .params(["_to": to, "_value": "0x1234"])
-
-let request: Request<BigUInt> = iconService.estimateStep(call)
-let result = request.execute()
-```
-
-For more details [here]()
+TBA
 
 ## Summary
 
-With the `debug_estimateStep` API, users can know how much STEPs are required for a particular transaction at the current block state.
+With the `debug_estimateStep` JSON-RPC API, developers can estimate how much Step will be required for a particular transaction under the current block state.
 
-However, the queried value is just an **ESTIMATED** value. 
-The required STEPs are variable by the current block state, the block state may not be the same between when estimating and submitting.
+However, please be aware that the returned value is just an **ESTIMATION**. 
+The block state may not reamain the same between the Step estimation and the actual transaction execution time. The required Step can be different if the block state changes.
 
 
 ## References
 
-- [ICON JSON RPC](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md#debug_estimateStep)
+- [ICON JSON RPC](icon-json-rpc-v3#section-debug_estimatestep)
 - [T-Bears]()
 - [Java SDK]()
 - [JavaScript SDK]()
