@@ -251,6 +251,7 @@ request.execute(new Callback<Bytes>() {
 
 
 ### Step Estimation
+@ Available since: 0.9.12
 
 It is important to set a proper `stepLimit` value in your transaction to make the submitted transaction executed successfully.
 
