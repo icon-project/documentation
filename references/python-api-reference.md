@@ -917,7 +917,7 @@ tx_hash = icon_service.send_transaction(signed_transaction)
 
 It is important to set a proper `step_limit` value in your transaction to make the submitted transaction executed successfully.
 
-`estimate_step` API provides a way to **estimate** the Step usage of a given transaction. Using the method, you can get an estimated Step usage before sending your transaction then make a `SignedTransaction` with the `step_limit` based on the estimation.
+`estimate_step` API provides a way to **estimate** the Step usage of a given transaction. Using the method, you can get an estimated Step usage before sending your transaction, then based on the estimation, decide the optimal `step_limit` in your `SignedTransaction`.
 
 ### Examples
 
