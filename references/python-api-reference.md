@@ -935,7 +935,7 @@ transaction = TransactionBuilder()\
 estimate_step = icon_service.estimate_step(transaction)
 
 # Adds some margin to the estimated step 
-estimate_step += 10000
+step_limit = estimate_step + 10000
 
 # Returns the signed transaction object having a signature with the same raw transaction and the estimated step
 signed_transaction = SignedTransaction(transaction, wallet, estimate_step)
