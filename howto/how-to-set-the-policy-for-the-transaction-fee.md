@@ -3,10 +3,11 @@ title: "How to set the policy for the transaction fee"
 excerpt: ""
 ---
 
-기존 아이콘 망에서 사용자들은 거래를 처리하기 위해서 거래 수수료를 지불해야 한다.
-Users should have paid the transaction fee for executing a transaction in existing ICON Network.
-그러나 이러한 거래 수수료는 서비스 사용자를 끌어들이는데 치명적인 요소가 된다.
-This document introduces the new policy for the transaction fee.
+## Overview
+
+Users should have paid the transaction fee for executing a transaction on existing ICON Network. But this transaction fee was the large obstacle that service owners draw a lot of users to their services. Thus we provide the new features called "fee sharing" and "virtual step" to solve this well-known problem.
+
+This document introduces how to use fee sharing and virtual step and what benefits service owners can get from the new features.
 
 ## Intended Audience
 
@@ -15,29 +16,112 @@ Service owners who want their users to use their dApp services without any trans
 ## Purpose
 
 Service owners are able to set some policy options for the transaction fee following this document.
+
 * Service owners can pay the transaction fee instead of service users.
-* Service owners want to use the new feature called virtual step to save the transaction fee.
+* Service owners can save transaction fees consumed while running their services with the new solution **"virtual step"**.
 
 ## Prerequisite 
 
-* Knowledge of the ICON JSON-RPC.
-* Need to know how to submit a transaction to the ICON Network.
+* Basic concept of transaction fee and step on ICON Network
+* Knowledge of the ICON JSON-RPC APIs.
 
 ## How-To
 
 ### Make a SCORE which supports fee sharing
+
+SCORE에서 TX를 처리하는데 필요한 수수료를 사용자 대신 SCORE가 부담하도록 하기 위해서는 먼저 SCORE가 부담하는 수수료 비율을 정해주어야 한다. 기본 동작은 사용자가 TX의 모든 수수료를 부담한다.
+
+SCORE 내에서 수수료 부담 비율을 조절하기 위해서 다음의 IconScoreBase 메소드들을 제공한다.
+
+* get_fee_sharing_proportion(self) -> int
+	* 현재 설정되어 있는 SCORE의 수수료 부담 비율을 리턴한다.
+	* Return value
+		* The proportion of the transaction fee that SCORE will pay
+		* 100 means that SCORE will pay 100% of transaction fee instead of transaction sender.
+		* Integer between 0 to 100
+* set_fee_sharing_proportion(self, proportion: int)
+	* SCORE의 수수료 부담 비율을 재설정한다.
+	* 여러 번 호출될 경우 최종 값으로 수수료 부담 비율이 결정된다.
+
+#### Example SCORE
+```python
+from iconservice import *
+
+class FeeSharing(IconScoreBase):
+
+    def __init__(self, db: IconScoreDatabase) -> None:
+        super().__init__(db)
+
+        self._whitelist = DictDB("whitelist", db, int)
+        self._value = VarDB("value", db, str)
+
+    def on_install(self) -> None:
+        super().on_install()
+
+        self._value.set("No value")
+
+    def on_update(self) -> None:
+        super().on_update()
+
+    def _check_owner(self):
+        if self.tx.origin != self.owner:
+            revert("Invalid SCORE owner")
+
+    @staticmethod
+    def _check_proportion(proportion: int):
+        if not (0 <= proportion <= 100):
+            revert(f"Invalid proportion: {proportion}")
+
+    @external(readonly=True)
+    def getFeeSharingProportion(self) -> int:
+        return self._whitelist.get(tx.origin, 0)
+
+    @external
+    def addToWhitelist(self, address: Address, proportion: int) -> None:
+        self._check_owner()
+        self._check_proportion(proportion)
+
+        self._whitelist[address] = proportion
+
+    @external
+    def removeFromwhitelist(self, address: Address) -> None:
+        self._check_owner()
+        self._whitelist.remove(address)
+
+    @external(readonly=True)
+    def getValue(self) -> str:
+        return self._value.get()
+
+    @external
+    def setValue(self, value: str) -> None:
+        if not isinstance(value, str):
+            revert("Invalid value")
+
+        self._value.set(value)
+        
+        proportion: int = self._whitelist.get(tx.origin, 0)
+        self.set_fee_sharing_proportion(proportion)
+```
+
+#### Transaction Result
 
 ### Add a deposit
 
 ```json
 {
     "jsonrpc": "2.0",
-    "id": 1,
     "method": "icx_sendTransaction",
+    "id": 1234,
     "params": {
-        "from": "hx4873b94352c8c1f3b2f09aaeccea31ce9e90bd31",
-        "to": "cx4d6f646441a3f9c9b91019c9b98e3c342cceb114",
+        "version": "0x3",
+        "from": "hxbe258ceb872e08851f1f59694dac2558708ece11",
+        "to": "cxbe258ceb872e08851f1f59694dac2558708ece11",
         "value": "0x10f0cf064dd59200000",
+        "stepLimit": "0x12345",
+        "timestamp": "0x563a6cf330136",
+        "nid": "0x3",
+        "nonce": "0x1",
+        "signature": "VAia7YZ2Ji6igKWzjR2YsGa2m53nKPrfK7uXYW78QLE+ATehAVZPC40szvAiA6NEU5gCYB4c4qaQzqDh2ugcHgA=",
         "dataType": "deposit",
         "data": {
             "action": "add"
@@ -48,21 +132,27 @@ Service owners are able to set some policy options for the transaction fee follo
 
 ### Withdraw a deposit
 
-SCORE owner can withdraw a deposit using the following JSON-RPC API
+* SCORE owner can withdraw a deposit using the following JSON-RPC API
+* Caution: if SCORE owners want to withdraw the deposit which does not expires, they can do it with some penalty which is the same as the quantity of consumed virtual steps.
 
 ```json
 {
     "jsonrpc": "2.0",
-    "id": 1,
     "method": "icx_sendTransaction",
+    "id": 1234,
     "params": {
-        "from": "hx4873b94352c8c1f3b2f09aaeccea31ce9e90bd31",
-        "to": "cx4d6f646441a3f9c9b91019c9b98e3c342cceb114",
-        "value": "0x10f0cf064dd59200000",
+        "version": "0x3",
+        "from": "hxbe258ceb872e08851f1f59694dac2558708ece11",
+        "to": "cxbe258ceb872e08851f1f59694dac2558708ece11",
+        "stepLimit": "0x12345",
+        "timestamp": "0x563a6cf330136",
+        "nid": "0x3",
+        "nonce": "0x1",
+        "signature": "VAia7YZ2Ji6igKWzjR2YsGa2m53nKPrfK7uXYW78QLE+ATehAVZPC40szvAiA6NEU5gCYB4c4qaQzqDh2ugcHgA=",
         "dataType": "deposit",
         "data": {
             "action": "withdraw",
-            "id": "0x78a7286833a17fc2b614da54e5a20d80748f041c81485244bf557445b19f5c07"
+            "id": "0x4bf74e6aeeb43bde5dc8d5b62537a33ac8eb7605ebbdb51b015c1881b45b3111"
         }
     }
 }
