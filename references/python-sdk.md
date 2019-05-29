@@ -56,6 +56,8 @@ After that, you need to create an IconService instance and set a provider.
 - A **provider** defines how the IconService connects to Loopchain.
 - The **HTTPProvider** takes a base domain URL where the server can be found. For local development, this would be something like http://localhost:9000.
 
+> **Note**: You’ll need to set HTTPProvider with not a full URI but a base domain URL on iconsdk 1.0.9 or later on your local development machine.
+
 Here is an example of calling a simple API method to get a block by its height :
 
 ```python

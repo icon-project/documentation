@@ -919,6 +919,8 @@ It is important to set a proper `step_limit` value in your transaction to make t
 
 `estimate_step` API provides a way to **estimate** the Step usage of a given transaction. Using the method, you can get an estimated Step usage before sending your transaction, then based on the estimation, decide the optimal `step_limit` in your `SignedTransaction`.
 
+> **Note**: You’ll need to have iconsdk 1.0.9 or later on your local development machine to use 'estimate_step' API.
+
 ### Examples
 
 ```python
