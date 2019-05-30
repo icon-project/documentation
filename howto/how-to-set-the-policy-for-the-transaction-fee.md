@@ -47,7 +47,11 @@ SCORE 내에서 수수료 부담 비율을 조절하기 위해서 다음의 Icon
 ```python
 from iconservice import *
 
+
 class FeeSharing(IconScoreBase):
+
+    @eventlog(indexed=1)
+    def ValueSet(self, address: Address, proportion: int): pass
 
     def __init__(self, db: IconScoreDatabase) -> None:
         super().__init__(db)
@@ -73,20 +77,15 @@ class FeeSharing(IconScoreBase):
             revert(f"Invalid proportion: {proportion}")
 
     @external(readonly=True)
-    def getFeeSharingProportion(self) -> int:
-        return self._whitelist.get(tx.origin, 0)
+    def getProportion(self, address: Address) -> int:
+        return self._whitelist[address]
 
     @external
-    def addToWhitelist(self, address: Address, proportion: int) -> None:
+    def addToWhitelist(self, address: Address, proportion: int = 100) -> None:
         self._check_owner()
         self._check_proportion(proportion)
 
         self._whitelist[address] = proportion
-
-    @external
-    def removeFromwhitelist(self, address: Address) -> None:
-        self._check_owner()
-        self._whitelist.remove(address)
 
     @external(readonly=True)
     def getValue(self) -> str:
@@ -94,16 +93,109 @@ class FeeSharing(IconScoreBase):
 
     @external
     def setValue(self, value: str) -> None:
-        if not isinstance(value, str):
-            revert("Invalid value")
-
         self._value.set(value)
-        
-        proportion: int = self._whitelist.get(tx.origin, 0)
+
+        proportion: int = self._whitelist[self.tx.origin]
         self.set_fee_sharing_proportion(proportion)
+
+        self.ValueSet(self.tx.origin, proportion)
 ```
 
 #### Transaction Result
+
+0%
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "txHash": "0xcfadd0ff7fc152f23c0ce92be4675d36743db11c25378a5a17560d286f641362",
+        "blockHeight": "0x11",
+        "blockHash": "0x8ae111527f885a0ca79e431c47624e35a01e2eb8169e406725ea785a9bf2cfc8",
+        "txIndex": "0x0",
+        "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+        "stepUsed": "0x20be8",
+        "stepPrice": "0x2540be400",
+        "cumulativeStepUsed": "0x20be8",
+        "eventLogs": [],
+        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "status": "0x1"
+    },
+    "id": 1
+}
+```
+
+50%
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "txHash": "0x5ca11a63e24cdb837026d4a20165d0246ecfc7bc40d84eaa33bdf43538b318c8",
+        "blockHeight": "0x17",
+        "blockHash": "0x53e6c94078e6b94135fe773675493dcc47ea62e8878e48eacd3044f5068d7bf1",
+        "txIndex": "0x1",
+        "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+        "stepUsed": "0x21bc4",
+        "stepPrice": "0x2540be400",
+        "cumulativeStepUsed": "0x43788",
+        "eventLogs": [
+            {
+                "scoreAddress": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+                "indexed": [
+                    "ValueSet(Address,int)",
+                    "hx93a1562d85982de882b5fa4df05d42d35a7db0b1"
+                ],
+                "data": [
+                    "0x32"
+                ]
+            }
+        ],
+        "logsBloom": "0x00000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000020002000000000000000100000000000000000080000004000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000",
+        "status": "0x1",
+        "stepUsedDetails": {
+            "hx93a1562d85982de882b5fa4df05d42d35a7db0b1": "0x10de2",
+            "cx216e1468b780ac1b54c328d19ea23a35a6899e55": "0x10de2"
+        }
+    },
+    "id": 1
+}
+```
+
+100%
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "txHash": "0x768a27f1591e0fe207b18a61632f50a9e32fd95898e3ef0e308d5c202ed5c48d",
+        "blockHeight": "0x18",
+        "blockHash": "0x3f94e2b1ba00af07bc4b2f8f6dfbe0cbaed5c608cd213d6e12b264e3db210bcd",
+        "txIndex": "0x0",
+        "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+        "stepUsed": "0x21bc4",
+        "stepPrice": "0x2540be400",
+        "cumulativeStepUsed": "0x21bc4",
+        "eventLogs": [
+            {
+                "scoreAddress": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+                "indexed": [
+                    "ValueSet(Address,int)",
+                    "hx6a94ebb8726b6f87aec5f7f1049bfcb1833f1bf4"
+                ],
+                "data": [
+                    "0x64"
+                ]
+            }
+        ],
+        "logsBloom": "0x00000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020002000000000000000000000000000000000080000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000100000000000000002000080000000000000000000000000000000000000000020000000000000000000000000000",
+        "status": "0x1",
+        "stepUsedDetails": {
+            "cx216e1468b780ac1b54c328d19ea23a35a6899e55": "0x21bc4"
+        }
+    },
+    "id": 1
+}
+```
+
+
 
 ### Add a deposit
 
