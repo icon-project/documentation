@@ -198,7 +198,8 @@ Finally, you can send a transaction with the signed transaction object as follow
 tx_hash = icon_service.send_transaction(signed_transaction)
 ```
 
-#### Estimate step
+### Step Estimation
+@ Available since: iconsdk 1.0.9
 
 It is important to set a proper `step_limit` value in your transaction to make the submitted transaction executed successfully.
 
@@ -229,7 +230,6 @@ tx_hash = icon_service.send_transaction(signed_transaction)
 
 Note that the estimation can be smaller or larger than the actual amount of step to be used by the transaction, so it is recommended to add some margin to the estimation when you set the `step_limit` of the `SignedTransaction`.
 
-#### 
 
 ## Code Examples
 
