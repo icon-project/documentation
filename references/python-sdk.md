@@ -43,7 +43,7 @@ $ pip install iconsdk
 
 
 
-## How to Use
+## Using the SDK
 
 Import, initialize, deinitialize, and basic call that applies to every or most code to use the SDK. 
 This section also serves as a test if the SDK has been correctly installed and ready to use.  
