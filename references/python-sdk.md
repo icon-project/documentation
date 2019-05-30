@@ -26,7 +26,10 @@ ICON SDK for Python development and execution requires following environments.
 
 - Python
   - Version: Python 3.6+
+  
   - IDE: Pycharm is recommended.
+  
+    
 
 ## Installation
 
@@ -40,18 +43,20 @@ $ pip install iconsdk
 
 
 
-## Using the SDK
+## How to Use
 
 Import, initialize, deinitialize, and basic call that applies to every or most code to use the SDK. 
 This section also serves as a test if the SDK has been correctly installed and ready to use.  
 
-### Creating an IconService Instance and Setting a Provider
+### Create IconService and Set Provider
 
 After that, you need to create an IconService instance and set a provider.
 
 - The **IconService** class contains a set of API methods. It accepts a HTTPProvider which serves the purpose of connecting to HTTP and HTTPS based JSON-RPC servers.
 - A **provider** defines how the IconService connects to Loopchain.
-- The **HTTPProvider** takes the full URI where the server can be found. For local development, this would be something like http://localhost:9000.
+- The **HTTPProvider** takes a base domain URL where the server can be found. For local development, this would be something like http://localhost:9000.
+
+> **Note**: You’ll need to set HTTPProvider with not a full URI but a base domain URL on iconsdk 1.0.9 or later on your local development machine.
 
 Here is an example of calling a simple API method to get a block by its height :
 
@@ -60,7 +65,7 @@ from iconsdk.icon_service import IconService
 from iconsdk.providers.http_provider import HTTPProvider
 
 # Creates an IconService instance using the HTTP provider and set a provider.
-icon_service = IconService(HTTPProvider("https://iconx.io"))
+icon_service = IconService(HTTPProvider("http://localhost:9000", 3))
 
 # Gets a block by a given block height.
 block = icon_service.get_block(1209)
@@ -69,8 +74,6 @@ block = icon_service.get_block(1209)
 
 
 ### Queries
-
-
 
 ```python
 from iconsdk.builder.call_builder import CallBuilder
@@ -117,7 +120,7 @@ result = icon_service.call(call)
 Calling SCORE APIs to change states is requested as sending a transaction. 
 Before sending a transaction, the transaction should be signed. It can be done using a `Wallet` object. 
 
-#### Generating a Transaction
+#### Generate a transaction
 After then, you should create an instance of the transaction using different types of transaction builders as follows.
 
 ```python
@@ -179,7 +182,7 @@ signed_transaction = SignedTransaction(transaction, wallet)
 tx_hash = icon_service.send_transaction(signed_transaction)
 ```
 
-#### Signing a Transaction
+#### Sign a transaction
 Before sending a transaction, the transaction should be signed by using SignedTransaction class. The SignedTransaction class is used to sign the transaction by returning an instance of the signed transaction as demonstrated in the example below. The instance of the signed transaction has the property of a signature.
 
 ```python
@@ -187,7 +190,7 @@ Before sending a transaction, the transaction should be signed by using SignedTr
 signed_transaction = SignedTransaction(transaction, wallet)
 ```
 
-#### Sending a Transaction
+#### Send a transaction
 Finally, you can send a transaction with the signed transaction object as follows.
 
 ```python
@@ -195,16 +198,48 @@ Finally, you can send a transaction with the signed transaction object as follow
 tx_hash = icon_service.send_transaction(signed_transaction)
 ```
 
+#### Estimate step
+
+It is important to set a proper `step_limit` value in your transaction to make the submitted transaction executed successfully.
+
+`estimate_step` API provides a way to **estimate** the Step usage of a given transaction. Using the method, you can get an estimated Step usage before sending your transaction then make a `SignedTransaction` with the `step_limit` based on the estimation.
+
+```python
+# Generates a raw transaction without the stepLimit
+transaction = TransactionBuilder()\
+    .from_(wallet.get_address())\
+    .to("cx00...02")\
+    .value(150000000)\
+    .nid(3)\
+    .nonce(100)\
+    .build()
+    
+# Returns an estimated step value
+estimate_step = icon_service.estimate_step(transaction)
+
+# Adds some margin to the estimated step 
+step_limit = estimate_step + 10000
+
+# Returns the signed transaction object having a signature with the same raw transaction and the estimated step
+signed_transaction = SignedTransaction(transaction, wallet, step_limit)
+
+# Sends the transaction
+tx_hash = icon_service.send_transaction(signed_transaction)
+```
+
+Note that the estimation can be smaller or larger than the actual amount of step to be used by the transaction, so it is recommended to add some margin to the estimation when you set the `step_limit` of the `SignedTransaction`.
+
+#### 
 
 ## Code Examples
 
 ### Wallet
 
-This example shows how to create a new `KeyWallet` and load wallet with privateKey or Keystore file.
+This example shows how to create a wallet object by using a method of `create` and load it with a private key or a keystore file by using a method of `load`.
 
 #### Create a wallet
 
-Create new EOA by calling `create` function. After creation, the address and private Key can be looked up.
+Create new EOA by calling `create` method. After creation, the address and private key can be looked up.
 
 ```python
 # Generates a wallet 
@@ -219,22 +254,23 @@ private key:  39765c71ed1884ce08010900ed817119f4227a8b3ee7a36c906c0ae9b5b11cae
 
 #### Load a wallet
 
-You can load an existing EOA by calling `load` function.
-
-After creation, the address and private Key can be looked up.
+You can load an existing EOA by calling a `load` method. After creation, the address and private key can be looked up.
 
 ```python
-# Loads a wallet from a private key
-wallet = KeyWallet.load(TEST_PRIVATE_KEY) # bytes of the private key
+# Loads a wallet from a private key in bytes
+wallet = KeyWallet.load(TEST_PRIVATE_KEY) 
+print("address: ", wallet.get_address()) # Returns an address
+print("private key: ", wallet.get_private_key()) # Returns a private key
+
+# Loads a wallet from a keystore file
+wallet = KeyWallet.load("./keystore", "password")
 print("address: ", wallet.get_address()) # Returns an address
 print("private key: ", wallet.get_private_key()) # Returns a private key
 ```
 
 #### Store the wallet
 
-After `KeyWallet` object creation, Keystore file can be stored by calling `store` function.
-
-After calling `store`, Keystore file name can be looked up with the returned value.
+After creating a `Wallet` object, you can generate a keystore file on the file path by calling a `store` method. 
 
 ```python
 # Stores a key store file on the file path
@@ -250,7 +286,7 @@ This example shows how to transfer ICX and check the result.
 
 #### ICX transfer transaction
 
-In this example, you can create sending KeyWallet with `TEST_PRIVATE_KEY` and receiving Keywallet. And transfer 1 ICX from `wallet1` to `wallet2`.
+In this example, you can create two wallets for sending and receiving ICX to transfer 1ICX from `wallet1` to `wallet2`.
 
 ```python
 # Wallet for sending ICX
