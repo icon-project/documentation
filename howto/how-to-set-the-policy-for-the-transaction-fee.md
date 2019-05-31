@@ -243,7 +243,7 @@ class FeeSharing(IconScoreBase):
             "action": "add"
         }
     },
-	"id": 1
+    "id": 1
 }
 ```
 
@@ -305,7 +305,7 @@ class FeeSharing(IconScoreBase):
             "id": "0x64b118d4a3c2b3b93362a0f3ea06e5519de42449523465265b85509041e69011"
         }
     },
-	"id": 1
+    "id": 1
 }
 ```
 
