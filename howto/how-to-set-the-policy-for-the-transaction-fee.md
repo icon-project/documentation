@@ -41,7 +41,7 @@ SCORE 내에서 수수료 부담 비율을 조절하기 위해서 다음의 Icon
 		* Integer between 0 to 100
 * set_fee_sharing_proportion(self, proportion: int)
 	* SCORE의 수수료 부담 비율을 재설정한다.
-	* 여러 번 호출될 경우 최종 값으로 수수료 부담 비율이 결정된다.
+	* 여러 번 호출될 경우 마지막 값으로 수수료 부담 비율이 결정된다.
 
 #### Example SCORE
 ```python
@@ -53,18 +53,18 @@ class FeeSharing(IconScoreBase):
     @eventlog(indexed=1)
     def ValueSet(self, address: Address, proportion: int): pass
 
-    def __init__(self, db: IconScoreDatabase) -> None:
+    def __init__(self, db: IconScoreDatabase):
         super().__init__(db)
 
         self._whitelist = DictDB("whitelist", db, int)
         self._value = VarDB("value", db, str)
 
-    def on_install(self) -> None:
+    def on_install(self):
         super().on_install()
 
         self._value.set("No value")
 
-    def on_update(self) -> None:
+    def on_update(self):
         super().on_update()
 
     def _check_owner(self):
@@ -81,7 +81,7 @@ class FeeSharing(IconScoreBase):
         return self._whitelist[address]
 
     @external
-    def addToWhitelist(self, address: Address, proportion: int = 100) -> None:
+    def addToWhitelist(self, address: Address, proportion: int = 100):
         self._check_owner()
         self._check_proportion(proportion)
 
@@ -92,13 +92,13 @@ class FeeSharing(IconScoreBase):
         return self._value.get()
 
     @external
-    def setValue(self, value: str) -> None:
+    def setValue(self, value: str):
         self._value.set(value)
+        self.ValueSet(self.tx.origin, proportion)
 
         proportion: int = self._whitelist[self.tx.origin]
         self.set_fee_sharing_proportion(proportion)
 
-        self.ValueSet(self.tx.origin, proportion)
 ```
 
 #### Transaction Result
@@ -195,7 +195,35 @@ class FeeSharing(IconScoreBase):
 }
 ```
 
-
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "current": {
+            "status": "active",
+            "deployTxHash": "0x19793f41b8e64fc31190c6a70a103103da1f4bc81bc829fa72c852a5e388fe8c"
+        },
+        "depositInfo": {
+            "scoreAddress": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+            "deposits": [
+                {
+                    "id": "0x64b118d4a3c2b3b93362a0f3ea06e5519de42449523465265b85509041e69011",
+                    "sender": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
+                    "depositAmount": "0x10f0cf064dd59200000",
+                    "depositUsed": "0x0",
+                    "created": "0x16",
+                    "expires": "0x13c696",
+                    "virtualStepIssued": "0x9502f9000",
+                    "virtualStepUsed": "0x329a6"
+                }
+            ],
+            "availableVirtualStep": "0x9502c665a",
+            "availableDeposit": "0xf3f20b8dfa69d00000"
+        }
+    },
+    "id": 1
+}
+```
 
 ### Add a deposit
 
