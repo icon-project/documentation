@@ -92,11 +92,10 @@ class FeeSharing(IconScoreBase):
     @external
     def setValue(self, value: str):
         self._value.set(value)
-        self.ValueSet(self.tx.origin, proportion)
-
+        
         proportion: int = self._whitelist[self.tx.origin]
+        self.ValueSet(self.tx.origin, proportion)
         self.set_fee_sharing_proportion(proportion)
-
 ```
 
 ### Transaction Result
@@ -229,50 +228,117 @@ class FeeSharing(IconScoreBase):
 {
     "jsonrpc": "2.0",
     "method": "icx_sendTransaction",
-    "id": 1234,
     "params": {
         "version": "0x3",
-        "from": "hxbe258ceb872e08851f1f59694dac2558708ece11",
-        "to": "cxbe258ceb872e08851f1f59694dac2558708ece11",
-        "value": "0x10f0cf064dd59200000",
-        "stepLimit": "0x12345",
-        "timestamp": "0x563a6cf330136",
         "nid": "0x3",
+        "from": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
+        "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+        "value": "0x10f0cf064dd59200000",
+        "stepLimit": "0x3000000",
+        "timestamp": "0x58a1be6dac367",
         "nonce": "0x1",
-        "signature": "VAia7YZ2Ji6igKWzjR2YsGa2m53nKPrfK7uXYW78QLE+ATehAVZPC40szvAiA6NEU5gCYB4c4qaQzqDh2ugcHgA=",
+        "signature": "Z+sc78SjGGsdch5kalcNqaK8+7ZX8M6SwaRYjrFopOoepLBok/sJ9EPulGxrDN4OodTqqYRA6KnuwGrNStomwAA=",
         "dataType": "deposit",
         "data": {
             "action": "add"
         }
-    }
+    },
+	"id": 1
+}
+```
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "txHash": "0x64b118d4a3c2b3b93362a0f3ea06e5519de42449523465265b85509041e69011",
+        "blockHeight": "0x16",
+        "blockHash": "0x2d082515c7a9098f6b1e88d42a3c11b227dc5e428aa28a97da7b6dcc22d0550c",
+        "txIndex": "0x0",
+        "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+        "stepUsed": "0x1ba94",
+        "stepPrice": "0x2540be400",
+        "cumulativeStepUsed": "0x1ba94",
+        "eventLogs": [
+            {
+                "scoreAddress": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+                "indexed": [
+                    "DepositAdded(bytes,Address,int,int)",
+                    "0x64b118d4a3c2b3b93362a0f3ea06e5519de42449523465265b85509041e69011",
+                    "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb"
+                ],
+                "data": [
+                    "0x10f0cf064dd59200000",
+                    "0x13c680"
+                ]
+            }
+        ],
+        "logsBloom": "0x00000001000000000000000000000000000000000000000000000000000000000010000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000004000000000000000000000400000000000000000000000000000040000002000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000200080000000000000000000000000000000000000000000000000000000000000000",
+        "status": "0x1"
+    },
+    "id": 1
 }
 ```
 
 ### Withdraw a deposit
 
 * SCORE owner can withdraw a deposit using the following JSON-RPC API
-* Caution: if SCORE operators want to withdraw the deposit which does not expires, they can do it with some penalty which is the same as the quantity of consumed virtual steps.
+* Caution: if a SCORE owner wants to withdraw the deposit which does not expire, some  amounts for used virtual steps are deducted from the deposit.
 
 ```json
 {
     "jsonrpc": "2.0",
     "method": "icx_sendTransaction",
-    "id": 1234,
     "params": {
         "version": "0x3",
-        "from": "hxbe258ceb872e08851f1f59694dac2558708ece11",
-        "to": "cxbe258ceb872e08851f1f59694dac2558708ece11",
-        "stepLimit": "0x12345",
-        "timestamp": "0x563a6cf330136",
         "nid": "0x3",
+        "from": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
+        "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+        "value": "0x0",
+        "stepLimit": "0x3000000",
+        "timestamp": "0x58a2bc315916c",
         "nonce": "0x1",
-        "signature": "VAia7YZ2Ji6igKWzjR2YsGa2m53nKPrfK7uXYW78QLE+ATehAVZPC40szvAiA6NEU5gCYB4c4qaQzqDh2ugcHgA=",
+        "signature": "yYA8OsVB3RM6h8RdNdbS5/7D5pDWxJTIVIWX3a0O0TIbhpYF/36oQYQfx1iq1DGChZ29tfVxx8mY/x+BXSH6pAA=",
         "dataType": "deposit",
         "data": {
             "action": "withdraw",
-            "id": "0x4bf74e6aeeb43bde5dc8d5b62537a33ac8eb7605ebbdb51b015c1881b45b3111"
+            "id": "0x64b118d4a3c2b3b93362a0f3ea06e5519de42449523465265b85509041e69011"
         }
-    }
+    },
+	"id": 1
+}
+```
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "txHash": "0xcd43ffc50418e025d06cbeb7d43cc6fad7c173f966b6764cb825b62459cc7e67",
+        "blockHeight": "0x1b",
+        "blockHash": "0xfb8617818c296891de7713c27134069c71a43ab1bdb71ee3cfc615040a9504bb",
+        "txIndex": "0x0",
+        "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+        "stepUsed": "0x1fb6c",
+        "stepPrice": "0x2540be400",
+        "cumulativeStepUsed": "0x1fb6c",
+        "eventLogs": [
+            {
+                "scoreAddress": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+                "indexed": [
+                    "DepositWithdrawn(bytes,Address,int,int)",
+                    "0x64b118d4a3c2b3b93362a0f3ea06e5519de42449523465265b85509041e69011",
+                    "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb"
+                ],
+                "data": [
+                    "0x10f0ce907c145e62800",
+                    "0x75d1c1339d800"
+                ]
+            }
+        ],
+        "logsBloom": "0x00000001000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000001000000000000000000000400000000000000000000000000000040000002000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000080000000000000200000000000000000000000020000000000000000000000000",
+        "status": "0x1"
+    },
+    "id": 1
 }
 ```
 
