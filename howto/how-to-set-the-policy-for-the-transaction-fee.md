@@ -5,48 +5,46 @@ excerpt: ""
 
 ## Overview
 
-Users should have paid the transaction fee for executing a transaction on existing ICON Network. But this transaction fee was the large obstacle that service owners draw a lot of users to their services. Thus we provide the new features called "fee sharing" and "virtual step" to solve this well-known problem.
+Users must pay the transaction fee to execute a smart contract (SCORE) on the ICON Network. But the transaction fee charged to the users would hinder attracting more users into the SCORE service. Thus we provide new features called "Fee Sharing" and "Virtual Step" to solve this well-known problem.
 
-This document introduces how to use fee sharing and virtual step and what benefits service owners can get from the new features.
+This document shows how to use the Fee Sharing and Virtual Step, and what benefits service operators can get from the new features.
 
 ## Intended Audience
 
-Service owners who want their users to use their dApp services without any transaction fees.
+Service operators who want their users to use their services without any transaction fees.
 
 ## Purpose
 
-Service owners are able to set some policy options for the transaction fee following this document.
+Service operators are able to set some policy options for the transaction fee after following this document.
 
-* Service owners can pay the transaction fee instead of service users.
-* Service owners can save transaction fees consumed while running their services with the new solution **"virtual step"**.
+* Service operators can pay the transaction fee on behalf of the service users.
+* Service operators can offset the fee burden by using the Virtual Step system.
 
-## Prerequisite 
+## Prerequisites
 
-* Basic concept of transaction fee and step on ICON Network
+* Basic concept of the transaction fee and Step on ICON Network
 * Knowledge of the ICON JSON-RPC APIs.
 
-## How-To
+## Make a SCORE which supports the Fee Sharing
 
-### Make a SCORE which supports fee sharing
+Be default, all the transaction fee to execute a SCORE will be charged to the transaction sender. However, the SCORE can determine who will pay the transaction fee during its execution. To do this, we provide the following APIs that can be invoked on the SCORE method, which are declared in `IconScoreBase`.
 
-SCORE에서 TX를 처리하는데 필요한 수수료를 사용자 대신 SCORE가 부담하도록 하기 위해서는 먼저 SCORE가 부담하는 수수료 비율을 정해주어야 한다. 기본 동작은 사용자가 TX의 모든 수수료를 부담한다.
+* `get_fee_sharing_proportion(self) -> int`
+    * Returns the current fee sharing proportion of the SCORE.
+    * Return value
+        * the current fee sharing proportion that the SCORE will pay
+        * 100 means the SCORE will pay 100% of transaction fee on behalf of the transaction sender.
+        * `int` value between 0 to 100
+* `set_fee_sharing_proportion(self, proportion: int)`
+    * Sets the proportion of the transaction fee that the SCORE will pay
+    * If this method is invoked multiple times, the last proportion value will be used.
 
-SCORE 내에서 수수료 부담 비율을 조절하기 위해서 다음의 IconScoreBase 메소드들을 제공한다.
+### SCORE Example
 
-* get_fee_sharing_proportion(self) -> int
-	* 현재 설정되어 있는 SCORE의 수수료 부담 비율을 리턴한다.
-	* Return value
-		* The proportion of the transaction fee that SCORE will pay
-		* 100 means that SCORE will pay 100% of transaction fee instead of transaction sender.
-		* Integer between 0 to 100
-* set_fee_sharing_proportion(self, proportion: int)
-	* SCORE의 수수료 부담 비율을 재설정한다.
-	* 여러 번 호출될 경우 마지막 값으로 수수료 부담 비율이 결정된다.
+The following example sets the fee sharing proportion according to the white list that can be set separately. If the user is in the white list, some or all of the transaction fee will be shared by the SCORE operator as much as the proportion value set in the white list.
 
-#### Example SCORE
 ```python
 from iconservice import *
-
 
 class FeeSharing(IconScoreBase):
 
@@ -101,7 +99,7 @@ class FeeSharing(IconScoreBase):
 
 ```
 
-#### Transaction Result
+### Transaction Result
 
 0%
 ```json
@@ -253,7 +251,7 @@ class FeeSharing(IconScoreBase):
 ### Withdraw a deposit
 
 * SCORE owner can withdraw a deposit using the following JSON-RPC API
-* Caution: if SCORE owners want to withdraw the deposit which does not expires, they can do it with some penalty which is the same as the quantity of consumed virtual steps.
+* Caution: if SCORE operators want to withdraw the deposit which does not expires, they can do it with some penalty which is the same as the quantity of consumed virtual steps.
 
 ```json
 {
