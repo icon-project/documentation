@@ -1,47 +1,49 @@
 ---
-title: "How to set the policy for the transaction fee"
+title: "How to set the policy for the transaction fees"
 excerpt: ""
 ---
 
 ## Overview
 
-Users must pay the transaction fee to execute a smart contract (SCORE) on the ICON Network. But the transaction fee charged to the users would hinder attracting more users into the SCORE service. Thus we provide new features called "Fee Sharing" and "Virtual Step" to solve this well-known problem.
+Users must pay the transaction fees to execute a smart contract (SCORE) on the ICON Network. But the fact that all DApp users were required to pay transaction fees has been a major hurdle to attract more users into the DApp service. With the Fee 2.0 feature (Fee Sharing and Virtual Step), the DApp service operators will be able to pay the transaction fees on behalf of the service users.
 
-This document shows how to use the Fee Sharing and Virtual Step, and what benefits service operators can get from the new features.
+This document shows how to use the Fee Sharing and Virtual Step, and what benefits the service operators can get from the new features.
 
 ## Intended Audience
 
-Service operators who want their users to use their services without any transaction fees.
+ICON DApp service operators who want the users to use their services without paying any transaction fees.
 
 ## Purpose
 
-Service operators are able to set some policy options for the transaction fee after following this document.
+Service operators will be able to set the policy for the transaction fees after following this document.
 
-* Service operators can pay the transaction fee on behalf of the service users.
+* Service operators can pay the transaction fees on behalf of the service users.
 * Service operators can offset the fee burden by using the Virtual Step system.
 
 ## Prerequisites
 
-* Basic concept of the transaction fee and Step on ICON Network
-* Knowledge of the ICON JSON-RPC APIs.
+* Basic concept of the transaction fees and Step on ICON Network
+* Knowledge of the ICON JSON-RPC APIs
+* Writing SCORE
 
-## Make a SCORE which supports the Fee Sharing
+## Make a SCORE which supports Fee Sharing
 
-Be default, all the transaction fee to execute a SCORE will be charged to the transaction sender. However, the SCORE can determine who will pay the transaction fee during its execution. To do this, we provide the following APIs that can be invoked on the SCORE method, which are declared in `IconScoreBase`.
+By default, all the transaction fees to execute a SCORE will be charged to the transaction sender. However, the SCORE can determine who will pay the transaction fees during its execution. To do this, we provide the following APIs that can be invoked from the SCORE external method.
 
 * `get_fee_sharing_proportion(self) -> int`
     * Returns the current fee sharing proportion of the SCORE.
     * Return value
         * the current fee sharing proportion that the SCORE will pay
-        * 100 means the SCORE will pay 100% of transaction fee on behalf of the transaction sender.
+        * 100 means the SCORE will pay 100% of transaction fees on behalf of the transaction sender.
         * `int` value between 0 to 100
 * `set_fee_sharing_proportion(self, proportion: int)`
-    * Sets the proportion of the transaction fee that the SCORE will pay
+    * Sets the proportion of the transaction fees that the SCORE will pay
+    * `proportion` should be between 0 to 100
     * If this method is invoked multiple times, the last proportion value will be used.
 
 ### SCORE Example
 
-The following example sets the fee sharing proportion according to the white list that can be set separately. If the user is in the white list, some or all of the transaction fee will be shared by the SCORE operator as much as the proportion value set in the white list.
+The following example sets the fee sharing proportion according to the white list that can be set separately. If the transaction sender (`self.tx.origin`) is in the white list, some or all of the transaction fees will be charged to the SCORE as much as the proportion value set in the white list.
 
 ```python
 from iconservice import *
@@ -92,72 +94,99 @@ class FeeSharing(IconScoreBase):
     @external
     def setValue(self, value: str):
         self._value.set(value)
-        
+
         proportion: int = self._whitelist[self.tx.origin]
-        self.ValueSet(self.tx.origin, proportion)
         self.set_fee_sharing_proportion(proportion)
+        self.ValueSet(self.tx.origin, proportion)
 ```
 
-### Transaction Result
+Note that `set_fee_sharing_proportion()` method should be called from the SCORE method (`setValue` in the example above) for the SCORE to pay the transaction fees. Otherwise, the transaction sender will pay all of the transaction fees as before.
 
-0%
+Also the transaction sender must have a minimum ICX balance to send the transaction, since it cannot be known beforehand whether the SCORE will pay the transaction fees without executing the transaction actually. However, the users balance will not be changed if the SCORE pays all of the transaction fees.
+
+## Add deposit to the SCORE
+
+After deploying the example SCORE above to the ICON Network, you need to deposit some ICX to the SCORE for the Fee Sharing and this deposit action will generate Virtual Steps.
+Currently only the SCORE owner (who deploys the SCORE) can deposit ICX to the SCORE.
+To add deposit to the SCORE, you can use the following JSON-RPC API (you can also use ICON SDKs like [Java SDK], [Python SDK], etc).
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "icx_sendTransaction",
+    "id": 1,
+    "params": {
+        "version": "0x3",
+        "nid": "0x3",
+        "from": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
+        "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+        "value": "0x10f0cf064dd59200000",
+        "stepLimit": "0x3000000",
+        "timestamp": "0x58a1be6dac367",
+        "nonce": "0x1",
+        "signature": "Z+sc78SjGGsdch5kalcNqaK8+7ZX8M6SwaRYjrFopOoepLBok/sJ9EPulGxrDN4OodTqqYRA6KnuwGrNStomwAA=",
+        "dataType": "deposit",
+        "data": {
+            "action": "add"
+        }
+    }
+}
+```
+
+If the deposit `add` transaction was successful, you will see the transaction result like the following, that has `DepositAdded` eventlog.
+
 ```json
 {
     "jsonrpc": "2.0",
     "result": {
-        "txHash": "0xcfadd0ff7fc152f23c0ce92be4675d36743db11c25378a5a17560d286f641362",
-        "blockHeight": "0x11",
-        "blockHash": "0x8ae111527f885a0ca79e431c47624e35a01e2eb8169e406725ea785a9bf2cfc8",
+        "txHash": "0x64b118d4a3c2b3b93362a0f3ea06e5519de42449523465265b85509041e69011",
+        "blockHeight": "0x16",
+        "blockHash": "0x2d082515c7a9098f6b1e88d42a3c11b227dc5e428aa28a97da7b6dcc22d0550c",
         "txIndex": "0x0",
         "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
-        "stepUsed": "0x20be8",
+        "stepUsed": "0x1ba94",
         "stepPrice": "0x2540be400",
-        "cumulativeStepUsed": "0x20be8",
-        "eventLogs": [],
-        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "cumulativeStepUsed": "0x1ba94",
+        "eventLogs": [
+            {
+                "scoreAddress": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+                "indexed": [
+                    "DepositAdded(bytes,Address,int,int)",
+                    "0x64b118d4a3c2b3b93362a0f3ea06e5519de42449523465265b85509041e69011",
+                    "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb"
+                ],
+                "data": [
+                    "0x10f0cf064dd59200000",
+                    "0x13c680"
+                ]
+            }
+        ],
+        "logsBloom": "0x00000001000000000000000000000...0000000000000000010000000000000",
         "status": "0x1"
     },
     "id": 1
 }
 ```
 
-50%
-```json
-{
-    "jsonrpc": "2.0",
-    "result": {
-        "txHash": "0x5ca11a63e24cdb837026d4a20165d0246ecfc7bc40d84eaa33bdf43538b318c8",
-        "blockHeight": "0x17",
-        "blockHash": "0x53e6c94078e6b94135fe773675493dcc47ea62e8878e48eacd3044f5068d7bf1",
-        "txIndex": "0x1",
-        "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
-        "stepUsed": "0x21bc4",
-        "stepPrice": "0x2540be400",
-        "cumulativeStepUsed": "0x43788",
-        "eventLogs": [
-            {
-                "scoreAddress": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
-                "indexed": [
-                    "ValueSet(Address,int)",
-                    "hx93a1562d85982de882b5fa4df05d42d35a7db0b1"
-                ],
-                "data": [
-                    "0x32"
-                ]
-            }
-        ],
-        "logsBloom": "0x00000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000020002000000000000000100000000000000000080000004000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000",
-        "status": "0x1",
-        "stepUsedDetails": {
-            "hx93a1562d85982de882b5fa4df05d42d35a7db0b1": "0x10de2",
-            "cx216e1468b780ac1b54c328d19ea23a35a6899e55": "0x10de2"
-        }
-    },
-    "id": 1
-}
-```
+The declaration of `DepositAdded` eventlog is as follows.
 
-100%
+```python
+@eventlog(indexed=2)
+def DepositAdded(self, id: bytes, from_: Address, amount: int, term: int):
+    pass
+```
+`id` is the deposit id (i.e., the transaction hash), `from_` is the transaction sender, `amount` is the amount of deposited ICX, and `term` is the deposit period in blocks, which is currently fixed to 1 month (1,296,000 blocks in 30 days).
+
+
+## Check the fee deduction after calling SCORE methods
+
+Now you have a SCORE that has the ICX deposit.
+You need to add some users to the white list first before letting them to call the SCORE method.
+After that, if a user that is in the white list calls the SCORE method (`setValue` in this case), some or all of the transaction fees will be charged to the SCORE.
+Here's an example of the transaction result, when the proportion is 100.
+Note that a new `stepUsedDetails` field was added to show the list of accounts that pay the fees.
+In this case, the SCORE pays all of the transaction fees.
+
 ```json
 {
     "jsonrpc": "2.0",
@@ -182,7 +211,7 @@ class FeeSharing(IconScoreBase):
                 ]
             }
         ],
-        "logsBloom": "0x00000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020002000000000000000000000000000000000080000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000100000000000000002000080000000000000000000000000000000000000000020000000000000000000000000000",
+        "logsBloom": "0x00000001000000000000000000000...0000000000000000010000000000000",
         "status": "0x1",
         "stepUsedDetails": {
             "cx216e1468b780ac1b54c328d19ea23a35a6899e55": "0x21bc4"
@@ -191,6 +220,52 @@ class FeeSharing(IconScoreBase):
     "id": 1
 }
 ```
+
+If the proportion is 50, the user and the SCORE pay the transaction fees half and half.
+Check the `stepUsedDetails` field in the following example how they are represented in this case.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "txHash": "0x5ca11a63e24cdb837026d4a20165d0246ecfc7bc40d84eaa33bdf43538b318c8",
+        "blockHeight": "0x17",
+        "blockHash": "0x53e6c94078e6b94135fe773675493dcc47ea62e8878e48eacd3044f5068d7bf1",
+        "txIndex": "0x1",
+        "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+        "stepUsed": "0x21bc4",
+        "stepPrice": "0x2540be400",
+        "cumulativeStepUsed": "0x43788",
+        "eventLogs": [
+            {
+                "scoreAddress": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
+                "indexed": [
+                    "ValueSet(Address,int)",
+                    "hx93a1562d85982de882b5fa4df05d42d35a7db0b1"
+                ],
+                "data": [
+                    "0x32"
+                ]
+            }
+        ],
+        "logsBloom": "0x00000001000000000000000000000...0000000000000000010000000000000",
+        "status": "0x1",
+        "stepUsedDetails": {
+            "hx93a1562d85982de882b5fa4df05d42d35a7db0b1": "0x10de2",
+            "cx216e1468b780ac1b54c328d19ea23a35a6899e55": "0x10de2"
+        }
+    },
+    "id": 1
+}
+```
+
+Note that the transaction result will be the same as when there was no Fee 2.0 feature, if either the user is not in the white list or the SCORE does not set the proportion (i.e., there is no `stepUsedDetails` in the transaction result).
+
+## Check the deposit status of the SCORE
+
+Service operators often need to check the deposit status of the SCORE to know how much deposit (or Virtual Steps) were consumed and when they need to deposit additional ICX to the SCORE to continue their services seamlessly.
+To do this, we retrofit the existing Governance API, [`getScoreStatus`](https://github.com/icon-project/governance#getscorestatus), to show the deposit status of the SCORE.
+Here's an example result of the API call.
 
 ```json
 {
@@ -222,73 +297,15 @@ class FeeSharing(IconScoreBase):
 }
 ```
 
-### Add a deposit
+## Withdraw the deposit
+
+SCORE owners can withdraw the deposit by using the following JSON-RPC API.
 
 ```json
 {
     "jsonrpc": "2.0",
     "method": "icx_sendTransaction",
-    "params": {
-        "version": "0x3",
-        "nid": "0x3",
-        "from": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
-        "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
-        "value": "0x10f0cf064dd59200000",
-        "stepLimit": "0x3000000",
-        "timestamp": "0x58a1be6dac367",
-        "nonce": "0x1",
-        "signature": "Z+sc78SjGGsdch5kalcNqaK8+7ZX8M6SwaRYjrFopOoepLBok/sJ9EPulGxrDN4OodTqqYRA6KnuwGrNStomwAA=",
-        "dataType": "deposit",
-        "data": {
-            "action": "add"
-        }
-    },
-    "id": 1
-}
-```
-
-```json
-{
-    "jsonrpc": "2.0",
-    "result": {
-        "txHash": "0x64b118d4a3c2b3b93362a0f3ea06e5519de42449523465265b85509041e69011",
-        "blockHeight": "0x16",
-        "blockHash": "0x2d082515c7a9098f6b1e88d42a3c11b227dc5e428aa28a97da7b6dcc22d0550c",
-        "txIndex": "0x0",
-        "to": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
-        "stepUsed": "0x1ba94",
-        "stepPrice": "0x2540be400",
-        "cumulativeStepUsed": "0x1ba94",
-        "eventLogs": [
-            {
-                "scoreAddress": "cx216e1468b780ac1b54c328d19ea23a35a6899e55",
-                "indexed": [
-                    "DepositAdded(bytes,Address,int,int)",
-                    "0x64b118d4a3c2b3b93362a0f3ea06e5519de42449523465265b85509041e69011",
-                    "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb"
-                ],
-                "data": [
-                    "0x10f0cf064dd59200000",
-                    "0x13c680"
-                ]
-            }
-        ],
-        "logsBloom": "0x00000001000000000000000000000000000000000000000000000000000000000010000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000004000000000000000000000400000000000000000000000000000040000002000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000200080000000000000000000000000000000000000000000000000000000000000000",
-        "status": "0x1"
-    },
-    "id": 1
-}
-```
-
-### Withdraw a deposit
-
-* SCORE owner can withdraw a deposit using the following JSON-RPC API
-* Caution: if a SCORE owner wants to withdraw the deposit which does not expire, some  amounts for used virtual steps are deducted from the deposit.
-
-```json
-{
-    "jsonrpc": "2.0",
-    "method": "icx_sendTransaction",
+    "id": 1,
     "params": {
         "version": "0x3",
         "nid": "0x3",
@@ -304,10 +321,15 @@ class FeeSharing(IconScoreBase):
             "action": "withdraw",
             "id": "0x64b118d4a3c2b3b93362a0f3ea06e5519de42449523465265b85509041e69011"
         }
-    },
-    "id": 1
+    }
 }
 ```
+
+Note that if the SCORE owner wants to withdraw the deposit which has not been expired, the same amount of ICX will be deducted from the deposit by the amount of Virtual Steps that were used.
+
+Here's an example of the transaction result, when the SCORE owner withdraws the deposit.
+If the deposit `withdraw` transaction was successful, you will see the transaction result like the following, that has `DepositWithdrawn` eventlog.
+
 
 ```json
 {
@@ -335,25 +357,38 @@ class FeeSharing(IconScoreBase):
                 ]
             }
         ],
-        "logsBloom": "0x00000001000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000001000000000000000000000400000000000000000000000000000040000002000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000080000000000000200000000000000000000000020000000000000000000000000",
+        "logsBloom": "0x00000001000000000000000000000...0000000000000000010000000000000",
         "status": "0x1"
     },
     "id": 1
 }
 ```
 
+The declaration of `DepositWithdrawn` eventlog is as follows.
+
+```python
+@eventlog(indexed=2)
+def DepositWithdrawn(self, id: bytes, from_: Address, returnAmount: int, penalty: int):
+    pass
+```
+`id` is the deposit id (i.e., the transaction hash), `from_` is the transaction sender, `returnAmount` is the returned amount of deposited ICX, and `penalty` is the deducted ICX as the penalty if this is an early withdrawal.
+
+
 ## Summary
 
-1. 거래 수수료 공유 비율을 정할 수 있는 set_fee_sharing_proportion() 함수를 사용하여 거래 처리 시 소비되는 수수료를 부담하는 비율을 조절할 수 있다.
-3. Add deposit을 통해 virtual step을 발급받을 수 있다.
-4. getScoreStatus를 이용하여 대상 SCORE의 deposit 상태 조회가 가능하다.
-5. Withdraw deposit을 통해 거래 수수료에 사용했던 예치금을 찾아올 수 있다.
+* Service operators will be able to pay transaction fees on behalf of the service users by calling `set_fee_sharing_proportion()` API from the SCORE method.
+* Depositing ICX to the SCORE will generate Virtual Steps that can be used to pay transaction fees.
+* `getScoreStatus` API of Governance can be used to check the current deposit status of the SCORE.
+* Service operators can withdraw the deposit in the SCORE at any time, however, some penalty will be incurred if it is an early withdrawal.
 
 ## References
 
-- [ICON JSON RPC](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md#debug_estimateStep)
-- [T-Bears]()
-- [Java SDK]()
-- [JavaScript SDK]()
-- [Python SDK]()
-- [Swift SDK]()
+- [ICON JSON RPC]
+- [T-Bears]
+- [Java SDK]
+- [Python SDK]
+
+[ICON JSON RPC]: https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md
+[T-Bears]: https://github.com/icon-project/t-bears
+[Java SDK]: https://github.com/icon-project/icon-sdk-java
+[Python SDK]: https://github.com/icon-project/icon-sdk-python
