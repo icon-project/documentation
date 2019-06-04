@@ -5,13 +5,13 @@ excerpt: ""
 
 ## Overview
 
-Users must pay the transaction fees to execute a smart contract (SCORE) on the ICON Network. But the fact that all DApp users were required to pay transaction fees has been a major hurdle to attract more users into the DApp service. With the Fee 2.0 feature (Fee Sharing and Virtual Step), the DApp service operators will be able to pay the transaction fees on behalf of the service users.
+Transaction senders must pay the transaction fees to execute a smart contract on the blockchain. The result of this transaction fee system was that all dApp users were required to pay transaction fees to use the service. This has been a major hurdle in attracting more users into the dApp service. With the ICON Transaction Fee 2.0 (Fee Sharing and Virtual Step), dApp service operators can choose to pay the transaction fees on behalf of the service users.
 
 This document shows how to use the Fee Sharing and Virtual Step, and what benefits the service operators can get from the new features.
 
 ## Intended Audience
 
-ICON DApp service operators who want the users to use their services without paying any transaction fees.
+ICON dApp service operators who want the users to use their services without paying any transaction fees.
 
 ## Purpose
 
@@ -22,13 +22,13 @@ Service operators will be able to set the policy for the transaction fees after 
 
 ## Prerequisites
 
-* Basic concept of the transaction fees and Step on ICON Network
-* Knowledge of the ICON JSON-RPC APIs
-* Writing SCORE
+* Basic concept of the [transaction fees and Step on ICON Network](https://www.icondev.io/docs/transaction-fees)
+* Knowledge of the [ICON JSON-RPC APIs](https://www.icondev.io/docs/icon-json-rpc-v3)
+* [Writing SCORE](https://www.icondev.io/docs/writing-score)
 
-## Make a SCORE which supports Fee Sharing
+## Make your SCORE support Fee Sharing
 
-By default, all the transaction fees to execute a SCORE will be charged to the transaction sender. However, the SCORE can determine who will pay the transaction fees during its execution. To do this, we provide the following APIs that can be invoked from the SCORE external method.
+By default, all the transaction fees to execute a SCORE will be charged to the transaction sender. With ICON Fee2.0, the SCORE can determine who will pay the transaction fees during its execution. To do this, `IconScoreBase` provides the following APIs that can be invoked inside the SCORE's external methods that cause a state transition.
 
 * `get_fee_sharing_proportion(self) -> int`
     * Returns the current fee sharing proportion of the SCORE.
@@ -42,8 +42,8 @@ By default, all the transaction fees to execute a SCORE will be charged to the t
     * If this method is invoked multiple times, the last proportion value will be used.
 
 ### SCORE Example
-
-The following example sets the fee sharing proportion according to the white list that can be set separately. If the transaction sender (`self.tx.origin`) is in the white list, some or all of the transaction fees will be charged to the SCORE as much as the proportion value set in the white list.
+Below example SCORE pays the full or partial transaction fee that is required to invoke the `setValue` method for the registered users.
+The following example sets the fee sharing proportion according to the whitelist that can be set separately. If the transaction sender (`self.tx.origin`) is in the whitelist, part of the transaction fees will be charged to the SCORE as per the proportion value set in the whitelist.
 
 ```python
 from iconservice import *
@@ -100,15 +100,15 @@ class FeeSharing(IconScoreBase):
         self.ValueSet(self.tx.origin, proportion)
 ```
 
-Note that `set_fee_sharing_proportion()` method should be called from the SCORE method (`setValue` in the example above) for the SCORE to pay the transaction fees. Otherwise, the transaction sender will pay all of the transaction fees as before.
+Note that `set_fee_sharing_proportion()` method should be called inside the SCORE method (`setValue` in the example above) that the SCORE is to pay the transaction fee for the transaction sender. Otherwise, the transaction sender will pay all of the transaction fees.
 
 Also the transaction sender must have a minimum ICX balance to send the transaction, since it cannot be known beforehand whether the SCORE will pay the transaction fees without executing the transaction actually. However, the users balance will not be changed if the SCORE pays all of the transaction fees.
 
 ## Add deposit to the SCORE
 
-After deploying the example SCORE above to the ICON Network, you need to deposit some ICX to the SCORE for the Fee Sharing and this deposit action will generate Virtual Steps.
-Currently only the SCORE owner (who deploys the SCORE) can deposit ICX to the SCORE.
-To add deposit to the SCORE, you can use the following JSON-RPC API (you can also use ICON SDKs like [Java SDK], [Python SDK], etc).
+After deploying the example SCORE above to the ICON Network, you need to deposit ICX to the SCORE for the Fee Sharing and this deposit action will generate Virtual Steps.
+Currently, only the SCORE owner (who deployed the SCORE) can deposit ICX to the SCORE.
+To add a deposit to the SCORE, use the following JSON-RPC API or the equivalent in ICON SDKs. See [Java SDK] and [Python SDK].
 
 ```json
 {
@@ -178,11 +178,11 @@ def DepositAdded(self, id: bytes, from_: Address, amount: int, term: int):
 `id` is the deposit id (i.e., the transaction hash), `from_` is the transaction sender, `amount` is the amount of deposited ICX, and `term` is the deposit period in blocks, which is currently fixed to 1 month (1,296,000 blocks in 30 days).
 
 
-## Check the fee deduction after calling SCORE methods
+## Invoke SCORE method and check the fee deduction result
 
 Now you have a SCORE that has the ICX deposit.
-You need to add some users to the white list first before letting them to call the SCORE method.
-After that, if a user that is in the white list calls the SCORE method (`setValue` in this case), some or all of the transaction fees will be charged to the SCORE.
+Before sending a transaction, you need to add the user to the whitelist.
+If a user who is in the whitelist calls the SCORE method (`setValue` in this case), part of the transaction fee will be charged to the SCORE according to the proportion set in the whitelist.
 Here's an example of the transaction result, when the proportion is 100.
 Note that a new `stepUsedDetails` field was added to show the list of accounts that pay the fees.
 In this case, the SCORE pays all of the transaction fees.
@@ -259,7 +259,7 @@ Check the `stepUsedDetails` field in the following example how they are represen
 }
 ```
 
-Note that the transaction result will be the same as when there was no Fee 2.0 feature, if either the user is not in the white list or the SCORE does not set the proportion (i.e., there is no `stepUsedDetails` in the transaction result).
+Note that the transaction result will be the same as when there was no Fee 2.0 feature if either the user is not in the whitelist or the SCORE does not set the fee sharing proportion (i.e., there will be no `stepUsedDetails` in the transaction result).
 
 ## Check the deposit status of the SCORE
 
