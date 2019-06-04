@@ -60,20 +60,19 @@ Above diagram shows how P-Rep nodes are interacting with each other in the test 
 
 
 
-- Endpoint: https://preptest.net.solidwallet.io
+- Endpoint: https://{YOUR_GROUP_NAME}.net.solidwallet.io
 
   - Endpoint is the load balancer that accepts the transaction requests from DApps and relays the requests to an available P-Rep node. In the test environment, ICON foundation is running the endpoint. It is also possible for each P-Rep to setup own endpoint to directly serve DApps (as depicted in PRep-Node4), but that configuration is out of the scope of this document. 
-- Tracker: [https://preptest.tracker.solidwallet.io](http://preptest.tracker.solidwallet.io/)
+- Tracker: https://{YOUR_GROUP_NAME}.tracker.solidwallet.io
 
   - A block and transaction explorer attached to the test network.
-- IP List: https://download.solidwallet.io/conf/prep_iplist.json
+- IP List: https://download.solidwallet.io/conf/{YOUR_GROUP_NAME}_prep_iplist.json
 
   - ICON foundation will maintain the IP list of P-Reps. The JSON file will contain the list of IPs. You should configure your firewalls to allow in/outbound traffic from/to the IP addresses.  Following TCP ports should be open.
   - Port 7100: Used by gRPC for peer to peer communication between nodes.
   - Port 9000: Used by  JSON-RPC API server.
+  - The IP whitelist will be automatically updated on a daily basis from the endpoint of the seed node inside the P-Rep Node Docker.
 
-
-We highly recommend you to use a firewall to protect the P-Rep node.
 
 
 
@@ -256,7 +255,7 @@ You have docker installed, then proceed the following steps to install the P-Rep
 **Pull the latest stable version of an image.**
 
 ```shell
-$ docker pull iconloop/prep-node:1904111713xdde258
+$ docker pull iconloop/prep-node:1905292100xdd3e5a
 ```
 
 
@@ -266,7 +265,7 @@ $ docker pull iconloop/prep-node:1904111713xdde258
 **Using docker command**
 
 ```shell
-$ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-node:1904111713xdde258
+$ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-node:1905292100xdd3e5a
 ```
 
 
@@ -276,7 +275,16 @@ $ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-no
 Open `docker-compose.yml` in a text editor and add the following content:
 
 ```yml
-version: '3' services:    container:        image: 'iconloop/prep-node:1904111713xdde258'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100
+version: '3' 
+services:    
+     container:        
+          image: 'iconloop/prep-node:1905292100xdd3e5a'        
+          container_name: 'prep-node'        
+          volumes:            
+               - ./data:/data        
+          ports:           
+               - 9000:9000           
+               - 7100:7100
 ```
 
 
@@ -330,7 +338,7 @@ The ``docker ps``  command shows the list of running docker containers.
 ```shell
 $ docker ps
 CONTAINER ID   IMAGE                                                          COMMAND                CREATED              STATUS                          PORTS                                                                 NAMES
-0de99e33cdc9     iconloop/prep-node:1904111713xdde258    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
+0de99e33cdc9     iconloop/prep-node:1905292100xdd3e5a    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
 The meaning of each column in the `docker ps` result output is as follows. 
@@ -353,8 +361,8 @@ $ tail -f data/PREP-TestNet/log/booting_20190419.log
 [2019-04-19 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-TestNet/.storage
 [2019-04-19 02:19:01.459] scoreRootPath=/data/PREP-TestNet/.score_data/score
 [2019-04-19 02:19:01.464] stateDbRootPath=/data/PREP-TestNet/.score_data/db
-[2019-04-19 02:19:01.468] P-REP package version info - 1904111713xdde258
-[2019-04-19 02:19:02.125] iconcommons 1.0.5.1 iconrpcserver 1.2.6 iconservice 1.2.2 loopchain 2.1.2
+[2019-04-19 02:19:01.468] P-REP package version info - 1905292100xdd3e5a
+[2019-04-19 02:19:02.125] iconcommons 1.0.5.2 iconrpcserver 1.3.1 iconservice 1.3.0 loopchain 2.1.7
 [2019-04-19 02:19:07.107] Enable rabbitmq_management
 [2019-04-19 02:19:10.676] Network: PREP-TestNet
 [2019-04-19 02:19:10.682] Run loop-peer and loop-channel start
@@ -421,7 +429,7 @@ $ curl localhost:9000/api/v1/status/peer
 If you want change the TimeZone, open `docker-compose.yml` in a text editor and add the following content:
 
 ```yml
-version: '3' services:    container:        image: 'iconloop/prep-node:1904111713xdde258'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100       environment:          TZ: "America/Los_Angeles"
+version: '3' services:    container:        image: 'iconloop/prep-node:1905292100xdd3e5a'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100       environment:          TZ: "America/Los_Angeles"
 ```
 
 
@@ -453,7 +461,7 @@ The ``docker ps``  command shows the list of running docker containers.
 ```shell
 $ docker ps
 CONTAINER ID   IMAGE                                                          COMMAND                CREATED              STATUS                          PORTS                                                                 NAMES
-0de99e33cdc9     iconloop/prep-node:1904111713xdde258    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
+0de99e33cdc9     iconloop/prep-node:1905292100xdd3e5a    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
 You should look at the `STATUS` field to see if the container is running up and in `healthy` state. 
@@ -487,8 +495,8 @@ $ cat data/PREP-TestNet/log/booting_${DATE}.log
 [2019-04-19 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-TestNet/.storage
 [2019-04-19 02:19:01.459] scoreRootPath=/data/PREP-TestNet/.score_data/score
 [2019-04-19 02:19:01.464] stateDbRootPath=/data/PREP-TestNet/.score_data/db
-[2019-04-19 02:19:01.468] P-REP package version info - 1904111713xdde258
-[2019-04-19 02:19:02.125] iconcommons 1.0.5.1 iconrpcserver 1.2.6 iconservice 1.2.2 loopchain 2.1.2
+[2019-04-19 02:19:01.468] P-REP package version info - 1905292100xdd3e5a
+[2019-04-19 02:19:02.125] iconcommons 1.0.5.2 iconrpcserver 1.3.1 iconservice 1.3.0 loopchain 2.1.7
 [2019-04-19 02:19:07.107] Enable rabbitmq_management
 [2019-04-19 02:19:10.676] Network: PREP-TestNet
 [2019-04-19 02:19:10.682] Run loop-peer and loop-channel start
