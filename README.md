@@ -9,7 +9,7 @@ Documents that merged into the master branch are published on the developers por
 	- [how-to-change-network-in-iconex](./howto/how-to-change-network-in-iconex.md)
 	- [how-to-estimate-required-step](./howto/how-to-estimate-required-step.md)
 	- [how-to-generate-a-transaction-signature](./howto/how-to-generate-a-transaction-signature.md)
-	- [howto/how-to-generate-a-transaction-signature](./howto/how-to-set-the-policy-for-the-transaction-fee.md)
+	- [how-to-set-the-policy-for-the-transaction-fee](./howto/how-to-set-the-policy-for-the-transaction-fee.md)
 	- [how-to-write-score-integration-test](./howto/how-to-write-score-integration-test.md)
 	- [how-to-write-score-unit-test](./howto/how-to-write-score-unit-test.md)
 	- [icon-development-network-on-aws-marketplace](./howto/icon-development-network-on-aws-marketplace.md)
