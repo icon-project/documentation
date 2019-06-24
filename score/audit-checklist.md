@@ -274,7 +274,7 @@ def ICXTransfer(self, _from: Address, _to: Address, _value: int):
 In your SCORE main class that inherits IconScoreBase, you must call super().\_\_init\_\_() in the \_\_init\_\_() function to initialize the state DB. Likewise, super().on_install() must be called in on_install() function and super().on_update() must be called in on_update() function. These initialization statements must be executed with the first command in each function.
 
 ```python
-# Bad (withiout initialization)
+# Bad (without initialization)
 class MyClass(IconScoreBase):
     def __init__(self, db: IconScoreDatabase) -> None:
         self._context__name = VarDB('context.name', db, str)
