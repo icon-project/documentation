@@ -1,8 +1,8 @@
 ---
-title: "Audit Checklist"
+title: 'Audit Checklist'
 ---
 
-This document explains ICON audit criteria and suggests secure SCORE implementation practices. 
+This document explains ICON audit criteria and suggests secure SCORE implementation practices.
 Audit checklist consists of 2 severity levels of items, Critical and Warning. Audit results will come as Pass/Fail/NA for each Critical items, and Pass/Warning/NA for each Warning items. If any Critical item is determined to be Fail, the SCORE deployment will be rejected.
 
 Listed below are the checklist grouped by severity.
@@ -11,6 +11,7 @@ We assume that you have read [Token & Crowdsale](/docs/token-crowdsale) and [Wri
 ## Severity level
 
 ### Critical
+
 - [Timeout](#timeout)
 - [Unfinishing Loop](#unfinishing-loop)
 - [Package import](#package-import)
@@ -33,6 +34,7 @@ We assume that you have read [Token & Crowdsale](/docs/token-crowdsale) and [Wri
 - [Temporary Limitation](#temporary-limitation)
 
 ### Warning
+
 - [External Function Parameter Check](#external-function-parameter-check)
 - [Internal Function Parameter Check](#internal-function-parameter-check)
 - [Predictable Arbitrarity](#predictable-arbitrarity)
@@ -40,7 +42,6 @@ We assume that you have read [Token & Crowdsale](/docs/token-crowdsale) and [Wri
 - [Underflow/Overflow](#underflowoverflow)
 - [Vault](#vault)
 - [Reentrancy](#reentrancy)
-
 
 ## Critical
 
@@ -128,7 +129,7 @@ s.connect(host, port)
 
 Among the API provided by ICONService, API written for platform should not be used in SCORE. Attempts to access internal APIs with information obtained using getAttr() are prohibited. Use externally released APIs only. You can find recent released APIs at https://iconservice.readthedocs.io/en/latest/.
 
-```python 
+```python
 # Bad
 something = getattr(self, 'something', '')
 ```
@@ -147,9 +148,11 @@ won = datetime.datetime.now() % 2 == 0
 ```
 
 ### Fixed SCORE Infomation
+
 SCORE's critical information should not be changed once it has been deployed. In case of IRC2 token SCORE, `name`, `symbol` and `decimals` should not be changed; for other SCOREs, `name` must not be changed.
 
-IRC token type must be fixed once deployed as well. For example, IRC2 token SCORE should not be updated to IRC3 tokens, and IRC2 token should not be updated to non-IRC SCORE. 
+IRC token type must be fixed once deployed as well. For example, IRC2 token SCORE should not be updated to IRC3 tokens, and IRC2 token should not be updated to non-IRC SCORE.
+
 ```python
 @external(readonly=True)
 def name(self) -> str:
@@ -159,10 +162,10 @@ def name(self) -> str:
 def setname(self, new_name):
     self._name.set(new_name)
 ```
-You should not implement any class methods that update the variables, and those values should not be changed when you update the SCORE.
-For IRC2 tokens, you must update the IRC2 token SCORE with the same `name`, `symbol` and `decimals` values. 
-If it is not an IRC2 token, it should be update to non-IRC2 SCORE with the same name value.
 
+You should not implement any class methods that update the variables, and those values should not be changed when you update the SCORE.
+For IRC2 tokens, you must update the IRC2 token SCORE with the same `name`, `symbol` and `decimals` values.
+If it is not an IRC2 token, it should be update to non-IRC2 SCORE with the same name value.
 
 ### IRC2 Token Standard Compliance
 
@@ -205,7 +208,7 @@ def balanceOf(self, _owner: Address) -> int:
 
 ### Eventlog on Token Transfer
 
-Token transfer must trigger Eventlog. 
+Token transfer must trigger Eventlog.
 
 ```python
 # Good
@@ -221,6 +224,7 @@ def transfer(self, _to: Address, _value: int, _data: bytes = None):
 ```
 
 In addition to sending tokens between the two addresses, you must leave Eventlog even if tokens are minted or burned. For mint and burn, use a specific address as follows:
+
 ```python
 # Good
 
@@ -233,8 +237,8 @@ def mint(self, amount: int):
     self.Transfer(EOA_ZERO, self.owner, amount, b'mint')
 
 @external
-def burn(self, amount: int):    
-    self._total_supply.set(self._total_supply.get() - amount)    
+def burn(self, amount: int):
+    self._total_supply.set(self._total_supply.get() - amount)
     self._balances[self.owner] -= amount
     self.Transfer(self.owner, EOA_ZERO, amount, b'burn')
 ```
@@ -267,10 +271,10 @@ def ICXTransfer(self, _from: Address, _to: Address, _value: int):
 
 ### Super Class
 
-In your SCORE main class that inherits IconScoreBase, you must call super().\_\_init\_\_() in the \_\_init\_\_() function to initialize the state DB. Likewise, super().on_install() must be called in on_install() function and super().on_update() must be called in on_update() function.
+In your SCORE main class that inherits IconScoreBase, you must call super().\_\_init\_\_() in the \_\_init\_\_() function to initialize the state DB. Likewise, super().on_install() must be called in on_install() function and super().on_update() must be called in on_update() function. These initialization statements must be executed with the first command in each function.
 
 ```python
-# Bad
+# Bad (withiout initialization)
 class MyClass(IconScoreBase):
     def __init__(self, db: IconScoreDatabase) -> None:
         self._context__name = VarDB('context.name', db, str)
@@ -278,27 +282,59 @@ class MyClass(IconScoreBase):
 
     def on_install(self, name: str, cap: str) -> None:
         # doSomething
+        self._context__name.set('test')
 
     def on_update(self) -> None:
         # doSomething
+        self._context__name.set('test')
 
-# Good
+# Bad (doSomething before initialization)
 class MyClass(IconScoreBase):
     def __init__(self, db: IconScoreDatabase) -> None:
+        # doSomething
+        self._context__name = VarDB('context.name', db, str)
+        self._context__cap = VarDB('context.cap', db, int)
+        # call super().__init__(db) later
         super().__init__(db)
+
+    def on_install(self, name: str, cap: str) -> None:
+        # doSomething
+        self._context__name.set('test')
+        # call super().on_install() later
+        super().on_install()
+
+
+    def on_update(self) -> None:
+        # doSomething
+        self._context__name.set('test')
+        # call super().on_update() later
+        super().on_update()
+
+
+# Good (doSomething after initialization)
+class MyClass(IconScoreBase):
+    def __init__(self, db: IconScoreDatabase) -> None:
+        # call super().__init__(db) first
+        super().__init__(db)
+        # doSomething later
         self._context__name = VarDB('context.name', db, str)
         self._context__cap = VarDB('context.cap', db, int)
 
     def on_install(self, name: str, cap: str) -> None:
+        # call super().on_install() first
         super().on_install()
-        # doSomething
+        # doSomething later
+        self._context__name.set('test')
 
     def on_update(self) -> None:
+        # call super().on_update() first
         super().on_update()
-        # doSomething
+        # doSomething later
+        self._context__name.set('test')
 ```
 
 ### Keyword Arguments
+
 Keyword arguments are not allowed as an input parameter of `on_install()` and `on_update()` functions.
 
 ```python
@@ -310,7 +346,6 @@ def on_install(self, name: str, symbol: str, amount: int, decimals: int):
 def on_install(self, **kwargs) -> None:
     ...
 ```
-
 
 ### Big Number Operation
 
@@ -388,7 +423,7 @@ def __init__(self, db: IconScoreDatabase) -> None:
 
 @external
 def update_organizer(self, _organizer: Address) -> None:
-    self._organizer.set(_organizer) 
+    self._organizer.set(_organizer)
 
 @external
 def get_organizer(self) -> Address:
@@ -397,7 +432,7 @@ def get_organizer(self) -> Address:
 
 ### StateDB Operation
 
-In order not to cause an unexpected situation, VarDB, DictDB and ArrayDB should be accessed in a permitted manner. 
+In order not to cause an unexpected situation, VarDB, DictDB and ArrayDB should be accessed in a permitted manner.
 
 ```python
 # VarDB
@@ -414,9 +449,9 @@ self.test_dict = DictDB('test_dict', db, value_type=int)
 
 # Good
 self.test_dict['key'] = 1        ## set
-print(self.test_dict['key'])     ## get 
+print(self.test_dict['key'])     ## get
 # Bad
-self.test_dict = 1               ## Error 
+self.test_dict = 1               ## Error
 
 # ArrayDB
 self.test_array = ArrayDB('test_array', db, value_type=int)
@@ -426,7 +461,7 @@ self.test_array.put(0)           # put the value at the last index
 self.test_array.pop()            # remove the value at the last index and return it
 self.test_array.get(0)           # get the value at some index
 # Bad
-self.test_array = 1              # Error 
+self.test_array = 1              # Error
 ```
 
 Also, if you want to store a class instance in StateDB, you must explicitly serialize it before saving.
@@ -454,8 +489,8 @@ def __init__(self, db: IconScoreDatabase) -> None:
 ```
 
 ### Temporary Limitation
-N/A
 
+N/A
 
 ## Warning
 
@@ -469,6 +504,7 @@ Developers do not need to deliberately verify the input parameter types inside a
 If a SCORE calls other functions of own or of other SCORE, always make sure that parameter types are correct and required parameters are not omitted.
 Values of parameters must be in a valid range.
 There is no size limit in `str` or `int` type in Python, however, transaction message should not exceed 512 KB.
+
 ```python
 # Function declarations
 def myTransfer(_value: int) -> bool:
@@ -501,7 +537,7 @@ In case of sending ICX by calling a low level function such as 'icx.send', you s
 'icx.send' returns boolean result of its execution, and does not raise an exception on failure.  
 On the other hand, 'icx.transfer' raises an exception if transaction fails.  
 If the SCORE does not catch the exception, the transaction will be reverted.  
-[Reference: An object used to transfer icx coin]( https://github.com/icon-project/icon-service/blob/master/docs/dapp_guide.md#icx--an-object-used-to-transfer-icx-coin)
+[Reference: An object used to transfer icx coin](https://github.com/icon-project/icon-service/blob/master/docs/dapp_guide.md#icx--an-object-used-to-transfer-icx-coin)
 
 ```python
 
@@ -518,7 +554,6 @@ if not self.icx.send(_to, amount):
 self._refund_icx_amount[_to] += amount
 self.icx.transfer(_to, amount)
 ```
-
 
 ### Underflow/Overflow
 
@@ -537,7 +572,7 @@ def mint_token(self, _amount: int):
 
     self.Transfer(EOA_ZERO, self.owner, _amount, b'mint')
 
-# Good  
+# Good
 @external
 def mint_token(self, _amount: int):
     if not self.msg.sender == self.owner:
