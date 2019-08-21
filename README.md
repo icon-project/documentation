@@ -1,3 +1,4 @@
+
 Documents that merged into the master branch are published on the developers portal: https://www.icondev.io/v0.9/docs
 - Once merged, please make a **pull request to the master branch** for further updates. 
 
@@ -21,8 +22,16 @@ Documents that merged into the master branch are published on the developers por
 	- [about-this-guide](./introduction/about-this-guide.md)
 	- [what-is-icon](./introduction/what-is-icon.md)
 - node
-	- p-rep
-		- [p-rep-installation-and-configuration](./node/p-rep/p-rep-installation-and-configuration.md)
+	- p-rep		
+		- [p-rep-installation-and-configuration-for-mainnet](./node/p-rep/p-rep-installation-and-configuration-for-mainnet.md)
+		- [p-rep-installation-and-configuration-for-testnet](./node/p-rep/p-rep-installation-and-configuration-for-testnet.md)				
+	    - [how-to-setup-network-infrastructure](./node/p-rep/how-to-setup-network-infrastructure.md)
+		- [how-to-network-design-for-high-availability](./node/p-rep/how-to-network-design-for-high-availability.md)
+		- [how-to-using-nginx-to-prevent-DDoS-attacks](./node/p-rep/how-to-using-nginx-to-prevent-DDoS-attacks.md)		
+		- [Understanding-log-files](./node/p-rep/Understanding-log-files.md)
+		- [how-to-collect-centralized-logging](./node/p-rep/how-to-collect-centralized-logging.md)
+		- [backup-and-restore-db-guide](./node/p-rep/backup-and-restore-db-guide.md)
+
 - references
 	- [icon-json-rpc-v3](./references/icon-json-rpc-v3.md)
 	- [java-sdk](./references/java-sdk.md)
