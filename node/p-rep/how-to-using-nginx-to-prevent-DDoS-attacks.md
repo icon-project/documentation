@@ -32,6 +32,7 @@ The reverse proxy receives data from the internal server and sends it to the cli
 1. Security: External users cannot recognize the existence of servers on the actual internal network. All transmissions happen through the reverse proxy server which maps the request to the internal server information and processes accordingly. This helps to protect internal server information from the external environment.
 2. ACL: Defines whether to allow or deny access from external users.
 3. Log/Audit: Check the information of external users who try to access the network.
+
 ## How to use 
 ### Prep + Nginx composition
 ##### Nginx reverse package for prep node
