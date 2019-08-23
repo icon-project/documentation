@@ -76,12 +76,7 @@ Below is the Active/Backup model built over Pacemaker.
 127.0.0.1 pcmk1
 192.168.10.1 pcmk1
 192.168.10.2 pcmk2
- 
-## Docker Repository
-13.125.21.220       repo.icon.icx        ## MainNet
-13.124.32.159       repo.icondev.go      ## TestNet
-13.112.128.109      repo.devnet.icx      ## DevNet, DevNetORG, MainctzNet, TestctzNet
- 
+  
 ## PaceMaker HeartBeat
 10.10.10.1 pcmk1-hb
 10.10.10.2 pcmk2-hb

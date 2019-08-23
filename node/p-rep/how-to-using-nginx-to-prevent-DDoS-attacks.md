@@ -37,7 +37,6 @@ The reverse proxy receives data from the internal server and sends it to the cli
 ### Prep + Nginx composition
 ##### Nginx reverse package for prep node
 - dockerized nginx will be provided - please refer to the link below.
-- < github url > 
 * Configure P-Rep node software based on nginx so that each node can communicate through nginx.
 * Set nginx allow ip to whitelist accessible IPs from P-Rep nodes.* Monitor the P-Rep node IP on a regular basis and renew the IP list if there is a change in allow ip. 
 * Install docker in bridge mode.
