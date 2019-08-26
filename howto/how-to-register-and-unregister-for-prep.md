@@ -71,12 +71,13 @@ optional arguments:
   --city CITY           P-Rep's city
   --email EMAIL         P-Rep's email
   --website WEBSITE     P-Rep's homepage url
-  --details DETAILS     json url including P-Rep detailed information 
+  --details DETAILS     Url including P-Rep detailed information
   --p2p-endpoint P2PENDPOINT
                         Network info used for connecting among P-Rep nodes
   --prep-json PREP_JSON
                         json file including P-Rep information
 ```
+<sup>*</sup>DETAILS : See [JSON Standard for P-Rep detailed information](https://github.com/icon-project/documentation/blob/develop/references/JSON-Standard-for-P-Rep-detailed-Information.md)
 
 #### Example
 There are three ways to Register as a P-Rep; using json file, optional argument, and interactive command line.
@@ -183,12 +184,13 @@ optional arguments:
   --city CITY           P-Rep's city
   --email EMAIL         P-Rep's email
   --website WEBSITE     P-Rep's homepage url
-  --details DETAILS     json url including P-Rep detailed information 
+  --details DETAILS     Url including P-Rep detailed information
   --p2p-endpoint P2PENDPOINT
                         Network info used for connecting among P-Rep nodes
   --prep-json PREP_JSON
                         json file including P-Rep information
 ```
+<sup>*</sup>DETAILS: See [JSON Standard for P-Rep detailed information](https://github.com/icon-project/documentation/blob/develop/references/JSON-Standard-for-P-Rep-detailed-Information.md)
 
 #### Example
 Update P-Rep using json file, optional argument and interactive command line.

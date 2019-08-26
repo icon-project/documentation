@@ -1630,7 +1630,7 @@ Response on success
 | website     | String     |    O     | P-Rep homepage url<br>"https://abc.example.com/"             |
 | details     | String     |    O     | Url including P-Rep detail information<br>"https://abc.example.com/details/" |
 | p2pEndpoint | String     |    O     | Network info used for connecting among P-Rep nodes<br>"123.45.67.89:7100", "node.example.com:7100" |
-<sup>**</sup>details : See [JSON Standard for P-Rep detailed information](https://github.com/icon-project/documentation/references/JSON-Standard-for-P-Rep-detailed-Information.md)*
+<sup>*</sup>details : See [JSON Standard for P-Rep detailed information](https://github.com/icon-project/documentation/blob/develop/references/JSON-Standard-for-P-Rep-detailed-Information.md)
 
 #### Returns
 
@@ -1723,7 +1723,7 @@ Request
 | website     | String     |    X     | P-Rep homepage url<br>"https://abc.example.com/"             |
 | details     | String     |    X     | Url including P-Rep detail information<br>"https://abc.example.com/details/" |
 | p2pEndpoint | String     |    X     | Network info used for connecting among P-Rep nodes<br>"123.45.67.89:7100", "node.example.com:7100" |
-<sup>**</sup>details : See [JSON Standard for P-Rep detailed information](https://github.com/icon-project/documentation/references/JSON-Standard-for-P-Rep-detailed-Information.md)*
+<sup>*</sup>details : See [JSON Standard for P-Rep detailed information](https://github.com/icon-project/documentation/blob/develop/references/JSON-Standard-for-P-Rep-detailed-Information.md)
 
 #### Returns
 
@@ -1992,4 +1992,4 @@ Response
 
 - [JSON-RPC 2.0 Specification](http://www.jsonrpc.org/specification)
 - [ICON JSON RPC API v2](https://github.com/icon-project/icx_JSON_RPC)
-- [JSON Standard for P-Rep detailed information](https://github.com/icon-project/documentation/references/JSON-Standard-for-P-Rep-detailed-Information.md)
+- [JSON Standard for P-Rep detailed information](https://github.com/icon-project/documentation/blob/develop/references/JSON-Standard-for-P-Rep-detailed-Information.md)
