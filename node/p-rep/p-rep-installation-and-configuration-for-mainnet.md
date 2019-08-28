@@ -266,7 +266,7 @@ Open `docker-compose.yml` in a text editor and add the following content:
 version: '3'
 services:
    citizen:
-      image: 'iconloop/citizen-node:1908121846x1857be'
+      image: 'iconloop/citizen-node:1908271151xd2b7a4'
       network_mode: host
       environment:
          LOG_OUTPUT_TYPE: "file"
@@ -295,12 +295,12 @@ citizen_1         |   [2019-08-20 15:36:18.935] RPC_PORT: 9000 / RPC_WORKER: 3
 citizen_1         |   [2019-08-20 15:36:18.937] DEFAULT_STORAGE_PATH=/data/loopchain/mainnet/.storage in Docker Container
 citizen_1         |   [2019-08-20 15:36:18.939] scoreRootPath=/data/loopchain/mainnet/.score_data/score
 citizen_1         |   [2019-08-20 15:36:18.940] stateDbRootPath=/data/loopchain/mainnet/.score_data/db
-citizen_1         |   [2019-08-20 15:36:18.942] Citizen package version info - 1908121846x1857be
+citizen_1         |   [2019-08-20 15:36:18.942] Citizen package version info - 1908271151xd2b7a4
 citizen_1         | WARNING: You are using pip version 19.1.1, however version 19.2.2 is available.
 citizen_1         | You should consider upgrading via the 'pip install --upgrade pip' command.
 citizen_1         | iconcommons             1.1.1
 citizen_1         | iconrpcserver           1.3.1.1
-citizen_1         | iconservice             1.4.1
+citizen_1         | iconservice             1.4.2
 citizen_1         | loopchain               2.2.1.3
 citizen_1         |   [2019-08-20 15:36:19.448] builtinScoreOwner = hx677133298ed5319607a321a38169031a8867085c
 citizen_1         | 0
