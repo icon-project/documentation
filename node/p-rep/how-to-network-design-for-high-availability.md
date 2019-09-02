@@ -42,18 +42,31 @@ If you want to get more detailed information, refer to the link below
 ##### Pacemaker Network
 Below is the Active/Backup model built over Pacemaker.
 
-![pace_maker_ha.jpg](../../img/prep/pace_maker_ha.jpg)
->L2 Switch 1,2 : 
+Below is Active status
+![pace_maker_ha.jpg](../../img/prep/LoopChain-HA-Active-onpremise.jpg)
+
+Below is Standby status
+![pace_maker_ha.jpg](../../img/prep/LoopChain-HA-Standby-onpremise.jpg)
+
+
+>Internal L2 Switch 1,2 : 
 >Management - Detects H/W error (Hang) or FailOver.
 >HeartBeat - Detects S/W error (network,process,daemon) or FailOver.
 >
->L4 Switch 1,2 : 
+>External L2 Switch 1,2 : 
 >Transmit to VIP allocated by Pacemaker when a Peer IP or Domain is called
 >
 > Peer Node :  active node
 > 
 > Backup Node : A backup node run a citizen
 
+* You need three public IP address. ( Bellow IP is random )
+
+|Node-Type|Public IPaddr |Connected status | Description|
+|----|----|----|----|
+|Active-Node| 211.71.10.11| Public VIP | Pacemaker assigns Virtual IP address to eth0:1<br>IP address used for connection among P-Rep nodes (p2pEndpoint).<br>Pacemaker assigns this IP address to Backup-node when Active-node failure begins.|
+|Active-Node|211.71.10.101| connected eth0 | Assign IP address to eth0|
+|Backup-Node|211.71.10.102| connected eth0| Assgin IP address to eth0 <br>Even when run as Backup-Node, it needs to be able to communicate between external network and run a citizen| 
 
 ##### PaceMaker H/A Process
 
@@ -74,20 +87,17 @@ Below is the Active/Backup model built over Pacemaker.
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost6 localhost6.localdomain6
 127.0.0.1 pcmk1
-192.168.10.1 pcmk1
-192.168.10.2 pcmk2
-  
-## PaceMaker HeartBeat
-10.10.10.1 pcmk1-hb
-10.10.10.2 pcmk2-hb
+211.71.10.101 pcmk1
+211.71.10.102 pcmk2
  
-## Fencing Device
-10.10.10.3 pcmk1-ilo
-10.10.10.4 pcmk2-ilo
+ 
+## PaceMaker HeartBeat
+10.10.10.101 pcmk1-hb
+10.10.10.102 pcmk2-hb
+ 
  
 ## VIP ##
-192.168.0.210 peer-vip
-192.168.0.220 ctz-vip
+211.71.10.11 peer-vip
 ```
 
 * Create Peer Daemon (PaceMaker)
@@ -104,9 +114,9 @@ RemainAfterExit=yes
 StandardError=null
 StandardOutput=null
 WorkingDirectory=/app/loopchain/bin
-ExecStart=/usr/local/bin/docker-compose -f /app/loopchain/bin/docker-compose.v3.host.yml up -d
+ExecStart=/usr/local/bin/docker-compose -f /app/loopchain/bin/docker-compose.host.yml up -d
 ExecStop=/usr/sbin/pcs resource disable Ctz
-ExecStop=/usr/local/bin/docker-compose -f /app/loopchain/bin/docker-compose.v3.host.yml down
+ExecStop=/usr/local/bin/docker-compose -f /app/loopchain/bin/docker-compose.host.yml down
  
 [Install]
 WantedBy=multi-user.target
@@ -130,8 +140,8 @@ RemainAfterExit=yes
 StandardError=null
 StandardOutput=null
 WorkingDirectory=/app/loopchain/bin
-ExecStart=/usr/local/bin/docker-compose -f /app/loopchain/bin/docker-compose.citizen.v3.host.yml up -d
-ExecStop=/usr/local/bin/docker-compose -f /app/loopchain/bin/docker-compose.citizen.v3.host.yml down
+ExecStart=/usr/local/bin/docker-compose -f /app/loopchain/bin/docker-compose.host.yml up -d
+ExecStop=/usr/local/bin/docker-compose -f /app/loopchain/bin/docker-compose.host.yml down
  
 [Install]
 WantedBy=multi-user.target
@@ -341,9 +351,8 @@ Full list of resources:
  Resource Group: Peer
      peer-vip   (ocf::heartbeat:vip):   Started pcmk1-hb
      peerservice    (systemd:peer): Started pcmk1-hb
- Resource Group: Ctz
-     ctz-vip    (ocf::heartbeat:vip):   Started pcmk2-hb
-     ctzservice (systemd:ctz):  Starting pcmk2-hb
+ Resource Group: Citizen
+     citizenservice (systemd:citizen):  Starting pcmk2-hb
  
 Daemon Status:
   corosync: active/enabled
@@ -374,9 +383,8 @@ Full list of resources:
  Resource Group: Peer
      peer-vip   (ocf::heartbeat:vip):   Started pcmk2-hb
      peerservice    (systemd:peer): Started pcmk2-hb
- Resource Group: Ctz
-     ctz-vip    (ocf::heartbeat:vip):   Stopped (disabled)
-     ctzservice (systemd:ctz):  Stopped (disabled)
+ Resource Group: Citizen
+     citizenservice (systemd:citizen):  Stopped (disabled)
  
 Daemon Status:
   corosync: active/enabled
