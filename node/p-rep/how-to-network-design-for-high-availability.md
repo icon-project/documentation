@@ -42,10 +42,10 @@ If you want to get more detailed information, refer to the link below
 ##### Pacemaker Network
 Below is the Active/Backup model built over Pacemaker.
 
-Below is Active status
+Below is Active status <br>
 ![pace_maker_ha.jpg](../../img/prep/LoopChain-HA-Active-onpremise.jpg)
 
-Below is Standby status
+Below is Standby status <br>
 ![pace_maker_ha.jpg](../../img/prep/LoopChain-HA-Standby-onpremise.jpg)
 
 
