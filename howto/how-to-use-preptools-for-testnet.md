@@ -114,7 +114,10 @@ request success.
     "id": 1234
 }
 ```
+<sup>*</sup>DETAILS : See [JSON Standard for P-Rep detailed information](https://github.com/icon-project/documentation/blob/develop/references/JSON-Standard-for-P-Rep-detailed-Information.md)
+
 Further information can be found in the below document:
+
 * [Register P-Rep using preptools](https://github.com/icon-project/preptools#preptools-registerprep)
 
 ### Unregister P-Rep
@@ -224,7 +227,10 @@ request success.
 }
 ```
 
+<sup>*</sup>DETAILS : See [JSON Standard for P-Rep detailed information](https://github.com/icon-project/documentation/blob/develop/references/JSON-Standard-for-P-Rep-detailed-Information.md)
+
 Further information can be found in the document below:
+
 * [Set P-Rep using preptools](https://github.com/icon-project/preptools#preptools-setprep)
 
 ### Set Governance Variables
