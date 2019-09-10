@@ -464,7 +464,8 @@ self.test_array.get(0)           # get the value at some index
 self.test_array = 1              # Error
 ```
 
-Also, if you want to store a class instance in StateDB, you must explicitly serialize it before saving.
+The data stored in StateDB must be deterministic on all nodes. There are some limitations to this.
+The first is that if you want to store a class instance in StateDB, you must explicitly serialize it before saving.
 
 ```python
 self.something = VarDB('context.something', db, str)
@@ -474,6 +475,22 @@ self.something.set( str(Something()) )
 
 # Bad
 self.something.set( Something() )
+```
+
+The second is when you store an unordered collection of items in StateDB, such as a python set datatype. Generally, set datatype is converted to list datatype and serialized using json.dumps and saved in StateDB. However, the result of converting from set to list may not be the same for each node. Therefore, the data must be manipulated so that the same result can be stored in StateDB.
+
+```python
+self.test_var = VarDB('test_var', db, str)
+data_set = set([1,2,3])
+
+# Good
+data_list = list(data_set)
+data_list.sort()
+self.test_var.set( json_dumps(data_list) )
+
+# Bad
+data_list = list(data_set)
+self.test_var.set( json_dumps(data_list) )
 ```
 
 ### StateDB Write Operation
