@@ -279,6 +279,7 @@ services:
       network_mode: host
       environment:
          LOOPCHAIN_LOG_LEVEL: "DEBUG"
+         ICON_LOG_LEVEL: "DEBUG"
          DEFAULT_PATH: "/data/loopchain"
          LOG_OUTPUT_TYPE: "file"
          CERT_PATH: "/cert"     
