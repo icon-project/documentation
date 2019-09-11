@@ -25,13 +25,13 @@ We assume that you have previous knowledge and experience in:
 
 Below specification is a minimum requirement for the testnet application. 
 
-| Desciption    | Minimum Specification for P-Rep TestNet Application | 
-| ------------- | ---------------------------------------------| 
-| CPU Model     | Intel(R) Xeon(R) CPU @ 3.00 GHz | 
-| vCPU (core)   | 2                                            |
-| RAM           | 4 G                                          |
-| Disk          | 100 G                                | 
-| Network       | 1 Gbps                                       | 
+| Description | Minimum Specifications|  Recommended Specifications|
+|-----|-----|-----|
+|CPU model|Intel(R) Xeon(R) CPU @ 3.00GHz|Intel(R) Xeon(R) CPU @ 3.00GHz|
+|vCPU (core) |16|36|
+|RAM|32G|72G|
+|Disk|200G |500G |
+|Network|1Gbps|1Gbps|
 
 
 ### SW Requirements
@@ -46,32 +46,28 @@ Below specification is a minimum requirement for the testnet application.
 
 For your reference, ICON node depends on the following packages. The packages are included in the P-Rep docker image that we provide, so you don't need to install them separately. 
 
-- Python 3.6.5 or higher (3.7 is not supported)
+- Python 3.6.5 or higher
 - RabbitMQ 3.7 or higher
 
 
 
 ## Network Diagram of P-Rep nodes
 
-![P-Rep Networking Model](../../img/p-rep1.png)
+![P-Rep Networking Model](../../img/prep/prep-testnet01.jpg)
 
-Above diagram shows how P-Rep nodes are interacting with each other in the test environment. To get access to the testnet, please read the medium post, [P-Rep TestNet Application Open](https://medium.com/helloiconworld/p-rep-testnet-application-open-97e3f7ad1e6d).
-
-
+Above diagram shows how P-Rep nodes are interacting with each other in the test environment. 
 
 
-- Endpoint: https://{YOUR_GROUP_NAME}.net.solidwallet.io
+- Endpoint: https://zicon.net.solidwallet.io
 
   - Endpoint is the load balancer that accepts the transaction requests from DApps and relays the requests to an available P-Rep node. In the test environment, ICON foundation is running the endpoint. It is also possible for each P-Rep to setup own endpoint to directly serve DApps (as depicted in PRep-Node4), but that configuration is out of the scope of this document. 
-- Tracker: https://{YOUR_GROUP_NAME}.tracker.solidwallet.io
+- Tracker: https://zicon.tracker.solidwallet.io
 
   - A block and transaction explorer attached to the test network.
-- IP List: https://download.solidwallet.io/conf/{YOUR_GROUP_NAME}_prep_iplist.json
 
-  - ICON foundation will maintain the IP list of P-Reps. The JSON file will contain the list of IPs. You should configure your firewalls to allow in/outbound traffic from/to the IP addresses.  Following TCP ports should be open.
-  - Port 7100: Used by gRPC for peer to peer communication between nodes.
-  - Port 9000: Used by  JSON-RPC API server.
-  - The IP whitelist will be automatically updated on a daily basis from the endpoint of the seed node inside the P-Rep Node Docker.
+- Firewall
+  - Port 7100: Used by gRPC for peer to peer communication between nodes. (We recommend any open)
+  - Port 9000: Used by JSON-RPC API server.  (We recommend any open)
 
 
 
@@ -275,16 +271,28 @@ $ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-no
 Open `docker-compose.yml` in a text editor and add the following content:
 
 ```yml
-version: '3' 
-services:    
-     container:        
-          image: 'iconloop/prep-node:1905292100xdd3e5a'        
-          container_name: 'prep-node'        
-          volumes:            
-               - ./data:/data        
-          ports:           
-               - 9000:9000           
-               - 7100:7100
+version: '3'
+services:
+   prep:
+      image: iconloop/prep-node:1909102212x380192
+      container_name: "prep-node"
+      network_mode: host
+      environment:
+         LOOPCHAIN_LOG_LEVEL: "DEBUG"
+         DEFAULT_PATH: "/data/loopchain"
+         LOG_OUTPUT_TYPE: "file"
+         CERT_PATH: "/cert"     
+         PRIVATE_PATH: "/cert/{==YOUR_KEYSTORE or YOUR_CERTKEY FILENAME==}"
+         PRIVATE_PASSWORD: "{==YOUR_KEY_PASSWORD==}"
+      cap_add:
+         - SYS_TIME
+      volumes:
+         - ./data:/data
+         - ./cert:/cert  
+      ports:
+         - 9000:9000
+         - 7100:7100
+
 ```
 
 
@@ -338,7 +346,7 @@ The ``docker ps``  command shows the list of running docker containers.
 ```shell
 $ docker ps
 CONTAINER ID   IMAGE                                                          COMMAND                CREATED              STATUS                          PORTS                                                                 NAMES
-0de99e33cdc9     iconloop/prep-node:1905292100xdd3e5a    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
+0de99e33cdc9     iconloop/prep-node:1909102212x380192    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
 The meaning of each column in the `docker ps` result output is as follows. 
@@ -358,16 +366,20 @@ You can read the container booting log from the log folder.
 
 ```shell
 $ tail -f data/PREP-TestNet/log/booting_20190419.log
-[2019-04-19 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-TestNet/.storage
-[2019-04-19 02:19:01.459] scoreRootPath=/data/PREP-TestNet/.score_data/score
-[2019-04-19 02:19:01.464] stateDbRootPath=/data/PREP-TestNet/.score_data/db
-[2019-04-19 02:19:01.468] P-REP package version info - 1905292100xdd3e5a
-[2019-04-19 02:19:02.125] iconcommons 1.0.5.2 iconrpcserver 1.3.1 iconservice 1.3.0 loopchain 2.1.7
-[2019-04-19 02:19:07.107] Enable rabbitmq_management
-[2019-04-19 02:19:10.676] Network: PREP-TestNet
-[2019-04-19 02:19:10.682] Run loop-peer and loop-channel start
-[2019-04-19 02:19:10.687] Run iconservice start!
-[2019-04-19 02:19:10.692] Run iconrpcserver start!
+[2019-09-10 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-TestNet/.storage
+[2019-09-10 02:19:01.459] scoreRootPath=/data/PREP-TestNet/.score_data/score
+[2019-09-10 02:19:01.464] stateDbRootPath=/data/PREP-TestNet/.score_data/db
+[2019-09-10 02:19:01.468] P-REP package version info - 1909102212x380192
+[2019-09-10 02:19:02.125] iconcommons             1.1.2
+                          iconrpcserver           1.4.1
+                          iconsdk                 1.1.0
+                          iconservice             1.5.3
+                          loopchain               2.3.4
+[2019-09-10 02:19:07.107] Enable rabbitmq_management
+[2019-09-10 02:19:10.676] Network: PREP-TestNet
+[2019-09-10 02:19:10.682] Run loop-peer and loop-channel start
+[2019-09-10 02:19:10.687] Run iconservice start!
+[2019-09-10 02:19:10.692] Run iconrpcserver start!
 ```
 
 
@@ -390,35 +402,44 @@ Removing network prep_default
 $ curl localhost:9000/api/v1/status/peer
 
 {
-    "made_block_count": 0,
-    "status": "Service is online: 0",
-    "state": "Vote",
-    "peer_type": "0",
-    "audience_count": "0",
-    "consensus": "siever",
-    "peer_id": "hx1787c2194f56bb550a8daba9bbaea00a4956ed58",
-    "block_height": 184,
-    "round": 1,
-    "epoch_height": 186,
-    "unconfirmed_block_height": 0,
-    "total_tx": 93, 
-    "unconfirmed_tx": 0,
-    "peer_target": "20.20.1.195:7100",
-    "leader_complaint": 185,
-    "peer_count": 5,
-    "leader": "hx7ff69280a1483c660695039c14ba954bb101bb66",
-    "epoch_leader": "hx7ff69280a1483c660695039c14ba954bb101bb66",
-    "mq": {
-         "peer": {
-               "message_count": 0
-          },
-         "channel": {
-               "message_count": 0
-         },
-         "score": {
-              "message_count": 0
-         }
-     }
+  "made_block_count": 10,
+  "leader_made_block_count": 10,
+  "status": "Service is online: 1",
+  "state": "BlockGenerate",
+  "service_available": true,
+  "peer_type": "1",
+  "audience_count": "0",
+  "consensus": "siever",
+  "peer_id": "hx6834efa18f6abe7d99de79e9bc9116f82e155620",
+  "block_height": 17034,
+  "round": 0,
+  "epoch_height": 17035,
+  "unconfirmed_block_height": 17035,
+  "total_tx": 17691,
+  "unconfirmed_tx": 1,
+  "peer_target": "20.20.1.212:7100",
+  "leader_complaint": 1,
+  "peer_count": 5,
+  "leader": "hx6834efa18f6abe7d99de79e9bc9116f82e155620",
+  "epoch_leader": "hx6834efa18f6abe7d99de79e9bc9116f82e155620",
+  "versions": {
+    "loopchain": "2.3.4",
+    "iconservice": "1.5.3",
+    "iconrpcserver": "1.4.1",
+    "iconcommons": "1.1.2",
+    "earlgrey": "0.0.4"
+  },
+  "mq": {
+    "peer": {
+      "message_count": 0
+    },
+    "channel": {
+      "message_count": 0
+    },
+    "score": {
+      "message_count": 0
+    }
+  }
 }
 ```
 
@@ -429,29 +450,91 @@ $ curl localhost:9000/api/v1/status/peer
 If you want change the TimeZone, open `docker-compose.yml` in a text editor and add the following content:
 
 ```yml
-version: '3' services:    container:        image: 'iconloop/prep-node:1905292100xdd3e5a'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100       environment:          TZ: "America/Los_Angeles"
+version: '3' services:    container:        image: 'iconloop/prep-node:1909102212x380192'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100       environment:          TZ: "America/Los_Angeles"
 ```
 
 
 
 The P-Rep Node image supports the following environment variables:
 
-| Variable            | Description                                                  | Default Value          | Allowed Value                |
-| :------------------ | :----------------------------------------------------------- | :--------------------- | :--------------------------- |
-| TZ                  | Setting the TimeZone Environment. <br>[List of TZ name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) | Asia/Seoul             | TZ database name             |
-|                     |                                                              |                        |                              |
-| IPADDR              | Setting the IP address                                       | Your public IP address | IP address                   |
-| DEFAULT_PATH        | Setting the Default Root PATH                                | /data/PREP-TestNet     | PATH String                  |
-| USE_MQ_ADMIN        | Enable RabbitMQ management Web interface.The management UI can be accessed using a Web browser at http://{node-hostname}:15672/. For example, for a node running on a machine with the hostname of prep-node, it can be accessed at http://prep-node:15672/ | false                  | boolean (true/false)         |
-| MQ_ADMIN            | RabbitMQ management username                                 | admin                  |                              |
-| MQ_PASSWORD         | RabbitMQ management password                                 | iamicon                |                              |
-| LOOPCHAIN_LOG_LEVEL | loopchain Log Level                                          | INFO                   | DEBUG, INFO, WARNING, ERROR  |
-| ICON_LOG_LEVEL      | iconservice Log Level                                        | INFO                   | DEBUG, INFO, WARNING, ERROR  |
-| LOG_OUTPUT_TYPE     | Choose a log output type                                     | file                   | file, console, file\|console |
-| RPC_WORKER          | Setting the number of RPC workers                            | 3                      | Number                       |
-
-
-
+| Environment variable | Description|Default value| Allowed value|
+|--------|--------|-------|-------|
+| IPADDR| Setting the IP address|$EXT\_IPADDR||
+| TZ| Setting the TimeZone Environment|Asia/Seoul|[List of TZ name](https://en.wikipedia.org/wiki/List\_of\_tz\_database\_time\_zones)|
+| NETWORK\_ENV| Network Environment name|PREP-TestNet||
+| SERVICE| Service Name|zicon||
+| ENDPOINT\_URL|  ENDPOINT API URI|https://${SERVICE}.net.solidwallet.io|URI|
+| SERVICE\_API| SERVICE\_API URI|${ENDPOINT\_URL}/api/v3|URI|
+| NTP\_SERVER| NTP SERVER ADDRESS|time.google.com||
+| NTP\_REFRESH\_TIME| NTP refresh time|21600||
+| FIND\_NEIGHBOR| Find fastest neighborhood PRrep|true||
+| GENESIS\_NODE|false|false||
+| DEFAULT\_PATH| Setting the Default Root PATH|/data/${NETWORK\_ENV}||
+| DEFAULT\_LOG\_PATH| Setting the logging path|${DEFAULT\_PATH}/log||
+| DEFAULT\_STORAGE\_PATH| block DB will be stored|${DEFAULT\_PATH}/.storage||
+| USE\_NAT| if you want to use NAT Network|no||
+| NETWORK\_NAME||||
+| VIEW\_CONFIG| for check deployment state|false| boolean (true/false)|
+| AMQP\_TARGET|127.0.0.1|127.0.0.1||
+| USE\_MQ\_ADMIN| Enable RabbitMQ management Web interface.The management UI can be accessed using a Web browser at http://{node-hostname}:15672/. For example, for a node running on a machine with the hostname of prep-node, it can be accessed at http://prepnode:15672/|false| boolean (true/false)|
+| MQ\_ADMIN| RabbitMQ management username|admin||
+| MQ\_PASSWORD| RabbitMQ management password|iamicon||
+| LOOPCHAIN\_LOG\_LEVEL| loopchain log level|INFO||
+| ICON\_LOG\_LEVEL| iconservice log level|INFO||
+| LOG\_OUTPUT\_TYPE| loopchain's output log type|file| file, console, file\|console|
+| outputType|iconservice's output log type|$LOG\_OUTPUT\_TYPE| file, console, file\|console|
+| FIRST\_PEER| for testnet|false||
+| NEWRELIC\_LICENSE| for testnet|||
+| CONF\_PATH| Setting the configure file path|/${APP\_DIR}/conf||
+| CERT\_PATH| Setting the certificate key file path|/${APP\_DIR}/cert||
+| REDIRECT\_PROTOCOL|http|http||
+| SUBSCRIBE\_USE\_HTTPS|false|false||
+| ICON\_NID| Setting the ICON Network ID number|0x50||
+| ALLOW\_MAKE\_EMPTY\_BLOCK|true|true||
+| score\_fee|true|true||
+| score\_audit|false|false||
+| ALLOW\_MAKE\_EMPTY\_BLOCK|true|true||
+| score\_fee|true|true||
+| score\_audit|false|false||
+| scoreRootPath|${DEFAULT\_PATH}/.score\_data/score|${DEFAULT\_PATH}/.score\_data/score||
+| stateDbRootPath|${DEFAULT\_PATH}/.score\_data/db|${DEFAULT\_PATH}/.score\_data/db||
+| iissDbRootPath|${DEFAULT\_PATH}/.iissDb|${DEFAULT\_PATH}/.iissDb||
+| CHANNEL\_BUILTIN| boolean (true/false)|true||
+| PEER\_NAME|`uname`|`uname`||
+| PRIVATE\_PATH| private cert key or keystore file location|${CERT\_PATH}/${IPADDR}\_private.der||
+| PRIVATE\_PASSWORD| private cert key  or keystore file password|test||
+| LOAD\_PEERS\_FROM\_IISS|true|true||
+| CHANNEL\_MANAGE\_DATA\_PATH|${CONF\_PATH}/channel\_manange\_data.json|${CONF\_PATH}/channel\_manange\_data.json||
+| CONFIG\_API\_SERVER|https://download.solidwallet.io|https://download.solidwallet.io||
+| GENESIS\_DATA\_PATH|${CONF\_PATH}/genesis.json|${CONF\_PATH}/genesis.json||
+| BLOCK\_VERSIONS||||
+| NEXT\_BLOCK\_VERSION\_HEIGHT||||
+| FORCE\_RUN\_MODE| Setting the loopchain running parameter e.g. if FORCE\_RUN\_MODE is `-r citizen` then loop `-r citizen`|||
+| configure\_json|${CONF\_PATH}/configure.json|${CONF\_PATH}/configure.json||
+| iconservice\_json|${CONF\_PATH}/iconservice.json|${CONF\_PATH}/iconservice.json||
+| iconrpcserver\_json|${CONF\_PATH}/iconrpcserver.json|${CONF\_PATH}/iconrpcserver.json||
+| ICON\_REVISION|5|5||
+| ROLE\_SWITCH\_BLOCK\_HEIGHT|1|1||
+| mainPRepCount|22|22||
+| mainAndSubPRepCount|100|100||
+| decentralizeTrigger|0.002|0.002||
+| iissCalculatePeriod|43200|43200||
+| termPeriod|43120|43120||
+| blockValidationPenaltyThreshold|660|660||
+| lowProductivityPenaltyThreshold|85|85||
+| RPC\_PORT| Choose a RPC service port|9000||
+| RPC\_WORKER|Setting the number of RPC workers|3||
+| RPC\_GRACEFUL\_TIMEOUT| rpc graceful timeout|0||
+| USE\_PROC\_HEALTH\_CHECK|yes|yes||
+| USE\_API\_HEALTH\_CHEK|yes|yes||
+| USE\_HELL\_CHEK|yes|yes||
+| HEALTH\_CHECK\_INTERVAL| Trigger if greater than `1`|20||
+| ERROR\_LIMIT|3|3||
+| HELL\_LIMIT|30|30||
+| USE\_SLACK|  if you want to use the slack|no||
+| SLACK\_URL|  slack's webhook URL|||
+| SLACK\_PREFIX| slack's prefix header message|||
+| CURL\_OPTION|default curl options|-s -S --fail --max-time 30||
 ## Troubleshooting
 
 ### Q: How to check if container is running or not
@@ -461,7 +544,7 @@ The ``docker ps``  command shows the list of running docker containers.
 ```shell
 $ docker ps
 CONTAINER ID   IMAGE                                                          COMMAND                CREATED              STATUS                          PORTS                                                                 NAMES
-0de99e33cdc9     iconloop/prep-node:1905292100xdd3e5a    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
+0de99e33cdc9     iconloop/prep-node:1909102212x380192    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
 You should look at the `STATUS` field to see if the container is running up and in `healthy` state. 
@@ -488,20 +571,24 @@ If the container does not start properly or went down unexpectedly, please check
 ```shell
 $ cat data/PREP-TestNet/log/booting_${DATE}.log 
 
-[2019-04-19 02:19:01.435] Your IP: 20.20.1.195
-[2019-04-19 02:19:01.439] RPC_PORT: 9000 / RPC_WORKER: 3
-[2019-04-19 02:19:01.444] DEFAULT_PATH=/data/PREP-TestNet in Docker Container
-[2019-04-19 02:19:01.449] DEFAULT_LOG_PATH=/data/PREP-TestNet/log
-[2019-04-19 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-TestNet/.storage
-[2019-04-19 02:19:01.459] scoreRootPath=/data/PREP-TestNet/.score_data/score
-[2019-04-19 02:19:01.464] stateDbRootPath=/data/PREP-TestNet/.score_data/db
-[2019-04-19 02:19:01.468] P-REP package version info - 1905292100xdd3e5a
-[2019-04-19 02:19:02.125] iconcommons 1.0.5.2 iconrpcserver 1.3.1 iconservice 1.3.0 loopchain 2.1.7
-[2019-04-19 02:19:07.107] Enable rabbitmq_management
-[2019-04-19 02:19:10.676] Network: PREP-TestNet
-[2019-04-19 02:19:10.682] Run loop-peer and loop-channel start
-[2019-04-19 02:19:10.687] Run iconservice start!
-[2019-04-19 02:19:10.692] Run iconrpcserver start!
+[2019-09-10 02:19:01.435] Your IP: 20.20.1.195
+[2019-09-10 02:19:01.439] RPC_PORT: 9000 / RPC_WORKER: 3
+[2019-09-10 02:19:01.444] DEFAULT_PATH=/data/PREP-TestNet in Docker Container
+[2019-09-10 02:19:01.449] DEFAULT_LOG_PATH=/data/PREP-TestNet/log
+[2019-09-10 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-TestNet/.storage
+[2019-09-10 02:19:01.459] scoreRootPath=/data/PREP-TestNet/.score_data/score
+[2019-09-10 02:19:01.464] stateDbRootPath=/data/PREP-TestNet/.score_data/db
+[2019-09-10 02:19:01.468] P-REP package version info - 1909102212x380192
+[2019-09-10 02:19:02.125] iconcommons             1.1.2
+                          iconrpcserver           1.4.1
+                          iconsdk                 1.1.0
+                          iconservice             1.5.3
+                          loopchain               2.3.4
+[2019-09-10 02:19:07.107] Enable rabbitmq_management
+[2019-09-10 02:19:10.676] Network: PREP-TestNet
+[2019-09-10 02:19:10.682] Run loop-peer and loop-channel start
+[2019-09-10 02:19:10.687] Run iconservice start!
+[2019-09-10 02:19:10.692] Run iconrpcserver start!
 
 ```
 
@@ -516,9 +603,9 @@ Grep the `ERROR` messages from the log files to find the possible cause of the f
 ```shell
 $ cat data/PREP-TestNet/log/booting_${DATE}.log | grep ERROR
 
-[2019-04-19 02:08:48.746] [ERROR] Download Failed - http://20.20.1.149:5000/cert/20.20.1.195_public.der status_code=000
+[2019-09-10 02:08:48.746] [ERROR] Download Failed - http://20.20.1.149:5000/cert/20.20.1.195_public.der status_code=000
 
-[2019-04-19 01:58:46.439] [ERROR] Unauthorized IP address, Please contact our support team
+[2019-09-10 01:58:46.439] [ERROR] Unauthorized IP address, Please contact our support team
 ```
 
 
