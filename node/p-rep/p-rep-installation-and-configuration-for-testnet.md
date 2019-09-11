@@ -251,7 +251,7 @@ You have docker installed, then proceed the following steps to install the P-Rep
 **Pull the latest stable version of an image.**
 
 ```shell
-$ docker pull iconloop/prep-node:1905292100xdd3e5a
+$ docker pull iconloop/prep-node:1909102212x380192
 ```
 
 
@@ -261,7 +261,7 @@ $ docker pull iconloop/prep-node:1905292100xdd3e5a
 **Using docker command**
 
 ```shell
-$ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-node:1905292100xdd3e5a
+$ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-node:1909102212x380192
 ```
 
 
