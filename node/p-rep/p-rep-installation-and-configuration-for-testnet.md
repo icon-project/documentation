@@ -283,6 +283,8 @@ services:
          DEFAULT_PATH: "/data/loopchain"
          LOG_OUTPUT_TYPE: "file"
          CERT_PATH: "/cert"     
+         iissCalculatePeriod: "1800"
+         termPeriod: "1800"
          PRIVATE_PATH: "/cert/{==YOUR_KEYSTORE or YOUR_CERTKEY FILENAME==}"
          PRIVATE_PASSWORD: "{==YOUR_KEY_PASSWORD==}"
       cap_add:
@@ -480,8 +482,8 @@ The P-Rep Node image supports the following environment variables:
 | USE\_MQ\_ADMIN| Enable RabbitMQ management Web interface.The management UI can be accessed using a Web browser at http://{node-hostname}:15672/. For example, for a node running on a machine with the hostname of prep-node, it can be accessed at http://prepnode:15672/|false| boolean (true/false)|
 | MQ\_ADMIN| RabbitMQ management username|admin||
 | MQ\_PASSWORD| RabbitMQ management password|iamicon||
-| LOOPCHAIN\_LOG\_LEVEL| loopchain log level|INFO||
-| ICON\_LOG\_LEVEL| iconservice log level|INFO||
+| LOOPCHAIN\_LOG\_LEVEL| loopchain log level|INFO| DEBUG, INFO, WARNING, ERROR|
+| ICON\_LOG\_LEVEL| iconservice log level|INFO| DEBUG, INFO, WARNING, ERROR|
 | LOG\_OUTPUT\_TYPE| loopchain's output log type|file| file, console, file\|console|
 | outputType|iconservice's output log type|$LOG\_OUTPUT\_TYPE| file, console, file\|console|
 | FIRST\_PEER| for testnet|false||
@@ -491,9 +493,6 @@ The P-Rep Node image supports the following environment variables:
 | REDIRECT\_PROTOCOL|http|http||
 | SUBSCRIBE\_USE\_HTTPS|false|false||
 | ICON\_NID| Setting the ICON Network ID number|0x50||
-| ALLOW\_MAKE\_EMPTY\_BLOCK|true|true||
-| score\_fee|true|true||
-| score\_audit|false|false||
 | ALLOW\_MAKE\_EMPTY\_BLOCK|true|true||
 | score\_fee|true|true||
 | score\_audit|false|false||
@@ -519,9 +518,9 @@ The P-Rep Node image supports the following environment variables:
 | mainPRepCount|22|22||
 | mainAndSubPRepCount|100|100||
 | decentralizeTrigger|0.002|0.002||
-| iissCalculatePeriod|43200|43200||
-| termPeriod|43120|43120||
-| blockValidationPenaltyThreshold|660|660||
+| iissCalculatePeriod| origin value is 43200|1800||
+| termPeriod| origin value is 43120|1800||
+| blockValidationPenaltyThreshold|66000000|66000000||
 | lowProductivityPenaltyThreshold|85|85||
 | RPC\_PORT| Choose a RPC service port|9000||
 | RPC\_WORKER|Setting the number of RPC workers|3||
@@ -529,13 +528,14 @@ The P-Rep Node image supports the following environment variables:
 | USE\_PROC\_HEALTH\_CHECK|yes|yes||
 | USE\_API\_HEALTH\_CHEK|yes|yes||
 | USE\_HELL\_CHEK|yes|yes||
-| HEALTH\_CHECK\_INTERVAL| Trigger if greater than `1`|20||
+| HEALTH\_CHECK\_INTERVAL| Trigger if greater than 1|20||
 | ERROR\_LIMIT|3|3||
 | HELL\_LIMIT|30|30||
 | USE\_SLACK|  if you want to use the slack|no||
 | SLACK\_URL|  slack's webhook URL|||
 | SLACK\_PREFIX| slack's prefix header message|||
 | CURL\_OPTION|default curl options|-s -S --fail --max-time 30||
+
 ## Troubleshooting
 
 ### Q: How to check if container is running or not
