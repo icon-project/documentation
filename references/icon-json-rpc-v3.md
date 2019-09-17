@@ -1674,6 +1674,7 @@ Request
 ### unregisterPRep
 
 - Unregister a P-Rep
+- **CAUTION**: Once you unregister an address, you will not be able to register the address again
 
 #### Parameters
 
