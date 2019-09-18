@@ -274,7 +274,7 @@ Open `docker-compose.yml` in a text editor and add the following content:
 version: '3'
 services:
    prep:
-      image: iconloop/prep-node:1909111919x74b59c
+      image: iconloop/prep-node:1909180304x565582
       container_name: "prep-node"
       network_mode: host
       environment:
@@ -349,7 +349,7 @@ The ``docker ps``  command shows the list of running docker containers.
 ```shell
 $ docker ps
 CONTAINER ID   IMAGE                                                          COMMAND                CREATED              STATUS                          PORTS                                                                 NAMES
-0de99e33cdc9     iconloop/prep-node:1909111919x74b59c    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
+0de99e33cdc9     iconloop/prep-node:1909180304x565582    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
 The meaning of each column in the `docker ps` result output is as follows. 
@@ -372,12 +372,12 @@ $ tail -f data/PREP-TestNet/log/booting_20190419.log
 [2019-09-10 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-TestNet/.storage
 [2019-09-10 02:19:01.459] scoreRootPath=/data/PREP-TestNet/.score_data/score
 [2019-09-10 02:19:01.464] stateDbRootPath=/data/PREP-TestNet/.score_data/db
-[2019-09-10 02:19:01.468] P-REP package version info - 1909111919x74b59c
+[2019-09-10 02:19:01.468] P-REP package version info - 1909180304x565582
 [2019-09-10 02:19:02.125] iconcommons             1.1.2
-                          iconrpcserver           1.4.1
+                          iconrpcserver           1.4.3
                           iconsdk                 1.1.0
-                          iconservice             1.5.3
-                          loopchain               2.3.4
+                          iconservice             1.5.5
+                          loopchain               2.3.7
 [2019-09-10 02:19:07.107] Enable rabbitmq_management
 [2019-09-10 02:19:10.676] Network: PREP-TestNet
 [2019-09-10 02:19:10.682] Run loop-peer and loop-channel start
@@ -426,9 +426,9 @@ $ curl localhost:9000/api/v1/status/peer
   "leader": "hx6834efa18f6abe7d99de79e9bc9116f82e155620",
   "epoch_leader": "hx6834efa18f6abe7d99de79e9bc9116f82e155620",
   "versions": {
-    "loopchain": "2.3.4",
-    "iconservice": "1.5.3",
-    "iconrpcserver": "1.4.1",
+    "loopchain": "2.3.7",
+    "iconservice": "1.5.5",
+    "iconrpcserver": "1.4.3",
     "iconcommons": "1.1.2",
     "earlgrey": "0.0.4"
   },
@@ -453,7 +453,7 @@ $ curl localhost:9000/api/v1/status/peer
 If you want change the TimeZone, open `docker-compose.yml` in a text editor and add the following content:
 
 ```yml
-version: '3' services:    container:        image: 'iconloop/prep-node:1909111919x74b59c'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100       environment:          TZ: "America/Los_Angeles"
+version: '3' services:    container:        image: 'iconloop/prep-node:1909180304x565582'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100       environment:          TZ: "America/Los_Angeles"
 ```
 
 
@@ -545,7 +545,7 @@ The ``docker ps``  command shows the list of running docker containers.
 ```shell
 $ docker ps
 CONTAINER ID   IMAGE                                                          COMMAND                CREATED              STATUS                          PORTS                                                                 NAMES
-0de99e33cdc9     iconloop/prep-node:1909111919x74b59c    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
+0de99e33cdc9     iconloop/prep-node:1909180304x565582    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
 You should look at the `STATUS` field to see if the container is running up and in `healthy` state. 
@@ -579,12 +579,12 @@ $ cat data/PREP-TestNet/log/booting_${DATE}.log
 [2019-09-10 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-TestNet/.storage
 [2019-09-10 02:19:01.459] scoreRootPath=/data/PREP-TestNet/.score_data/score
 [2019-09-10 02:19:01.464] stateDbRootPath=/data/PREP-TestNet/.score_data/db
-[2019-09-10 02:19:01.468] P-REP package version info - 1909111919x74b59c
+[2019-09-10 02:19:01.468] P-REP package version info - 1909180304x565582
 [2019-09-10 02:19:02.125] iconcommons             1.1.2
-                          iconrpcserver           1.4.1
+                          iconrpcserver           1.4.3
                           iconsdk                 1.1.0
-                          iconservice             1.5.3
-                          loopchain               2.3.4
+                          iconservice             1.5.5
+                          loopchain               2.3.7
 [2019-09-10 02:19:07.107] Enable rabbitmq_management
 [2019-09-10 02:19:10.676] Network: PREP-TestNet
 [2019-09-10 02:19:10.682] Run loop-peer and loop-channel start
