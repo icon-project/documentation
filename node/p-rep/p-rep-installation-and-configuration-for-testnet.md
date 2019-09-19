@@ -277,6 +277,7 @@ services:
       image: iconloop/prep-node:1909180304x565582
       container_name: "prep-node"
       network_mode: host
+      restart: always
       environment:
          LOOPCHAIN_LOG_LEVEL: "DEBUG"
          ICON_LOG_LEVEL: "DEBUG"
