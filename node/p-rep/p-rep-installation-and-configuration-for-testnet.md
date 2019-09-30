@@ -251,7 +251,7 @@ You have docker installed, then proceed the following steps to install the P-Rep
 **Pull the latest stable version of an image.**
 
 ```shell
-$ docker pull iconloop/prep-node:1909201037xdb4bdf
+$ docker pull iconloop/prep-node:1909301159xa7e757
 ```
 
 
@@ -261,7 +261,7 @@ $ docker pull iconloop/prep-node:1909201037xdb4bdf
 **Using docker command**
 
 ```shell
-$ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-node:1909201037xdb4bdf
+$ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-node:1909301159xa7e757
 ```
 
 
@@ -274,7 +274,7 @@ Open `docker-compose.yml` in a text editor and add the following content:
 version: '3'
 services:
    prep:
-      image: iconloop/prep-node:1909201037xdb4bdf
+      image: iconloop/prep-node:1909301159xa7e757
       container_name: "prep-node"
       network_mode: host
       restart: always
@@ -350,7 +350,7 @@ The ``docker ps``  command shows the list of running docker containers.
 ```shell
 $ docker ps
 CONTAINER ID   IMAGE                                                          COMMAND                CREATED              STATUS                          PORTS                                                                 NAMES
-0de99e33cdc9     iconloop/prep-node:1909201037xdb4bdf    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
+0de99e33cdc9     iconloop/prep-node:1909301159xa7e757    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
 The meaning of each column in the `docker ps` result output is as follows. 
@@ -370,20 +370,20 @@ You can read the container booting log from the log folder.
 
 ```shell
 $ tail -f data/PREP-TestNet/log/booting_20190419.log
-[2019-09-10 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-TestNet/.storage
-[2019-09-10 02:19:01.459] scoreRootPath=/data/PREP-TestNet/.score_data/score
-[2019-09-10 02:19:01.464] stateDbRootPath=/data/PREP-TestNet/.score_data/db
-[2019-09-10 02:19:01.468] P-REP package version info - 1909201037xdb4bdf
-[2019-09-10 02:19:02.125] iconcommons             1.1.2
+[2019-09-30 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-TestNet/.storage
+[2019-09-30 02:19:01.459] scoreRootPath=/data/PREP-TestNet/.score_data/score
+[2019-09-30 02:19:01.464] stateDbRootPath=/data/PREP-TestNet/.score_data/db
+[2019-09-30 02:19:01.468] P-REP package version info - 1909301159xa7e757
+[2019-09-30 02:19:02.125] iconcommons             1.1.2
                           iconrpcserver           1.4.3
-                          iconsdk                 1.1.0
-                          iconservice             1.5.5
-                          loopchain               2.3.7
-[2019-09-10 02:19:07.107] Enable rabbitmq_management
-[2019-09-10 02:19:10.676] Network: PREP-TestNet
-[2019-09-10 02:19:10.682] Run loop-peer and loop-channel start
-[2019-09-10 02:19:10.687] Run iconservice start!
-[2019-09-10 02:19:10.692] Run iconrpcserver start!
+                          iconsdk                 1.2.0
+                          iconservice             1.5.8
+                          loopchain               2.4.5
+[2019-09-30 02:19:07.107] Enable rabbitmq_management
+[2019-09-30 02:19:10.676] Network: PREP-TestNet
+[2019-09-30 02:19:10.682] Run loop-peer and loop-channel start
+[2019-09-30 02:19:10.687] Run iconservice start!
+[2019-09-30 02:19:10.692] Run iconrpcserver start!
 ```
 
 
@@ -404,31 +404,30 @@ Removing network prep_default
 
 ```shell
 $ curl localhost:9000/api/v1/status/peer
-
 {
-  "made_block_count": 10,
-  "leader_made_block_count": 10,
-  "status": "Service is online: 1",
-  "state": "BlockGenerate",
+  "made_block_count": 0,
+  "leader_made_block_count": 1,
+  "status": "Service is online: 0",
+  "state": "Vote",
   "service_available": true,
-  "peer_type": "1",
+  "peer_type": "0",
   "audience_count": "0",
   "consensus": "siever",
-  "peer_id": "hx6834efa18f6abe7d99de79e9bc9116f82e155620",
-  "block_height": 17034,
+  "peer_id": "hxab7f0442e884affaeb72aa0399ad1f0c1bd7fe3f",
+  "block_height": 1265,
   "round": 0,
-  "epoch_height": 17035,
-  "unconfirmed_block_height": 17035,
-  "total_tx": 17691,
-  "unconfirmed_tx": 1,
-  "peer_target": "20.20.1.212:7100",
+  "epoch_height": 1266,
+  "unconfirmed_block_height": 1266,
+  "total_tx": 1374,
+  "unconfirmed_tx": 0,
+  "peer_target": "20.20.1.254:7100",
   "leader_complaint": 1,
-  "peer_count": 5,
-  "leader": "hx6834efa18f6abe7d99de79e9bc9116f82e155620",
-  "epoch_leader": "hx6834efa18f6abe7d99de79e9bc9116f82e155620",
+  "peer_count": 14,
+  "leader": "hx74cc5ad0e7f6a92a8db684a1694cbfe16e50bc6e",
+  "epoch_leader": "hx74cc5ad0e7f6a92a8db684a1694cbfe16e50bc6e",
   "versions": {
-    "loopchain": "2.3.7",
-    "iconservice": "1.5.5",
+    "loopchain": "2.4.5",
+    "iconservice": "1.5.8",
     "iconrpcserver": "1.4.3",
     "iconcommons": "1.1.2",
     "earlgrey": "0.0.4"
@@ -454,7 +453,7 @@ $ curl localhost:9000/api/v1/status/peer
 If you want change the TimeZone, open `docker-compose.yml` in a text editor and add the following content:
 
 ```yml
-version: '3' services:    container:        image: 'iconloop/prep-node:1909201037xdb4bdf'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100       environment:          TZ: "America/Los_Angeles"
+version: '3' services:    container:        image: 'iconloop/prep-node:1909301159xa7e757'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100       environment:          TZ: "America/Los_Angeles"
 ```
 
 
@@ -546,7 +545,7 @@ The ``docker ps``  command shows the list of running docker containers.
 ```shell
 $ docker ps
 CONTAINER ID   IMAGE                                                          COMMAND                CREATED              STATUS                          PORTS                                                                 NAMES
-0de99e33cdc9     iconloop/prep-node:1909201037xdb4bdf    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
+0de99e33cdc9     iconloop/prep-node:1909301159xa7e757    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
 You should look at the `STATUS` field to see if the container is running up and in `healthy` state. 
@@ -573,24 +572,24 @@ If the container does not start properly or went down unexpectedly, please check
 ```shell
 $ cat data/PREP-TestNet/log/booting_${DATE}.log 
 
-[2019-09-10 02:19:01.435] Your IP: 20.20.1.195
-[2019-09-10 02:19:01.439] RPC_PORT: 9000 / RPC_WORKER: 3
-[2019-09-10 02:19:01.444] DEFAULT_PATH=/data/PREP-TestNet in Docker Container
-[2019-09-10 02:19:01.449] DEFAULT_LOG_PATH=/data/PREP-TestNet/log
-[2019-09-10 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-TestNet/.storage
-[2019-09-10 02:19:01.459] scoreRootPath=/data/PREP-TestNet/.score_data/score
-[2019-09-10 02:19:01.464] stateDbRootPath=/data/PREP-TestNet/.score_data/db
-[2019-09-10 02:19:01.468] P-REP package version info - 1909201037xdb4bdf
-[2019-09-10 02:19:02.125] iconcommons             1.1.2
+[2019-09-30 02:19:01.435] Your IP: 20.20.1.195
+[2019-09-30 02:19:01.439] RPC_PORT: 9000 / RPC_WORKER: 3
+[2019-09-30 02:19:01.444] DEFAULT_PATH=/data/PREP-TestNet in Docker Container
+[2019-09-30 02:19:01.449] DEFAULT_LOG_PATH=/data/PREP-TestNet/log
+[2019-09-30 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-TestNet/.storage
+[2019-09-30 02:19:01.459] scoreRootPath=/data/PREP-TestNet/.score_data/score
+[2019-09-30 02:19:01.464] stateDbRootPath=/data/PREP-TestNet/.score_data/db
+[2019-09-30 02:19:01.468] P-REP package version info - 1909301159xa7e757
+[2019-09-30 02:19:02.125] iconcommons             1.1.2
                           iconrpcserver           1.4.3
-                          iconsdk                 1.1.0
-                          iconservice             1.5.5
-                          loopchain               2.3.7
-[2019-09-10 02:19:07.107] Enable rabbitmq_management
-[2019-09-10 02:19:10.676] Network: PREP-TestNet
-[2019-09-10 02:19:10.682] Run loop-peer and loop-channel start
-[2019-09-10 02:19:10.687] Run iconservice start!
-[2019-09-10 02:19:10.692] Run iconrpcserver start!
+                          iconsdk                 1.2.0
+                          iconservice             1.5.8
+                          loopchain               2.4.5
+[2019-09-30 02:19:07.107] Enable rabbitmq_management
+[2019-09-30 02:19:10.676] Network: PREP-TestNet
+[2019-09-30 02:19:10.682] Run loop-peer and loop-channel start
+[2019-09-30 02:19:10.687] Run iconservice start!
+[2019-09-30 02:19:10.692] Run iconrpcserver start!
 
 ```
 
@@ -605,9 +604,9 @@ Grep the `ERROR` messages from the log files to find the possible cause of the f
 ```shell
 $ cat data/PREP-TestNet/log/booting_${DATE}.log | grep ERROR
 
-[2019-09-10 02:08:48.746] [ERROR] Download Failed - http://20.20.1.149:5000/cert/20.20.1.195_public.der status_code=000
+[2019-09-30 02:08:48.746] [ERROR] Download Failed - http://20.20.1.149:5000/cert/20.20.1.195_public.der status_code=000
 
-[2019-09-10 01:58:46.439] [ERROR] Unauthorized IP address, Please contact our support team
+[2019-09-30 01:58:46.439] [ERROR] Unauthorized IP address, Please contact our support team
 ```
 
 
