@@ -23,6 +23,7 @@ Documents that merged into the master branch are published on the developers por
 	- [what-is-icon](./introduction/what-is-icon.md)
 - node
 	- p-rep		
+	    - [p-rep-installation-guide-for-mainnet-during-pre-voting-period](./node/p-rep/P-Rep_Installation_guide_for_mainnet_during_pre_voting_period.md)
 		- [p-rep-installation-and-configuration-for-mainnet](./node/p-rep/p-rep-installation-and-configuration-for-mainnet.md)
 		- [p-rep-installation-and-configuration-for-testnet](./node/p-rep/p-rep-installation-and-configuration-for-testnet.md)				
 	    - [how-to-setup-network-infrastructure](./node/p-rep/how-to-setup-network-infrastructure.md)
