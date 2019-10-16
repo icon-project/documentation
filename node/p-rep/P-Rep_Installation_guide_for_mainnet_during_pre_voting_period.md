@@ -36,6 +36,23 @@ In order to facilitate block sync, we provide a snapshot which gets activated wh
 If the snapshot file already exists, a new file will not be downloaded.
 ​
 docker and docker-compose need to be installed beforehand.
+
+Citizen-node must be run with the wallet(keystore file) that registered as prep.
+
+The `keystore file` needs to be exported and stored in the `keys` directory
+Below is a directory structure under the docker-compose.yml
+
+```yaml
+
+|-- docker-compose.yml   
+  |-- data  → data directory            
+  |-- keys  → keytore or cert key directory
+       |-- YOUR_KEYSTORE_FILE  → put your keystore file
+
+```
+
+(How to export keystore file → https://www.icondev.io/docs/account-management)  
+
 ​
 **Using docker-compose command (Recommended)**
 ​
@@ -44,12 +61,15 @@ Open 'docker-compose.yml' in a text editor and add the following content:
 version: "3"
 services:
   citizen:
-     image: "iconloop/citizen-node:1908271151xd2b7a4"
+     image: "iconloop/citizen-node:1909181817xee0cef"
      network_mode: host
+     restart: "always"
      environment:
         LOG_OUTPUT_TYPE: "file"
         LOOPCHAIN_LOG_LEVEL: "DEBUG"
         FASTEST_START: "yes" # Restore from lastest snapshot DB
+        PRIVATE_KEY_FILENAME: "{YOUR_KEYSTORE or YOUR_CERTKEY FILENAME}" # only file name
+        PRIVATE_PASSWORD: "{YOUR_KEY_PASSWORD}"
       
      volumes:
         - ./data:/data # mount a data volumes
@@ -66,21 +86,22 @@ $ docker-compose up -d
 ​
 ​
 ```conf
-citizen_1 | [2019-08-20 15:36:18.933] Your IP: 58.234.156.140
-citizen_1 | [2019-08-20 15:36:18.935] RPC_PORT: 9000 / RPC_WORKER: 3
-citizen_1 | [2019-08-20 15:36:18.937] DEFAULT_STORAGE_PATH=/data/loopchain/mainnet/.storage in Docker Container
-citizen_1 | [2019-08-20 15:36:18.939] scoreRootPath=/data/loopchain/mainnet/.score_data/score
-citizen_1 | [2019-08-20 15:36:18.940] stateDbRootPath=/data/loopchain/mainnet/.score_data/db
-citizen_1 | [2019-08-20 15:36:18.942] Citizen package version info - 1908271151xd2b7a4
+citizen_1 | [2019-09-20 15:36:18.933] Your IP: 58.234.156.140
+citizen_1 | [2019-09-20 15:36:18.935] RPC_PORT: 9000 / RPC_WORKER: 3
+citizen_1 | [2019-09-20 15:36:18.937] DEFAULT_STORAGE_PATH=/data/loopchain/mainnet/.storage in Docker Container
+citizen_1 | [2019-09-20 15:36:18.939] scoreRootPath=/data/loopchain/mainnet/.score_data/score
+citizen_1 | [2019-09-20 15:36:18.940] stateDbRootPath=/data/loopchain/mainnet/.score_data/db
+citizen_1 | [2019-09-20 15:36:18.942] Citizen package version info - 1908271151xd2b7a4
 citizen_1 | WARNING: You are using pip version 19.1.1, however version 19.2.2 is available.
 citizen_1 | You should consider upgrading via the 'pip install --upgrade pip' command.
 citizen_1 | iconcommons             1.1.2
 citizen_1 | iconrpcserver           1.3.1.1
-citizen_1 | iconservice             1.4.2
+citizen_1 | iconsdk                 1.2.0
+citizen_1 | iconservice             1.4.7
 citizen_1 | loopchain               2.2.1.3
-citizen_1 | [2019-08-20 15:36:19.448] builtinScoreOwner = hx677133298ed5319607a321a38169031a8867085c
+citizen_1 | [2019-09-20 15:36:19.448] builtinScoreOwner = hx677133298ed5319607a321a38169031a8867085c
 citizen_1 | 0
-citizen_1 | [2019-08-20 15:36:19.528] START FASTEST MODE : NETWORK_NAME=MainctzNet
-citizen_1 | [2019-08-20 15:36:19.777] Start download - https://s3.ap-northeast-2.amazonaws.com/icon-leveldb-backup/MainctzNet/20190820/MainctzNet_BH7344686_data-20190820_1500.tar.gz
+citizen_1 | [2019-09-20 15:36:19.528] START FASTEST MODE : NETWORK_NAME=MainctzNet
+citizen_1 | [2019-09-20 15:36:19.777] Start download - https://s3.ap-northeast-2.amazonaws.com/icon-leveldb-backup/MainctzNet/20190820/MainctzNet_BH7344686_data-20190820_1500.tar.gz
 citizen_1 | [OK] CHECK=0, Download 20190820/MainctzNet_BH7344686_data-20190820_1500.tar.gz(/data/loopchain/mainnet/) to /data/loopchain/mainnet
 ```
