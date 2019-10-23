@@ -244,73 +244,6 @@ $ docker-compose version
 
 ```
 
-## Citizen node Configuration for Pre-voting
-
-Citizen node is used for block sync and API load balancing without network consensus.
-Non-P-Rep nodes act in citizen node and synchronize blocks.
-​
-P-Reps can participate either by installing a citizen node or connect to `https://ctz.solidwallet.io`.
-​
-In order to facilitate block sync, we provide a snapshot which gets activated when  `FASTEST_START` is `yes`. Then,  snapshot in `data volume` will be re-downloaded when the null size file is deleted.
-
-If the snapshot file already exists, a new file will not be downloaded.
-​
-docker and docker-compose need to be installed beforehand.
-
-### Running a Citizen Node on Docker Container
-
-**Using docker-compose command (Recommended)**
-
-Open `docker-compose.yml` in a text editor and add the following content:
-```yaml
-version: '3'
-services:
-   citizen:
-      image: 'iconloop/citizen-node:1908271151xd2b7a4'
-      network_mode: host
-      environment:
-         LOG_OUTPUT_TYPE: "file"
-         LOOPCHAIN_LOG_LEVEL: "DEBUG"
-         FASTEST_START: "yes"     # Restore from lastest snapshot DB
-        
-      volumes:
-         - ./data:/data  # mount a data volumes
-         - ./keys:/citizen_pack/keys  # Automatically generate cert key files here
-      ports:
-         - 9000:9000
-
-```
-
-
-
-**Run docker-compose**
-```bash
-$ docker-compose up -d
-```
-
-
-```conf
-citizen_1         |   [2019-08-20 15:36:18.933] Your IP: XXX.XXX.XXX.XXX
-citizen_1         |   [2019-08-20 15:36:18.935] RPC_PORT: 9000 / RPC_WORKER: 3
-citizen_1         |   [2019-08-20 15:36:18.937] DEFAULT_STORAGE_PATH=/data/loopchain/mainnet/.storage in Docker Container
-citizen_1         |   [2019-08-20 15:36:18.939] scoreRootPath=/data/loopchain/mainnet/.score_data/score
-citizen_1         |   [2019-08-20 15:36:18.940] stateDbRootPath=/data/loopchain/mainnet/.score_data/db
-citizen_1         |   [2019-08-20 15:36:18.942] Citizen package version info - 1908271151xd2b7a4
-citizen_1         | WARNING: You are using pip version 19.1.1, however version 19.2.2 is available.
-citizen_1         | You should consider upgrading via the 'pip install --upgrade pip' command.
-citizen_1         | iconcommons             1.1.1
-citizen_1         | iconrpcserver           1.3.1.1
-citizen_1         | iconservice             1.4.2
-citizen_1         | loopchain               2.2.1.3
-citizen_1         |   [2019-08-20 15:36:19.448] builtinScoreOwner = hx677133298ed5319607a321a38169031a8867085c
-citizen_1         | 0
-citizen_1         |   [2019-08-20 15:36:19.528] START FASTEST MODE : NETWORK_NAME=MainctzNet
-citizen_1         |   [2019-08-20 15:36:19.777] Start download - https://s3.ap-northeast-2.amazonaws.com/icon-leveldb-backup/MainctzNet/20190820/MainctzNet_BH7344686_data-20190820_1500.tar.gz
-citizen_1         |  [OK] CHECK=0,  Download 20190820/MainctzNet_BH7344686_data-20190820_1500.tar.gz(/data/loopchain/mainnet/)  to /data/loopchain/mainnet
-```
-
-
-
 ### Running a P-Rep Node on Docker Container
 
 Once you have docker installed, then proceed through the following steps to install the P-Rep node.
@@ -320,7 +253,7 @@ Once you have docker installed, then proceed through the following steps to inst
 **Pull the latest stable version of an image.**
 
 ```shell
-$ docker pull iconloop/prep-node:1907091410x2f8b2e
+$ docker pull iconloop/prep-node:1910211829xc2286d
 ```
 
 
@@ -330,7 +263,7 @@ $ docker pull iconloop/prep-node:1907091410x2f8b2e
 **Using docker command**
 
 ```shell
-$ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-node:1907091410x2f8b2e
+$ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-node:1910211829xc2286d
 ```
 
 
@@ -340,16 +273,31 @@ $ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-no
 Open `docker-compose.yml` in a text editor and add the following content:
 
 ```yml
-version: '3' 
-services:    
-     container:        
-          image: 'iconloop/prep-node:1907091410x2f8b2e'        
-          container_name: 'prep-node'        
-          volumes:            
-               - ./data:/data        
-          ports:           
-               - 9000:9000           
-               - 7100:7100
+version: "3"
+services:
+  prep-node:
+     image: "iconloop/prep-node:1910211829xc2286d"
+     container_name: "prep-mainnet"
+     network_mode: host     
+     restart: "always"
+     environment:
+        NETWORK_ENV: "mainnet"
+        LOG_OUTPUT_TYPE: "file"
+        SWITCH_BH_VERSION3: "10324749"
+        CERT_PATH: "/cert"
+        LOOPCHAIN_LOG_LEVEL: "DEBUG"
+        ICON_LOG_LEVEL: "DEBUG"        
+        FASTEST_START: "yes" # Restore from lastest snapshot DB
+        PRIVATE_KEY_FILENAME: "{YOUR_KEYSTORE or YOUR_CERTKEY FILENAME}" # only file name
+        PRIVATE_PASSWORD: "{YOUR_KEY_PASSWORD}"
+     cap_add:
+        - SYS_TIME      
+     volumes:
+        - ./data:/data # mount a data volumes
+        - ./cert:/cert # Automatically generate cert key files here
+     ports:
+        - 9000:9000
+        - 7100:7100
 ```
 
 
@@ -375,7 +323,7 @@ Above command options, do the following.
 ```shell
 .
 |---- data  
-|     |---- PREP-MainNet   → Default ENV directory  
+|     |---- mainnet   → Default ENV directory  
 |          |---- .score_data  
 |          |      |-- db      → root directory that SCOREs will be installed
 |          |      |-- score   → root directory that the state DB file will be created
@@ -404,7 +352,7 @@ The ``docker ps``  command shows the list of running docker containers.
 ```shell
 $ docker ps
 CONTAINER ID   IMAGE                                                          COMMAND                CREATED              STATUS                          PORTS                                                                 NAMES
-0de99e33cdc9     iconloop/prep-node:1907091410x2f8b2e    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
+0de99e33cdc9     iconloop/prep-node:1910211829xc2286d    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
 The meaning of each column in the `docker ps` result output is as follows. 
@@ -424,16 +372,20 @@ You can read the container booting log from the log folder.
 
 ```shell
 $ tail -f data/PREP-MainNet/log/booting_20190419.log
-[2019-08-12 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-MainNet/.storage
-[2019-08-12 02:19:01.459] scoreRootPath=/data/PREP-MainNet/.score_data/score
-[2019-08-12 02:19:01.464] stateDbRootPath=/data/PREP-MainNet/.score_data/db
-[2019-08-12 02:19:01.468] P-REP package version info - 1907091410x2f8b2e
-[2019-08-12 02:19:02.125] iconcommons 1.0.5.2 iconrpcserver 1.3.1 iconservice 1.3.0 loopchain 2.1.7
-[2019-08-12 02:19:07.107] Enable rabbitmq_management
-[2019-08-12 02:19:10.676] Network: PREP-MainNet
-[2019-08-12 02:19:10.682] Run loop-peer and loop-channel start
-[2019-08-12 02:19:10.687] Run iconservice start!
-[2019-08-12 02:19:10.692] Run iconrpcserver start!
+[2019-10-23 17:47:05.204] Your IP: xx.xx.xx.xx
+[2019-10-23 17:47:05.209] RPC_PORT: 9000 / RPC_WORKER: 3
+[2019-10-23 17:47:05.214] DEFAULT_PATH=/data/mainnet in Docker Container
+[2019-10-23 17:47:05.219] DEFAULT_LOG_PATH=/data/mainnet/log
+[2019-10-23 17:47:05.224] DEFAULT_STORAGE_PATH=/data/mainnet/.storage
+[2019-10-23 17:47:05.229] scoreRootPath=/data/mainnet/.score_data/score
+[2019-10-23 17:47:05.234] stateDbRootPath=/data/mainnet/.score_data/db
+[2019-10-23 17:47:05.239] Time synchronization with NTP / NTP SERVER: time.google.com
+[2019-10-23 17:47:12.022] P-REP package version info - _1910211829xc2286d
+[2019-10-23 17:47:12.697] iconcommons             1.1.2
+                        iconrpcserver           1.4.5
+                        iconsdk                 1.2.0
+                        iconservice             1.5.15
+                        loopchain               2.4.15
 ```
 
 
@@ -462,35 +414,44 @@ The response data are the same, but HTTP response code is different.
 $ curl localhost:9000/api/v1/status/peer
 
 {
-    "made_block_count": 0,
-    "status": "Service is online: 0",
-    "state": "Vote",
-    "peer_type": "0",
-    "audience_count": "0",
-    "consensus": "siever",
-    "peer_id": "hx1787c2194f56bb550a8daba9bbaea00a4956ed58",
-    "block_height": 184,
-    "round": 1,
-    "epoch_height": 186,
-    "unconfirmed_block_height": 0,
-    "total_tx": 93, 
-    "unconfirmed_tx": 0,
-    "peer_target": "20.20.1.195:7100",
-    "leader_complaint": 185,
-    "peer_count": 5,
-    "leader": "hx7ff69280a1483c660695039c14ba954bb101bb66",
-    "epoch_leader": "hx7ff69280a1483c660695039c14ba954bb101bb66",
-    "mq": {
-         "peer": {
-               "message_count": 0
-          },
-         "channel": {
-               "message_count": 0
-         },
-         "score": {
-              "message_count": 0
-         }
-     }
+  "made_block_count": 0,
+  "leader_made_block_count": 7,
+  "status": "Service is online: 0",
+  "state": "Watch",
+  "service_available": true,
+  "peer_type": "0",
+  "audience_count": "0",
+  "consensus": "siever",
+  "peer_id": "hx72bff0f887ef183bde1391dc61375f096e75c74a",
+  "block_height": 10106994,
+  "round": 0,
+  "epoch_height": 10106995,
+  "unconfirmed_block_height": -1,
+  "total_tx": 72003516,
+  "unconfirmed_tx": 0,
+  "peer_target": "xxx.xxx.xxx.xxx:7100",
+  "leader_complaint": 1,
+  "peer_count": 24,
+  "leader": "hxc9e36a98a3fca0b636eb822ff5a96db658e4bb88",
+  "epoch_leader": "hxc9e36a98a3fca0b636eb822ff5a96db658e4bb88",
+  "versions": {
+    "loopchain": "2.4.15",
+    "iconservice": "1.5.15",
+    "iconrpcserver": "1.4.5",
+    "iconcommons": "1.1.2",
+    "earlgrey": "0.0.4"
+  },
+  "mq": {
+    "peer": {
+      "message_count": 0
+    },
+    "channel": {
+      "message_count": 0
+    },
+    "score": {
+      "message_count": 0
+    }
+  }
 }
 ```
 
@@ -520,24 +481,32 @@ Content-Type: application/json
  
 {
   "made_block_count": 0,
-  "status": "Service is offline: block height sync",
-  "state": "BlockSync",
-  "service_available": false,
+  "leader_made_block_count": 7,
+  "status": "Service is online: 0",
+  "state": "Watch",
+  "service_available": true,
   "peer_type": "0",
   "audience_count": "0",
   "consensus": "siever",
-  "peer_id": "hxa5c4ae316abcdd58baa3f7889e9c15c970c3cde6",
-  "block_height": 5904,
-  "round": -1,
-  "epoch_height": -1,
+  "peer_id": "hx72bff0f887ef183bde1391dc61375f096e75c74a",
+  "block_height": 10106994,
+  "round": 0,
+  "epoch_height": 10106995,
   "unconfirmed_block_height": -1,
-  "total_tx": 0,
+  "total_tx": 72003516,
   "unconfirmed_tx": 0,
-  "peer_target": "20.20.1.87:7100",
+  "peer_target": "xxx.xxx.xxx.xxx:7100",
   "leader_complaint": 1,
-  "peer_count": 6,
-  "leader": "hx0124b85ccaf05d4265d2e09ecfff19937d6ca063",
-  "epoch_leader": "",
+  "peer_count": 24,
+  "leader": "hxc9e36a98a3fca0b636eb822ff5a96db658e4bb88",
+  "epoch_leader": "hxc9e36a98a3fca0b636eb822ff5a96db658e4bb88",
+  "versions": {
+    "loopchain": "2.4.15",
+    "iconservice": "1.5.15",
+    "iconrpcserver": "1.4.5",
+    "iconcommons": "1.1.2",
+    "earlgrey": "0.0.4"
+  },
   "mq": {
     "peer": {
       "message_count": 0
@@ -563,24 +532,32 @@ Content-Type: application/json
  
 {
   "made_block_count": 0,
-  "status": "Service is offline: block height sync",
-  "state": "BlockSync",
-  "service_available": false,
+  "leader_made_block_count": 7,
+  "status": "Service is online: 0",
+  "state": "Watch",
+  "service_available": true,
   "peer_type": "0",
   "audience_count": "0",
   "consensus": "siever",
-  "peer_id": "hxa5c4ae316abcdd58baa3f7889e9c15c970c3cde6",
-  "block_height": 5904,
-  "round": -1,
-  "epoch_height": -1,
+  "peer_id": "hx72bff0f887ef183bde1391dc61375f096e75c74a",
+  "block_height": 10106994,
+  "round": 0,
+  "epoch_height": 10106995,
   "unconfirmed_block_height": -1,
-  "total_tx": 0,
+  "total_tx": 72003516,
   "unconfirmed_tx": 0,
-  "peer_target": "20.20.1.87:7100",
+  "peer_target": "xxx.xxx.xxx.xxx:7100",
   "leader_complaint": 1,
-  "peer_count": 6,
-  "leader": "hx0124b85ccaf05d4265d2e09ecfff19937d6ca063",
-  "epoch_leader": "",
+  "peer_count": 24,
+  "leader": "hxc9e36a98a3fca0b636eb822ff5a96db658e4bb88",
+  "epoch_leader": "hxc9e36a98a3fca0b636eb822ff5a96db658e4bb88",
+  "versions": {
+    "loopchain": "2.4.15",
+    "iconservice": "1.5.15",
+    "iconrpcserver": "1.4.5",
+    "iconcommons": "1.1.2",
+    "earlgrey": "0.0.4"
+  },
   "mq": {
     "peer": {
       "message_count": 0
@@ -645,29 +622,32 @@ Content-Type: application/json
 If you want change the TimeZone, open `docker-compose.yml` in a text editor and add the following content:
 
 ```yml
-version: '3'
+version: "3"
 services:
-   prep:
-      image: 'iconloop/prep-node:1907091410x2f8b2e'
-      container_name: "prep-node"
-      network_mode: host
-      environment:
-         LOOPCHAIN_LOG_LEVEL: "DEBUG"
-         DEFAULT_PATH: "/data/loopchain"
-         LOCAL_TEST: "true"
-         LOG_OUTPUT_TYPE: "file"
-         TIMEOUT_FOR_LEADER_COMPLAIN: "120"
-         MAX_TIMEOUT_FOR_LEADER_COMPLAIN: "600"
-         LOAD_PEERS_FROM_IISS: "true"
-         FIND_NEIGHBOR: "true"
-         TZ: "America/Los_Angeles"
-      cap_add:
-         - SYS_TIME
-      volumes:
-         - ./data:/data
-      ports:
-         - 9000:9000
-         - 7100:7100
+  prep-node:
+     image: "iconloop/prep-node:1910211829xc2286d"
+     container_name: "prep-mainnet"
+     network_mode: host     
+     restart: "always"
+     environment:
+        NETWORK_ENV: "mainnet"
+        LOG_OUTPUT_TYPE: "file"
+        SWITCH_BH_VERSION3: "10324749"
+        CERT_PATH: "/cert"
+        LOOPCHAIN_LOG_LEVEL: "DEBUG"
+        ICON_LOG_LEVEL: "DEBUG"        
+        FASTEST_START: "yes" # Restore from lastest snapshot DB
+        PRIVATE_KEY_FILENAME: "{YOUR_KEYSTORE or YOUR_CERTKEY FILENAME}" # only file name
+        PRIVATE_PASSWORD: "{YOUR_KEY_PASSWORD}"
+        TZ: "America/Los_Angeles"
+     cap_add:
+        - SYS_TIME      
+     volumes:
+        - ./data:/data # mount a data volumes
+        - ./cert:/cert # Automatically generate cert key files here
+     ports:
+        - 9000:9000
+        - 7100:7100
 ```
 
 
@@ -744,7 +724,7 @@ The ``docker ps``  command shows the list of running docker containers.
 ```shell
 $ docker ps
 CONTAINER ID   IMAGE                                                          COMMAND                CREATED              STATUS                          PORTS                                                                 NAMES
-0de99e33cdc9     iconloop/prep-node:1907091410x2f8b2e    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
+0de99e33cdc9     iconloop/prep-node:1910211829xc2286d    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
 You should look at the `STATUS` field to see if the container is running up and in `healthy` state. 
@@ -771,20 +751,20 @@ If the container does not start properly or went down unexpectedly, please check
 ```shell
 $ cat data/PREP-MainNet/log/booting_${DATE}.log 
 
-[2019-08-12 02:19:01.435] Your IP: 20.20.1.195
-[2019-08-12 02:19:01.439] RPC_PORT: 9000 / RPC_WORKER: 3
-[2019-08-12 02:19:01.444] DEFAULT_PATH=/data/PREP-MainNet in Docker Container
-[2019-08-12 02:19:01.449] DEFAULT_LOG_PATH=/data/PREP-MainNet/log
-[2019-08-12 02:19:01.454] DEFAULT_STORAGE_PATH=/data/PREP-MainNet/.storage
-[2019-08-12 02:19:01.459] scoreRootPath=/data/PREP-MainNet/.score_data/score
-[2019-08-12 02:19:01.464] stateDbRootPath=/data/PREP-MainNet/.score_data/db
-[2019-08-12 02:19:01.468] P-REP package version info - 1907091410x2f8b2e
-[2019-08-12 02:19:02.125] iconcommons 1.0.5.2 iconrpcserver 1.3.1 iconservice 1.3.0 loopchain 2.1.7
-[2019-08-12 02:19:07.107] Enable rabbitmq_management
-[2019-08-12 02:19:10.676] Network: PREP-MainNet
-[2019-08-12 02:19:10.682] Run loop-peer and loop-channel start
-[2019-08-12 02:19:10.687] Run iconservice start!
-[2019-08-12 02:19:10.692] Run iconrpcserver start!
+[2019-10-23 17:47:05.204] Your IP: xxx.xxx.xxx.xxx
+[2019-10-23 17:47:05.209] RPC_PORT: 9000 / RPC_WORKER: 3
+[2019-10-23 17:47:05.214] DEFAULT_PATH=/data/mainnet in Docker Container
+[2019-10-23 17:47:05.219] DEFAULT_LOG_PATH=/data/mainnet/log
+[2019-10-23 17:47:05.224] DEFAULT_STORAGE_PATH=/data/mainnet/.storage
+[2019-10-23 17:47:05.229] scoreRootPath=/data/mainnet/.score_data/score
+[2019-10-23 17:47:05.234] stateDbRootPath=/data/mainnet/.score_data/db
+[2019-10-23 17:47:05.239] Time synchronization with NTP / NTP SERVER: time.google.com
+[2019-10-23 17:47:12.022] P-REP package version info - _1910211829xc2286d
+[2019-10-23 17:47:12.697] iconcommons             1.1.2
+iconrpcserver           1.4.5
+iconsdk                 1.2.0
+iconservice             1.5.15
+loopchain               2.4.15
 
 ```
 
