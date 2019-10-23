@@ -39,7 +39,7 @@ docker and docker-compose need to be installed beforehand.
 
 Citizen-node must be run with the wallet(keystore file) that registered as prep.
 
-The `keystore file` needs to be exported and stored in the `keys` directory
+The `keystore file` needs to be exported and stored in the `cert` directory
 Below is a directory structure under the docker-compose.yml
 
 ```yaml
@@ -48,7 +48,7 @@ Below is a directory structure under the docker-compose.yml
   |-- data  → data directory            
        |-- mainnet  → block DB directory 
        |-- log  → log directory
-  |-- certs  → keytore or cert key directory
+  |-- cert  → keytore or cert key directory
        |-- YOUR_KEYSTORE_FILE  → put your keystore file
 
 ```
