@@ -70,8 +70,10 @@ services:
      environment:
         NETWORK_ENV: "mainnet"
         LOG_OUTPUT_TYPE: "file"
+        SWITCH_BH_VERSION3: "10324749"
         CERT_PATH: "/cert"
-        LOOPCHAIN_LOG_LEVEL: "DEBUG"        
+        LOOPCHAIN_LOG_LEVEL: "DEBUG"
+        ICON_LOG_LEVEL: "DEBUG"        
         FASTEST_START: "yes" # Restore from lastest snapshot DB
         PRIVATE_KEY_FILENAME: "{YOUR_KEYSTORE or YOUR_CERTKEY FILENAME}" # only file name
         PRIVATE_PASSWORD: "{YOUR_KEY_PASSWORD}"
