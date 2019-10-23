@@ -78,7 +78,7 @@ services:
         PRIVATE_KEY_FILENAME: "{YOUR_KEYSTORE or YOUR_CERTKEY FILENAME}" # only file name
         PRIVATE_PASSWORD: "{YOUR_KEY_PASSWORD}"
      cap_add:
-         - SYS_TIME      
+        - SYS_TIME      
      volumes:
         - ./data:/data # mount a data volumes
         - ./cert:/cert # Automatically generate cert key files here
