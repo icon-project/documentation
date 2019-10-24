@@ -21,6 +21,18 @@ We assume that you have previous knowledge and experience in:
 - Docker container
 - Linux server and docker service troubleshooting
 
+---
+## Contents
+
+### HW Requirements for MainNet  
+### SW Requirements
+#### - OS requirements
+#### - Package requirements  
+### Network Diagram of P-Rep nodes
+### Inside a P-Rep Node    
+
+---
+
 ### HW Requirements for MainNet
 Below specification is a minimum requirement .
  
@@ -206,7 +218,7 @@ $ sudo apt-get install  -y systemd apt-transport-https ca-certificates curl gnup
 $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
 ## Add the apt repository
-$ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
 ## Update the apt package index:
 $ sudo apt-get update

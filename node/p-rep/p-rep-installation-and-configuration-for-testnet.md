@@ -211,7 +211,7 @@ $ sudo apt-get update
 $ sudo apt-get -y install docker-ce docker-ce-cli containerd.io
 
 ## Add your user to the docker group with the following command.
-$ sudo usermod -aG docker $(whoami)
+$ sudo usermod -aG docker $USER
 
 ## Set Docker to start automatically at boot time:
 $ sudo systemctl enable docker.service
@@ -230,7 +230,7 @@ $ docker version
 
 ```shell
 ## Install python-pip
-$ sudo apt-get install -y python-pip
+$ sudo apt-get install -y python3-pip
 
 ## Then install Docker Compose:
 $ sudo pip install docker-compose
@@ -453,7 +453,21 @@ $ curl localhost:9000/api/v1/status/peer
 If you want change the TimeZone, open `docker-compose.yml` in a text editor and add the following content:
 
 ```yml
-version: '3' services:    container:        image: 'iconloop/prep-node:1909301159xa7e757'        container_name: 'prep-node'        volumes:            - ./data:/data        ports:           - 9000:9000           - 7100:7100       environment:          TZ: "America/Los_Angeles"
+version: '3' 
+  services:    
+    container:        
+      image: 'iconloop/prep-node:1909301159xa7e757'
+        container_name: 'prep-node'
+
+        volumes:            
+          - ./data:/data        
+        
+        ports:           
+          - 9000:9000
+          - 7100:7100
+        
+        environment:
+          TZ: "America/Los_Angeles"
 ```
 
 
