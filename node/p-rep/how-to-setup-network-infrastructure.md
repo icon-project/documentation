@@ -52,7 +52,7 @@ Setting throttle by using Nginx as Reserve Proxy, P-Reps can protect its network
 
 
 Refer to the link below
-- [How to using nginx to prevent DDoS attacks](./how_to_using_nginx_to_prevent_DDoS_attacks.md)
+- [How to use nginx to prevent DDoS attacks](./how_to_using_nginx_to_prevent_DDoS_attacks.md)
 
 #### Network design for high availability
 P-Rep node operators should have methods to enhance the availability of the network. 
@@ -60,6 +60,6 @@ By setting Active or Backup in PaceMaker, P-Reps can enhance the availability of
 
 
 Refer to the link below
-- [How Network design for high availability](./how_to_network_design_for_high_availability.md)
+- [How to design a highly available network infrastructure](./how_to_network_design_for_high_availability.md)
 
 
