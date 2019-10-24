@@ -46,7 +46,7 @@ In order to operate Endpoint, we recommend using Firewall, Reverse Proxy and SSL
 
 	- P-Reps can be operated by setting Active or Standby status, 
 
-#### How to Secure Your PRep node 
+#### How to Secure Your P-Rep node 
 P-Rep node operator should have methods to enhance security. 
 Setting throttle by using Nginx as Reserve Proxy, P-Reps can protect its network from DDoS attack and able to build a White IP list based network. 
 
