@@ -60,6 +60,6 @@ By setting Active or Backup in PaceMaker, P-Reps can enhance the availability of
 
 
 Refer to the link below
-- [How Network design for high availability](./how_to_network_design_for_high_availability.md)
+- [How to design a highly available network infrastructure](./how_to_network_design_for_high_availability.md)
 
 
