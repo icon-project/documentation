@@ -253,7 +253,7 @@ Once you have docker installed, then proceed through the following steps to inst
 **Pull the latest stable version of an image.**
 
 ```shell
-$ docker pull iconloop/prep-node:1910211829xc2286d
+$ docker pull iconloop/prep-node:1910261021xc97f33
 ```
 
 
@@ -263,7 +263,7 @@ $ docker pull iconloop/prep-node:1910211829xc2286d
 **Using docker command**
 
 ```shell
-$ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-node:1910211829xc2286d
+$ docker run -d  -p 9000:9000 -p 7100:7100 -v ${PWD}/data:/data iconloop/prep-node:1910261021xc97f33
 ```
 
 
@@ -276,7 +276,7 @@ Open `docker-compose.yml` in a text editor and add the following content:
 version: "3"
 services:
   prep-node:
-     image: "iconloop/prep-node:1910211829xc2286d"
+     image: "iconloop/prep-node:1910261021xc97f33"
      container_name: "prep-mainnet"
      network_mode: host     
      restart: "always"
@@ -352,7 +352,7 @@ The ``docker ps``  command shows the list of running docker containers.
 ```shell
 $ docker ps
 CONTAINER ID   IMAGE                                                          COMMAND                CREATED              STATUS                          PORTS                                                                 NAMES
-0de99e33cdc9     iconloop/prep-node:1910211829xc2286d    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
+0de99e33cdc9     iconloop/prep-node:1910261021xc97f33    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
 The meaning of each column in the `docker ps` result output is as follows. 
@@ -372,20 +372,20 @@ You can read the container booting log from the log folder.
 
 ```shell
 $ tail -f data/PREP-MainNet/log/booting_20190419.log
-[2019-10-23 17:47:05.204] Your IP: xx.xx.xx.xx
-[2019-10-23 17:47:05.209] RPC_PORT: 9000 / RPC_WORKER: 3
-[2019-10-23 17:47:05.214] DEFAULT_PATH=/data/mainnet in Docker Container
-[2019-10-23 17:47:05.219] DEFAULT_LOG_PATH=/data/mainnet/log
-[2019-10-23 17:47:05.224] DEFAULT_STORAGE_PATH=/data/mainnet/.storage
-[2019-10-23 17:47:05.229] scoreRootPath=/data/mainnet/.score_data/score
-[2019-10-23 17:47:05.234] stateDbRootPath=/data/mainnet/.score_data/db
-[2019-10-23 17:47:05.239] Time synchronization with NTP / NTP SERVER: time.google.com
-[2019-10-23 17:47:12.022] P-REP package version info - _1910211829xc2286d
-[2019-10-23 17:47:12.697] iconcommons             1.1.2
-                        iconrpcserver           1.4.5
-                        iconsdk                 1.2.0
-                        iconservice             1.5.15
-                        loopchain               2.4.15
+[2019-10-28 10:43:05.204] Your IP: xx.xx.xx.xx
+[2019-10-28 10:43:05.209] RPC_PORT: 9000 / RPC_WORKER: 3
+[2019-10-28 10:43:05.214] DEFAULT_PATH=/data/mainnet in Docker Container
+[2019-10-28 10:43:05.219] DEFAULT_LOG_PATH=/data/mainnet/log
+[2019-10-28 10:43:05.224] DEFAULT_STORAGE_PATH=/data/mainnet/.storage
+[2019-10-28 10:43:05.229] scoreRootPath=/data/mainnet/.score_data/score
+[2019-10-28 10:43:05.234] stateDbRootPath=/data/mainnet/.score_data/db
+[2019-10-28 10:43:05.239] Time synchronization with NTP / NTP SERVER: time.google.com
+[2019-10-28 10:43:12.022] P-REP package version info - _1910261021xc97f33
+[2019-10-28 10:43:12.853] iconcommons             1.1.2
+iconrpcserver           1.4.5
+iconsdk                 1.2.0
+iconservice             1.5.15
+loopchain               2.4.16
 ```
 
 
@@ -435,7 +435,7 @@ $ curl localhost:9000/api/v1/status/peer
   "leader": "hxc9e36a98a3fca0b636eb822ff5a96db658e4bb88",
   "epoch_leader": "hxc9e36a98a3fca0b636eb822ff5a96db658e4bb88",
   "versions": {
-    "loopchain": "2.4.15",
+    "loopchain": "2.4.16",
     "iconservice": "1.5.15",
     "iconrpcserver": "1.4.5",
     "iconcommons": "1.1.2",
@@ -501,7 +501,7 @@ Content-Type: application/json
   "leader": "hxc9e36a98a3fca0b636eb822ff5a96db658e4bb88",
   "epoch_leader": "hxc9e36a98a3fca0b636eb822ff5a96db658e4bb88",
   "versions": {
-    "loopchain": "2.4.15",
+    "loopchain": "2.4.16",
     "iconservice": "1.5.15",
     "iconrpcserver": "1.4.5",
     "iconcommons": "1.1.2",
@@ -552,7 +552,7 @@ Content-Type: application/json
   "leader": "hxc9e36a98a3fca0b636eb822ff5a96db658e4bb88",
   "epoch_leader": "hxc9e36a98a3fca0b636eb822ff5a96db658e4bb88",
   "versions": {
-    "loopchain": "2.4.15",
+    "loopchain": "2.4.16",
     "iconservice": "1.5.15",
     "iconrpcserver": "1.4.5",
     "iconcommons": "1.1.2",
@@ -625,7 +625,7 @@ If you want change the TimeZone, open `docker-compose.yml` in a text editor and 
 version: "3"
 services:
   prep-node:
-     image: "iconloop/prep-node:1910211829xc2286d"
+     image: "iconloop/prep-node:1910261021xc97f33"
      container_name: "prep-mainnet"
      network_mode: host     
      restart: "always"
@@ -724,7 +724,7 @@ The ``docker ps``  command shows the list of running docker containers.
 ```shell
 $ docker ps
 CONTAINER ID   IMAGE                                                          COMMAND                CREATED              STATUS                          PORTS                                                                 NAMES
-0de99e33cdc9     iconloop/prep-node:1910211829xc2286d    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
+0de99e33cdc9     iconloop/prep-node:1910261021xc97f33    "/src/entrypoint.sh"      2 minutes ago        Up 2 minutes(healthy)    0.0.0.0:7100->7100/tcp, 0.0.0.0:9000->9000/tcp prep_prep_1
 ```
 
 You should look at the `STATUS` field to see if the container is running up and in `healthy` state. 
@@ -751,21 +751,20 @@ If the container does not start properly or went down unexpectedly, please check
 ```shell
 $ cat data/PREP-MainNet/log/booting_${DATE}.log 
 
-[2019-10-23 17:47:05.204] Your IP: xxx.xxx.xxx.xxx
-[2019-10-23 17:47:05.209] RPC_PORT: 9000 / RPC_WORKER: 3
-[2019-10-23 17:47:05.214] DEFAULT_PATH=/data/mainnet in Docker Container
-[2019-10-23 17:47:05.219] DEFAULT_LOG_PATH=/data/mainnet/log
-[2019-10-23 17:47:05.224] DEFAULT_STORAGE_PATH=/data/mainnet/.storage
-[2019-10-23 17:47:05.229] scoreRootPath=/data/mainnet/.score_data/score
-[2019-10-23 17:47:05.234] stateDbRootPath=/data/mainnet/.score_data/db
-[2019-10-23 17:47:05.239] Time synchronization with NTP / NTP SERVER: time.google.com
-[2019-10-23 17:47:12.022] P-REP package version info - _1910211829xc2286d
-[2019-10-23 17:47:12.697] iconcommons             1.1.2
+[2019-10-28 10:43:05.204] Your IP: xxx.xxx.xxx.xxx
+[2019-10-28 10:43:05.209] RPC_PORT: 9000 / RPC_WORKER: 3
+[2019-10-28 10:43:05.214] DEFAULT_PATH=/data/mainnet in Docker Container
+[2019-10-28 10:43:05.219] DEFAULT_LOG_PATH=/data/mainnet/log
+[2019-10-28 10:43:05.224] DEFAULT_STORAGE_PATH=/data/mainnet/.storage
+[2019-10-28 10:43:05.229] scoreRootPath=/data/mainnet/.score_data/score
+[2019-10-28 10:43:05.234] stateDbRootPath=/data/mainnet/.score_data/db
+[2019-10-28 10:43:05.239] Time synchronization with NTP / NTP SERVER: time.google.com
+[2019-10-28 10:43:12.022] P-REP package version info - _1910261021xc97f33
+[2019-10-28 10:43:12.853] iconcommons             1.1.2
 iconrpcserver           1.4.5
 iconsdk                 1.2.0
 iconservice             1.5.15
-loopchain               2.4.15
-
+loopchain               2.4.16
 ```
 
 
