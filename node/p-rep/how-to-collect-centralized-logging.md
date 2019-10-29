@@ -91,12 +91,12 @@ Docker-Compose information is same as below when setting agent, and some modific
 version: '3'
 services:
    loop-logger:
-      image: looploy/fluentd
+      image: looploy/fluentd:20191029
       container_name: loop_logger
       restart: always
       network_mode: host
       volumes:
-         - ./data/:/loopchain/log
+         - ./data/loopchain:/loopchain/log
          - ./fluent/log:/fluentd/log
       environment:
          LOG_SERVER_IP: 1.1.1.1
@@ -113,7 +113,7 @@ When setting the server, Docker-compose information is the same as below and som
 version: '3'
 services:
    loop-logger:
-      image: looploy/fluentd
+      image: looploy/fluentd::20191029
       container_name: loop_logger
       restart: always
       network_mode: host
