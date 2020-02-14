@@ -318,7 +318,7 @@ dictDB = 100         # wrong
 
 ### InterfaceScore
 `InterfaceScore` is an interface class that is used to invoke other SCORE’s method.
-This interface should be used instead of the legacy `call` method. Usage syntax is as follows.
+Usage syntax is as follows.
 
 ```python
 class TokenInterface(InterfaceScore):
@@ -346,10 +346,42 @@ def fallback(self):
 
     # gets an interface object of the token SCORE
     token_score = self.create_interface_score(self._addr_token_score.get(), TokenInterface)
+    # set value if you want to transfer ICX to the token SCORE
+    token_score.value = 0
     # transfers tokens to the contributor as a reward
     token_score.transfer(self.msg.sender, value, data)
     ...
 ```
+
+### IconScoreBase.call
+`call` invokes an external method of other SCORE.
+
+* `call(addr_to: Address, func_name: str, kw_dict: dict, amount: int = 0) -> None`
+  * `add_to` : the address of other SCORE
+  * `func_name` : function name to invoke
+  * `kw_dict` : keyward argument of `func_name`
+  * `amount` : Amount of ICX to transfer
+
+Example)
+
+```python
+# excerpt from Crowdsale SCORE
+@payable
+def fallback(self):
+  ...
+  data = b'called from Crowdsale'
+  # set value if you want to transfer ICX to the token SCORE
+  icx_value = 0
+
+  # transfers tokens to the contributor as a reward
+  self.call(self._addr_token_score.get(),
+            "transfer",
+            {"_to": self.msg.sender, "_value": value, "_data": data},
+            icx_value
+           )
+  ...
+```
+
 
 ## Transferring ICX
 
