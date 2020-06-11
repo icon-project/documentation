@@ -154,7 +154,7 @@ If a read-only external method is also decorated with `@payable`, the method cal
 Duplicate declaration of `@external` will raise an exception on class loading time.
 
 Possible data types for external method parameters are Python primitive types (`int`, `str`, `bytes`, `bool`) and `Address` (newly defined type for SCORE codes).
-`list`, `dict` and `None` types are not supported as method parameters.
+`list`, `dict` and `None` types are not supported as method parameters. For `list` and `dict` type parameters, the external method needs to validate the parameters.
 Method parameters can have default values.
 
 
@@ -314,10 +314,10 @@ dictDB['key0'] = 100 # right
 dictDB = 100         # wrong
 ```
 
-## Invoking Other SCORE Methods
+## Calling External Method of Other SCORE
 
 ### InterfaceScore
-`InterfaceScore` is an interface class that is used to invoke other SCORE’s method.
+`InterfaceScore` is an interface class that is used to call an external method of other SCORE.
 Usage syntax is as follows.
 
 ```python
@@ -333,7 +333,7 @@ If there is an implementation body, it will be simply ignored.
 
 You need to get an `InterfaceScore` object by using `IconScoreBase`’s built-in API,
 `create_interface_score('score address', 'interface class')`.
-Using the object, you can invoke other SCORE’s external method as if it is a local method call.
+Using the object, you can call other SCORE’s external method as if it is a local method call.
 
 Example)
 
@@ -346,21 +346,84 @@ def fallback(self):
 
     # gets an interface object of the token SCORE
     token_score = self.create_interface_score(self._addr_token_score.get(), TokenInterface)
-    # set value if you want to transfer ICX to the token SCORE
-    token_score.value = 0
+
     # transfers tokens to the contributor as a reward
     token_score.transfer(self.msg.sender, value, data)
     ...
 ```
 
+#### InterfaceSystemScore
+`InterfaceSystemScore` is an pre-defined interface class that is used to call an external method of system SCORE. You can use `InterfaceSystemScore` in the same way as `InetfaceScore`
+
+```python
+class InterfaceSystemScore(InterfaceScore):
+    @interface
+    def setStake(self, value: int) -> None: pass
+
+    @interface
+    def getStake(self, address: Address) -> dict: pass
+
+    @interface
+    def estimateUnstakeLockPeriod(self) -> dict: pass
+
+    @interface
+    def setDelegation(self, delegations: list = None): pass
+
+    @interface
+    def getDelegation(self, address: Address) -> dict: pass
+
+    @interface
+    def claimIScore(self): pass
+
+    @interface
+    def queryIScore(self, address: Address) -> dict: pass
+
+    @interface
+    def getIISSInfo(self) -> dict: pass
+
+    @interface
+    def getPRep(self, address: Address) -> dict: pass
+
+    @interface
+    def getPReps(self, startRanking: int, endRanking: int) -> list: pass
+
+    @interface
+    def getMainPReps(self) -> dict: pass
+
+    @interface
+    def getSubPReps(self) -> dict: pass
+
+    @interface
+    def getPRepTerm(self) -> dict: pass
+
+    @interface
+    def getInactivePReps(self) -> dict: pass
+
+    @interface
+    def getScoreDepositInfo(self, address: Address) -> dict: pass
+```
+
+Example)
+
+```python
+@external
+def intercall_system_score_example(stake: int):
+    # gets an interface object of the system SCORE
+    system_score = self.create_interface_score(SYSTEM_SCORE_ADDRESS, InterfaceSystemScore)
+
+    # call external method of system SCORE
+    system_score.setStake(stake)
+```
+
 ### IconScoreBase.call
+
 `call` invokes an external method of other SCORE.
 
 * `call(addr_to: Address, func_name: str, kw_dict: dict, amount: int = 0) -> None`
   * `add_to` : the address of other SCORE
   * `func_name` : function name to invoke
   * `kw_dict` : keyward argument of `func_name`
-  * `amount` : Amount of ICX to transfer
+  * `amount` : Amount of ICX to transfer to add_to
 
 Example)
 
