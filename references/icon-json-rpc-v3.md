@@ -1630,6 +1630,7 @@ Response on success
 | website     | String     |    O     | P-Rep homepage url<br>"https://abc.example.com/"             |
 | details     | String     |    O     | Url including P-Rep detail information<br>"https://abc.example.com/details/" |
 | p2pEndpoint | String     |    O     | Network info used for connecting among P-Rep nodes<br>"123.45.67.89:7100", "node.example.com:7100" |
+| nodeAddress | String     |    X     | Node Key for only consensus<br>"hxe7af5fcfd8dfc67530a01a0e403882687528dfcb" |
 <sup>*</sup>details : See [JSON Standard for P-Rep detailed information](https://github.com/icon-project/documentation/references/JSON-Standard-for-P-Rep-detailed-Information.md)
 
 #### Returns
@@ -1663,7 +1664,8 @@ Request
                 "email": "abc@example.com",
                 "website": "https://abc.example.com/",
                 "details": "https://abc.example.com/details/",
-                "p2pEndpoint": "abc.example.com:7100"
+                "p2pEndpoint": "abc.example.com:7100",
+              	"nodeAddress": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb"
             }
         },
         ...
@@ -1723,6 +1725,7 @@ Request
 | website     | String     |    X     | P-Rep homepage url<br>"https://abc.example.com/"             |
 | details     | String     |    X     | Url including P-Rep detail information<br>"https://abc.example.com/details/" |
 | p2pEndpoint | String     |    X     | Network info used for connecting among P-Rep nodes<br>"123.45.67.89:7100", "node.example.com:7100" |
+| nodeAddress | String     |    X     | Node Key for only consensus<br>"hxe7af5fcfd8dfc67530a01a0e403882687528dfcb" |
 <sup>*</sup>details : See [JSON Standard for P-Rep detailed information](https://github.com/icon-project/documentation/references/JSON-Standard-for-P-Rep-detailed-Information.md)
 
 #### Returns
@@ -1750,7 +1753,8 @@ Request
             "method": "setPRep",
             "params": {
                 "name": "Banana Node",
-                "email": "banana@email.com"
+                "email": "banana@email.com",
+              	"nodeAddress": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb"
             }
         },
         ...
@@ -1821,6 +1825,7 @@ Request
 | website                 | String          |    O     | P-Rep homepage url<br>"https://abc.example.com/"             |
 | details                 | String          |    O     | Url including P-Rep detail information<br>"https://abc.example.com/details/" |
 | p2pEndpoint             | String          |    O     | Network info used for connecting among P-Rep nodes<br>"123.45.67.89:7100", "node.example.com:7100" |
+| nodeAddress             | String          |    O     | Node Key for only consensus<br/>"hxe7af5fcfd8dfc67530a01a0e403882687528dfcb" |
 | irep                    | [T_INT](#T_INT) |    O     | Incentive rep used to calculate the reward for P-Rep<br>Limit: +- 20% of the previous value<br>Unit: loop |
 | irepUpdateBlockHeight   | [T_INT](#T_INT) |    O     | Block height when a P-Rep changed I-Rep value                |
 | lastGenerateBlockHeight | [T_INT](#T_INT) |    O     | Height of the last block which a P-Rep generated             |
@@ -1865,6 +1870,7 @@ Response on success
         "website": "https://icon.banana.com",
         "details": "https://icon.banana.com/json",
         "p2pEndpoint": "123.45.67.89:7100",
+      	"nodeAddress": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
         "irep": "0xa968163f0a57b400000",
         "irepUpdateBlockHeight": "0x847ea",
         "stake": "0x38372",
