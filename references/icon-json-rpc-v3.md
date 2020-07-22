@@ -1336,10 +1336,18 @@ Response on success
     "jsonrpc": "2.0",
     "id": 1234,
     "result": {
-        "stake": "0xde0b6b3a7640000",
-        "unstake": "0xde0b6b3a7640000",
-        "unstakeBlockHeight": "0xa",
-        "blockHeight": "0x23e8"
+        "stake": "0x4e1003b28d9280000",
+        "unstakeList": [
+            {
+                "unstakeList": [
+                    {
+                        "unstake": "0x8ac7230489e80000",
+                        "unstakeBlockHeight": "0x19",
+                        "remainingBlocks": "0x11"
+                    }
+                ]
+            }
+        ]
     }
 }
 ```
