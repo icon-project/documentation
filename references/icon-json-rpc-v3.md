@@ -1302,12 +1302,13 @@ Request
 
 #### Returns
 
-| KEY                | VALUE type      | Required | Description                                                |
-| :----------------- | :-------------- | :------: | :--------------------------------------------------------- |
-| stake              | [T_INT](#T_INT) | O        | ICX amount of stake in loop                                |
-| unstake            | [T_INT](#T_INT) | X        | ICX amount of unstake in loop                              |
-| unstakeBlockHeight | [T_INT](#T_INT) | X        | BlockHeight when unstake will be done                      |
-| remainingBlocks    | [T_INT](#T_INT) | X        | The number of remaining blocks to reach unstakeBlockHeight |
+| KEY                         | VALUE type      | Required | Description                                                |
+| :-------------------------- | :-------------- | :------: | :--------------------------------------------------------- |
+| stake                       | [T_INT](#T_INT) |    O     | ICX amount of stake in loop                                |
+| unstakes                    | T_LIST[T_DICT]  |    X     | Unstake info list                                          |
+| unstakes.unstake            | [T_INT](#T_INT) |    X     | ICX amount of unstake in loop                              |
+| unstakes.unstakeBlockHeight | [T_INT](#T_INT) |    X     | BlockHeight when unstake will be done                      |
+| unstakes.remainingBlocks    | [T_INT](#T_INT) |    X     | The number of remaining blocks to reach unstakeBlockHeight |
 
 #### Example
 
@@ -1337,16 +1338,12 @@ Response on success
     "id": 1234,
     "result": {
         "stake": "0x4e1003b28d9280000",
-        "unstakeList": [
-            {
-                "unstakeList": [
-                    {
-                        "unstake": "0x8ac7230489e80000",
-                        "unstakeBlockHeight": "0x19",
-                        "remainingBlocks": "0x11"
-                    }
-                ]
-            }
+        "unstakes": [
+          {
+              "unstake": "0x8ac7230489e80000",
+              "unstakeBlockHeight": "0x19",
+              "remainingBlocks": "0x11"
+          }
         ]
     }
 }
